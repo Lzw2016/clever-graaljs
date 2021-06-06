@@ -148,4 +148,14 @@ public class ScriptObject {
         Assert.isTrue(original.canExecute(), "当前脚本对象不能执行");
         return original.execute(arguments);
     }
+
+    /**
+     * 执行当前脚本对象
+     *
+     * @param arguments 参数
+     */
+    public void executeVoid(Object... arguments) {
+        Assert.isTrue(original.canExecute(), "当前脚本对象不能执行");
+        original.executeVoid(arguments);
+    }
 }

@@ -2,6 +2,7 @@ package org.clever.graaljs.core;
 
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.IOUtils;
+import org.graalvm.polyglot.Source;
 import org.graalvm.polyglot.Value;
 import org.junit.jupiter.api.Test;
 
@@ -9,6 +10,7 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.Consumer;
 
 /**
  * 作者：lizw <br/>
@@ -16,12 +18,13 @@ import java.util.Map;
  */
 @Slf4j
 public class ScriptEngineInstanceTest {
-    private String getSourceCode() throws IOException {
-        return IOUtils.resourceToString("/t01.js", StandardCharsets.UTF_8);
+    private String getSourceCode(String name) throws IOException {
+        return IOUtils.resourceToString(name, StandardCharsets.UTF_8);
     }
 
     @Test
     public void t01() throws IOException {
+        String code = getSourceCode("/t01.js");
         final ScriptEngineConfig config = new ScriptEngineConfig();
         config.setMaxIdle(8);
         config.setMinIdle(0);
@@ -31,7 +34,6 @@ public class ScriptEngineInstanceTest {
         log.info("EngineName-> {}", scriptEngineInstance.getEngineName());
         log.info("EngineVersion-> {}", scriptEngineInstance.getEngineVersion());
         log.info("LanguageVersion-> {}", scriptEngineInstance.getLanguageVersion());
-        String code = getSourceCode();
         scriptEngineInstance.wrapFunctionAndEval(code, scriptObject -> {
             if (scriptObject.originalValue().canExecute()) {
                 Map<String, Object> args = new HashMap<>();
@@ -40,6 +42,33 @@ public class ScriptEngineInstanceTest {
                 log.info("res-> {}", res);
             }
         });
+        scriptEngineInstance.close();
+    }
+
+    @Test
+    public void t02() throws IOException {
+        String code = getSourceCode("/t02.js");
+        final ScriptEngineConfig config = new ScriptEngineConfig();
+        ScriptEngineInstance scriptEngineInstance = new ScriptEngineInstance(config);
+        scriptEngineInstance.wrapFunctionAndEval(code, (Consumer<ScriptObject>) ScriptObject::executeVoid);
+        scriptEngineInstance.close();
+    }
+
+    @Test
+    public void t03() throws IOException {
+        String code = getSourceCode("/t03.js");
+        final ScriptEngineConfig config = new ScriptEngineConfig();
+        ScriptEngineInstance scriptEngineInstance = new ScriptEngineInstance(config);
+        scriptEngineInstance.wrapFunctionAndEval(code, (Consumer<ScriptObject>) ScriptObject::executeVoid);
+        scriptEngineInstance.close();
+    }
+
+    @Test
+    public void t04() throws IOException {
+        String code = getSourceCode("/t04.js");
+        final ScriptEngineConfig config = new ScriptEngineConfig();
+        ScriptEngineInstance scriptEngineInstance = new ScriptEngineInstance(config);
+        scriptEngineInstance.wrapFunctionAndEval(code, (Consumer<ScriptObject>) ScriptObject::executeVoid);
         scriptEngineInstance.close();
     }
 }

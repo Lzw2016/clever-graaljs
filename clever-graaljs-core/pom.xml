@@ -30,14 +30,6 @@
             <groupId>org.graalvm.js</groupId>
             <artifactId>js</artifactId>
         </dependency>
-        <!--        <dependency>-->
-        <!--            <groupId>org.graalvm.tools</groupId>-->
-        <!--            <artifactId>profiler</artifactId>-->
-        <!--        </dependency>-->
-        <!--        <dependency>-->
-        <!--            <groupId>org.graalvm.compiler</groupId>-->
-        <!--            <artifactId>compiler</artifactId>-->
-        <!--        </dependency>-->
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
