@@ -37,7 +37,7 @@ public class ScriptEngineInstanceTest {
             if (scriptObject.originalValue().canExecute()) {
                 Map<String, Object> args = new HashMap<>();
                 args.put("test", "lzw");
-                Value res = scriptObject.originalValue().execute(args);
+                Value res = scriptObject.execute(args);
                 log.info("res-> {}", res);
             }
         });
