@@ -2,7 +2,6 @@ package org.clever.graaljs.core;
 
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.IOUtils;
-import org.graalvm.polyglot.Source;
 import org.graalvm.polyglot.Value;
 import org.junit.jupiter.api.Test;
 
@@ -68,6 +67,19 @@ public class ScriptEngineInstanceTest {
         String code = getSourceCode("/t04.js");
         final ScriptEngineConfig config = new ScriptEngineConfig();
         ScriptEngineInstance scriptEngineInstance = new ScriptEngineInstance(config);
+        scriptEngineInstance.wrapFunctionAndEval(code, (Consumer<ScriptObject>) ScriptObject::executeVoid);
+        scriptEngineInstance.close();
+    }
+
+    @Test
+    public void t05() throws IOException {
+        String code = getSourceCode("/t05.js");
+        Map<String, Object> contextMap = new HashMap<>();
+        contextMap.put("JavaInterop", JavaInteropTest.Instance);
+        Map<String, Object> global = new HashMap<>();
+        global.put("a", "aa");
+        final ScriptEngineConfig config = new ScriptEngineConfig();
+        ScriptEngineInstance scriptEngineInstance = new ScriptEngineInstance(config, null, contextMap, global);
         scriptEngineInstance.wrapFunctionAndEval(code, (Consumer<ScriptObject>) ScriptObject::executeVoid);
         scriptEngineInstance.close();
     }
