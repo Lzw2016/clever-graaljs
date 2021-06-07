@@ -12,6 +12,6 @@ public class ScriptCodeUtilsTest {
 
     @Test
     public void wrapFunction() {
-        log.info("-->\n{}\n<----", ScriptCodeUtils.wrapFunction("var a = 3;", 1));
+        log.info("-->\n{}\n<----", ScriptCodeUtils.wrapFunction("var a = 3;\r\n   var b = 3;", 1));
     }
 }

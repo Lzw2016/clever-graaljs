@@ -26,12 +26,17 @@ public class ScriptCodeUtils {
         boolean current = false;
         for (int i = 0; i < code.length(); i++) {
             char c = code.charAt(i);
+            if (keepWrap && Objects.equals('\n', c)) {
+                sb.append(c);
+                continue;
+            }
             boolean pre = current;
-            current = Character.isWhitespace(c) && (!keepWrap || !Objects.equals('\n', c));
+            current = Character.isWhitespace(c);
             if (current) {
                 continue;
             }
-            if (pre && sb.length() > 0) {
+            int length = sb.length();
+            if (pre && length > 0 && !Character.isWhitespace(sb.charAt(length - 1))) {
                 sb.append(compressChar);
             }
             sb.append(c);
