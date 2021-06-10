@@ -1,10 +1,9 @@
 package org.clever.graaljs.core;
 
-import org.clever.graaljs.core.internal.LoggerConsole;
-import org.clever.graaljs.core.internal.LoggerFactory;
-
-import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * 作者：lizw <br/>
@@ -46,13 +45,4 @@ public interface GraalConstant {
                     )
             )
     );
-
-    /**
-     * 默认注入的全局对象
-     */
-    Map<String, Object> Default_Context_Map = Collections.unmodifiableMap(new HashMap<String, Object>() {{
-        put("console", LoggerConsole.Instance);
-        put("print", LoggerConsole.Instance);
-        put("LoggerFactory", LoggerFactory.Instance);
-    }});
 }

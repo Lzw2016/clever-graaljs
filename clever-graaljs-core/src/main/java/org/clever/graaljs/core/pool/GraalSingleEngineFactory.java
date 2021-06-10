@@ -46,9 +46,7 @@ public class GraalSingleEngineFactory extends BasePooledObjectFactory<ScriptCont
      * 自定义引擎全局对象
      */
     @Getter
-    private final ConcurrentMap<String, Object> contextMap = new ConcurrentHashMap<String, Object>(32) {{
-        putAll(GraalConstant.Default_Context_Map);
-    }};
+    private final ConcurrentMap<String, Object> contextMap = new ConcurrentHashMap<>(32);
     /**
      * 引擎全局变量
      */
