@@ -25,7 +25,7 @@ public class CommonUtils {
     /**
      * 放弃当前CPU使用权(当前线程放弃本次CPU时间)
      */
-    public void yield(Number millis) {
+    public void yield() {
         Thread.yield();
     }
 

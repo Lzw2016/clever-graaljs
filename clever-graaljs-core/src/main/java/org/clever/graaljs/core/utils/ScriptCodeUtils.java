@@ -56,7 +56,7 @@ public class ScriptCodeUtils {
 
     public static String wrapFunction(String code, long count) {
         Assert.isNotBlank(code, "脚本代码不能为空");
-        code = String.format("function __fuc_autogenerate_%1$s(args) {\n%2$s\n}\n__fuc_autogenerate_%1$s;", count, code);
+        code = String.format("function __fuc_autogenerate_%1$s(args) {;%2$s\n}\n__fuc_autogenerate_%1$s;", count, code);
         return compressCode(code, true);
     }
 }
