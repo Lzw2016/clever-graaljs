@@ -20,7 +20,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 @Slf4j
 public class ScriptContextInstance implements Closeable {
     private static final AtomicInteger FUC_COUNTER = new AtomicInteger(0);
-    private static final int CODE_MAP_CAPACITY = 10;
+    private static final int CODE_MAP_CAPACITY = 20480;
     private static final ConcurrentHashMap<String, Integer> CODE_MAP = new ConcurrentHashMap<>(CODE_MAP_CAPACITY);
 
     /**
