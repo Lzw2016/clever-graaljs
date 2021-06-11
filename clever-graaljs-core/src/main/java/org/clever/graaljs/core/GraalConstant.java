@@ -25,9 +25,9 @@ public interface GraalConstant {
     String Error_Engine_Name = "Interpreted";
 
     /**
-     * ECMAScript Version: 11 (ES2020)
+     * ECMAScript Version: https://github.com/oracle/graaljs/blob/master/CHANGELOG.md
      */
-    String ECMAScript_Version = "11";
+    String ECMAScript_Version = "2021";
 
     /**
      * JS 语言ID

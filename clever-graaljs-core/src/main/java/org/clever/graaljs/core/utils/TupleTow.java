@@ -38,4 +38,12 @@ public final class TupleTow<A, B> {
     public void setValue1(A val) {
         value1 = val;
     }
+
+    @Override
+    public String toString() {
+        return "TupleTow{" +
+                "value1=" + value1 +
+                ", value2=" + value2 +
+                '}';
+    }
 }

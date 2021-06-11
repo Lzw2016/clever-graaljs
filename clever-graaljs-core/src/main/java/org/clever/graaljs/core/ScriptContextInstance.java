@@ -4,12 +4,12 @@ import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.clever.graaljs.core.utils.Assert;
 import org.clever.graaljs.core.utils.ScriptCodeUtils;
+import org.clever.graaljs.core.utils.TupleTow;
 import org.graalvm.polyglot.Context;
 import org.graalvm.polyglot.Source;
 import org.graalvm.polyglot.Value;
 
 import java.io.Closeable;
-import java.util.concurrent.atomic.AtomicLong;
 
 /**
  * 作者：lizw <br/>
@@ -17,8 +17,6 @@ import java.util.concurrent.atomic.AtomicLong;
  */
 @Slf4j
 public class ScriptContextInstance implements Closeable {
-    private final static AtomicLong FUC_COUNTER = new AtomicLong(0);
-
     /**
      * 代码缓存
      */
@@ -70,14 +68,15 @@ public class ScriptContextInstance implements Closeable {
      * @return ScriptObject
      */
     public ScriptObject wrapFunctionObject(String scriptCode) {
-        final long counter = Math.abs(FUC_COUNTER.incrementAndGet());
-        final String code = ScriptCodeUtils.wrapFunction(scriptCode, counter);
+        final TupleTow<String, Integer> function = ScriptCodeUtils.wrapFunction(scriptCode);
+        final String code = function.getValue1();
+        final Integer count = function.getValue2();
         synchronized (scriptObjectCache) {
             ScriptObject scriptObject = scriptObjectCache.get(code);
             if (scriptObject != null) {
                 return scriptObject;
             }
-            Source source = Source.newBuilder(GraalConstant.Js_Language_Id, code, String.format("/__fuc_autogenerate_%s.js", counter))
+            Source source = Source.newBuilder(GraalConstant.Js_Language_Id, code, String.format("/__fuc_autogenerate_%s.js", count))
                     .cached(true)
                     .buildLiteral();
             Value value;

@@ -18,6 +18,7 @@ import org.clever.graaljs.core.utils.ExceptionUtils;
  */
 @Slf4j
 public class XStreamMapper {
+    private static volatile Boolean INITIALIZED = false;
     /**
      * 使用DOM解析XML的Mapper，性能不高<br/>
      */
@@ -63,8 +64,11 @@ public class XStreamMapper {
         } else {
             xstream = new XStream(driver);
         }
-        XStream.setupDefaultSecurity(xstream);
-        xstream.allowTypesByRegExp(new String[]{".*"});
+        if (!INITIALIZED) {
+            INITIALIZED = true;
+            XStream.setupDefaultSecurity(xstream);
+            xstream.allowTypesByRegExp(new String[]{".*"});
+        }
     }
 
     /**
