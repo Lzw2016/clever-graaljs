@@ -63,6 +63,8 @@ public class XStreamMapper {
         } else {
             xstream = new XStream(driver);
         }
+        XStream.setupDefaultSecurity(xstream);
+        xstream.allowTypesByRegExp(new String[]{".*"});
     }
 
     /**
