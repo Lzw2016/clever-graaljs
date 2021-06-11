@@ -10,6 +10,8 @@ import org.graalvm.polyglot.Source;
 import org.graalvm.polyglot.Value;
 
 import java.io.Closeable;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * 作者：lizw <br/>
@@ -17,6 +19,34 @@ import java.io.Closeable;
  */
 @Slf4j
 public class ScriptContextInstance implements Closeable {
+    private static final AtomicInteger FUC_COUNTER = new AtomicInteger(0);
+    private static final int CODE_MAP_CAPACITY = 10;
+    private static final ConcurrentHashMap<String, Integer> CODE_MAP = new ConcurrentHashMap<>(CODE_MAP_CAPACITY);
+
+    /**
+     * 缓存code的count值
+     *
+     * @return {@code TupleTow<压缩后的code, code的count值>}
+     */
+    private static synchronized TupleTow<String, Integer> cacheCodeCount(String code) {
+        Assert.isNotBlank(code, "脚本代码不能为空");
+        // 控制CODE_MAP容量
+        final int preCount = FUC_COUNTER.get();
+        if (preCount >= Integer.MAX_VALUE) {
+            CODE_MAP.clear();
+            FUC_COUNTER.set(0);
+        }
+        if (CODE_MAP.size() >= CODE_MAP_CAPACITY) {
+            // 释放10%空间
+            final int max = (preCount - CODE_MAP_CAPACITY) + (CODE_MAP_CAPACITY / 10);
+            CODE_MAP.entrySet().removeIf(entry -> entry.getValue() <= max);
+        }
+        // 获取code count
+        code = ScriptCodeUtils.compressCode(code, true);
+        final int currentCount = CODE_MAP.computeIfAbsent(code, strCode -> FUC_COUNTER.incrementAndGet());
+        return TupleTow.creat(code, currentCount);
+    }
+
     /**
      * 代码缓存
      */
@@ -68,7 +98,8 @@ public class ScriptContextInstance implements Closeable {
      * @return ScriptObject
      */
     public ScriptObject wrapFunctionObject(String scriptCode) {
-        final TupleTow<String, Integer> function = ScriptCodeUtils.wrapFunction(scriptCode);
+        Assert.isNotBlank(scriptCode, "脚本代码不能为空");
+        final TupleTow<String, Integer> function = cacheCodeCount(scriptCode);
         final String code = function.getValue1();
         final Integer count = function.getValue2();
         synchronized (scriptObjectCache) {
@@ -76,7 +107,8 @@ public class ScriptContextInstance implements Closeable {
             if (scriptObject != null) {
                 return scriptObject;
             }
-            Source source = Source.newBuilder(GraalConstant.Js_Language_Id, code, String.format("/__fuc_autogenerate_%s.js", count))
+            final String fucCode = ScriptCodeUtils.wrapFunction(code, count);
+            Source source = Source.newBuilder(GraalConstant.Js_Language_Id, fucCode, String.format("/__fuc_autogenerate_%s.js", count))
                     .cached(true)
                     .buildLiteral();
             Value value;
