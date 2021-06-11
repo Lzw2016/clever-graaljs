@@ -17,7 +17,7 @@ import java.util.concurrent.TimeUnit;
  */
 @Slf4j
 public class ScriptObjectCache {
-    public static final int Default_Initial_Capacity = 2048;
+    public static final int Default_Initial_Capacity = 4096;
     /**
      * 缓存 {@code Cache<ScriptCode, ScriptObject>}
      */
