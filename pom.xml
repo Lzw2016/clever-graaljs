@@ -50,6 +50,7 @@
 
     <modules>
         <module>clever-graaljs-core</module>
+        <module>clever-graaljs-data-common</module>
     </modules>
 
     <properties>
