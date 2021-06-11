@@ -7,7 +7,6 @@ import org.apache.commons.pool2.PooledObject;
 import org.apache.commons.pool2.impl.DefaultPooledObject;
 import org.clever.graaljs.core.GraalConstant;
 import org.clever.graaljs.core.ScriptContextInstance;
-import org.clever.graaljs.core.internal.utils.EngineGlobalUtils;
 import org.clever.graaljs.core.utils.Assert;
 import org.clever.graaljs.core.utils.ScriptContextUtils;
 import org.graalvm.polyglot.Context;

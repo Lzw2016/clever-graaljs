@@ -1,13 +1,15 @@
-package org.clever.graaljs.core.utils;
+package org.clever.graaljs.core.utils.mapper;
 
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
+import com.fasterxml.jackson.databind.util.JSONPObject;
 import com.fasterxml.jackson.datatype.joda.cfg.JacksonJodaDateFormat;
 import com.fasterxml.jackson.datatype.joda.ser.DateTimeSerializer;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.clever.graaljs.core.utils.ExceptionUtils;
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 
@@ -66,6 +68,13 @@ public class JacksonMapper {
         } catch (IOException e) {
             throw ExceptionUtils.unchecked(e);
         }
+    }
+
+    /**
+     * 输出JSON格式数据.
+     */
+    public String toJsonP(String functionName, Object object) {
+        return toJson(new JSONPObject(functionName, object));
     }
 
     /**

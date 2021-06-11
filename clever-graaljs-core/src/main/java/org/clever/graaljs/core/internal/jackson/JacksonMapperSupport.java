@@ -5,7 +5,7 @@ import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.oracle.truffle.api.interop.TruffleObject;
 import lombok.extern.slf4j.Slf4j;
-import org.clever.graaljs.core.utils.JacksonMapper;
+import org.clever.graaljs.core.utils.mapper.JacksonMapper;
 import org.graalvm.polyglot.Value;
 import org.graalvm.polyglot.proxy.Proxy;
 

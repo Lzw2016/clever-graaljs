@@ -4,7 +4,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateFormatUtils;
 import org.clever.graaljs.core.GraalConstant;
 import org.clever.graaljs.core.utils.ExceptionUtils;
-import org.clever.graaljs.core.utils.JacksonMapper;
+import org.clever.graaljs.core.utils.mapper.JacksonMapper;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;

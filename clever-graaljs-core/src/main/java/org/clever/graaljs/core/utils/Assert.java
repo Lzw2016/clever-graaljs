@@ -2,6 +2,10 @@ package org.clever.graaljs.core.utils;
 
 import org.apache.commons.lang3.StringUtils;
 
+import java.lang.reflect.Array;
+import java.util.Collection;
+import java.util.Map;
+import java.util.Optional;
 import java.util.function.Supplier;
 
 /**
@@ -83,5 +87,69 @@ public class Assert {
 
     private static String nullSafeGet(Supplier<String> messageSupplier) {
         return (messageSupplier != null ? messageSupplier.get() : null);
+    }
+
+    public static void hasLength(String text, String message) {
+        if (text == null || text.isEmpty()) {
+            throw new IllegalArgumentException(message);
+        }
+    }
+
+    public static void hasText(String text, String message) {
+        if (StringUtils.isBlank(text)) {
+            throw new IllegalArgumentException(message);
+        }
+    }
+
+    public static void doesNotContain(String textToSearch, String substring, String message) {
+        if ((textToSearch != null && !textToSearch.isEmpty()) && (substring != null && !substring.isEmpty()) && textToSearch.contains(substring)) {
+            throw new IllegalArgumentException(message);
+        }
+    }
+
+    public static void notEmpty(Object[] array, String message) {
+        if ((array == null || array.length == 0)) {
+            throw new IllegalArgumentException(message);
+        }
+    }
+
+    public static void notEmpty(Collection<Object> collection, String message) {
+        if (isEmpty(collection)) {
+            throw new IllegalArgumentException(message);
+        }
+    }
+
+    public static void noNullElements(Object[] array, String message) {
+        if (array != null) {
+            for (Object element : array) {
+                if (element == null) {
+                    throw new IllegalArgumentException(message);
+                }
+            }
+        }
+    }
+
+    @SuppressWarnings("rawtypes")
+    private static boolean isEmpty(Object obj) {
+        if (obj == null) {
+            return true;
+        }
+        if (obj instanceof Optional) {
+            return !((Optional) obj).isPresent();
+        }
+        if (obj instanceof CharSequence) {
+            return ((CharSequence) obj).length() == 0;
+        }
+        if (obj.getClass().isArray()) {
+            return Array.getLength(obj) == 0;
+        }
+        if (obj instanceof Collection) {
+            return ((Collection) obj).isEmpty();
+        }
+        if (obj instanceof Map) {
+            return ((Map) obj).isEmpty();
+        }
+        // else
+        return false;
     }
 }
