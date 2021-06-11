@@ -1,4 +1,4 @@
-package org.clever.graaljs.core.builtin.adapter;
+package org.clever.graaljs.core.builtin;
 
 import org.apache.commons.lang3.ObjectUtils;
 import org.clever.graaljs.core.utils.Assert;

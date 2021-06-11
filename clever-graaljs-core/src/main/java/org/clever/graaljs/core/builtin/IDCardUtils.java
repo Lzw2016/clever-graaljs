@@ -1,4 +1,4 @@
-package org.clever.graaljs.core.builtin.adapter;
+package org.clever.graaljs.core.builtin;
 
 /**
  * 作者：lizw <br/>

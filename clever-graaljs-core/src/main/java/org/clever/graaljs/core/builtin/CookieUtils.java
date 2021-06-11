@@ -1,4 +1,4 @@
-package org.clever.graaljs.core.builtin.adapter;
+package org.clever.graaljs.core.builtin;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;

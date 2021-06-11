@@ -1,4 +1,4 @@
-package org.clever.graaljs.core.builtin.adapter;
+package org.clever.graaljs.core.builtin;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
