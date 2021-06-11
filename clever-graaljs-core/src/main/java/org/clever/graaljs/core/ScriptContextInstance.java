@@ -99,9 +99,9 @@ public class ScriptContextInstance implements Closeable {
      */
     public ScriptObject wrapFunctionObject(String scriptCode) {
         Assert.isNotBlank(scriptCode, "脚本代码不能为空");
-        final TupleTow<String, Integer> function = cacheCodeCount(scriptCode);
-        final String code = function.getValue1();
-        final Integer count = function.getValue2();
+        final TupleTow<String, Integer> codeAndCount = cacheCodeCount(scriptCode);
+        final String code = codeAndCount.getValue1();
+        final Integer count = codeAndCount.getValue2();
         synchronized (scriptObjectCache) {
             ScriptObject scriptObject = scriptObjectCache.get(code);
             if (scriptObject != null) {
