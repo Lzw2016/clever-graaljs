@@ -1,6 +1,10 @@
 package org.clever.graaljs.core.pool;
 
 import org.clever.graaljs.core.builtin.adapter.*;
+import org.clever.graaljs.core.builtin.wrap.HttpUtils;
+import org.clever.graaljs.core.builtin.wrap.PinyinUtils;
+import org.clever.graaljs.core.builtin.wrap.TreeUtils;
+import org.clever.graaljs.core.builtin.wrap.ZxingUtils;
 import org.clever.graaljs.core.internal.GraalInterop;
 import org.clever.graaljs.core.internal.GraalLoggerFactory;
 import org.clever.graaljs.core.internal.LoggerConsole;
