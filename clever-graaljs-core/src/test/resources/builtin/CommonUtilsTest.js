@@ -1,4 +1,4 @@
-const log = LoggerFactory.getLogger("CommonUtilsTest.js");
+const log = LoggerFactory.getLogger("logger");
 
 log.info("sleep             --------------->{}", CommonUtils.sleep(3000));
 log.info("yield             --------------->{}", CommonUtils.yield());

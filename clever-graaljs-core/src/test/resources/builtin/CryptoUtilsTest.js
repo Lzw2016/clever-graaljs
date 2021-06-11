@@ -1,4 +1,4 @@
-const log = LoggerFactory.getLogger("CryptoUtilsTest.js");
+const log = LoggerFactory.getLogger("logger");
 
 const input = StringUtils.getByteFromString("李志伟123");
 const key = CryptoUtils.generateAesKey();
