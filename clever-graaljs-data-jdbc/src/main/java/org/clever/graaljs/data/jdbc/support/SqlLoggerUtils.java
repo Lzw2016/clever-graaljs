@@ -1,11 +1,9 @@
 package org.clever.graaljs.data.jdbc.support;
 
 import lombok.extern.slf4j.Slf4j;
+import org.clever.graaljs.core.utils.DateTimeUtils;
 
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * 作者：lizw <br/>
@@ -135,7 +133,12 @@ public class SqlLoggerUtils {
             if (sb.length() > 0) {
                 sb.append(", ");
             }
-            sb.append(name).append("=").append(value);
+            sb.append(name).append("=");
+            if(value instanceof Date) {
+                sb.append(DateTimeUtils.formatToString((Date) value, "yyyy-MM-dd HH:mm:ssZ"));
+            } else {
+                sb.append(value);
+            }
             if (value != null) {
                 String valueType = value.getClass().getName();
                 for (String packagePrefix : Ignore_Package_Prefix) {

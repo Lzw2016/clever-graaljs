@@ -32,7 +32,7 @@ public class GraalInterop extends Interop<Value> {
             LocalDateTime localDateTime = LocalDateTime.of(arg.asDate(), arg.asTime());
             return Date.from(localDateTime.atZone(ZoneId.systemDefault()).toInstant());
         }
-        throw new ClassCastException("参数 arg=:" + arg.toString() + "不能转换成Date类型");
+        throw new ClassCastException("参数 arg=:" + arg + "不能转换成Date类型");
     }
 
     // --------------------------------------------------------------------------------------------------- Map
