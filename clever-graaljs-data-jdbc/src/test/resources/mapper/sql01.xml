@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="sql01">
+    <select id="t01">
+        select prod_no,branch_id,merchandise_type,merchandise_state from  tb_merchandise_ext
+        <where>
+            <if test="#obj.notEmpty(purchaseMobile)">
+                and purchase_mobile=#{purchaseMobile}
+            </if>
+        </where>
+        limit 10
+    </select>
+</mapper>

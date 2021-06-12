@@ -19,11 +19,11 @@ import java.util.function.Consumer;
  * 创建时间：2021/06/12 21:11 <br/>
  */
 @Slf4j
-public class JdbcDataSourceTest {
+public class JdbcDatabaseTest {
     @Test
     public void t01() throws IOException {
         JdbcDatabase.Instance.setDefault("default", BaseTest.newJdbcDataSource());
-        String code = IOUtils.resourceToString("/builtin/JdbcDataSourceTest.js", StandardCharsets.UTF_8);
+        String code = IOUtils.resourceToString("/builtin/JdbcDatabaseTest.js", StandardCharsets.UTF_8);
         final ScriptEngineConfig config = new ScriptEngineConfig();
         final Map<String, Object> contextMap = new HashMap<>();
         contextMap.put("JdbcDatabase", JdbcDatabase.Instance);

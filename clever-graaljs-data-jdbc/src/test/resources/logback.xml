@@ -11,6 +11,7 @@
 
     <!--自定义日志级别-->
     <logger name="org.clever" level="DEBUG"/>
+    <logger name="org.clever.graaljs.data.jdbc.support.mybatisplus" level="WARN"/>
     <logger name="org.springframework" level="INFO"/>
     <logger name="com.zaxxer.hikari" level="INFO"/>
     <!--<logger name="org.springframework.jdbc.core.JdbcTemplate" level="DEBUG"/>-->
