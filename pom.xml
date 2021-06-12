@@ -53,6 +53,7 @@
         <module>clever-graaljs-data-common</module>
         <module>clever-graaljs-data-jdbc</module>
         <module>clever-graaljs-data-redis</module>
+        <module>clever-graaljs-meta-data</module>
     </modules>
 
     <properties>
@@ -90,6 +91,11 @@
             <dependency>
                 <groupId>org.clever</groupId>
                 <artifactId>clever-graaljs-data-redis</artifactId>
+                <version>${revision}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.clever</groupId>
+                <artifactId>clever-graaljs-meta-data</artifactId>
                 <version>${revision}</version>
             </dependency>
             <!--clever依赖-->

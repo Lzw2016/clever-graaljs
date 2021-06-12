@@ -8,8 +8,8 @@
     <packaging>jar</packaging>
 
     <parent>
-        <artifactId>clever-graaljs</artifactId>
         <groupId>org.clever</groupId>
+        <artifactId>clever-graaljs</artifactId>
         <version>${revision}</version>
     </parent>
 
