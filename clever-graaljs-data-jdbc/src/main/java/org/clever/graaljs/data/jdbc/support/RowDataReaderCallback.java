@@ -1,5 +1,7 @@
 package org.clever.graaljs.data.jdbc.support;
 
+import org.clever.graaljs.core.utils.UnderlineToCamelUtils;
+
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Map;

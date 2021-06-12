@@ -35,6 +35,7 @@ public class EngineGlobalUtils {
         contextMap.put("IOUtils", IOUtils.Instance);
         contextMap.put("IDGenerateUtils", IDGenerateUtils.Instance);
         contextMap.put("EncodeDecodeUtils", EncodeDecodeUtils.Instance);
+        contextMap.put("UnderlineToCamelUtils", UnderlineToCamelUtils.Instance);
         // 特定场景
         contextMap.put("TreeUtils", TreeUtils.Instance);
         contextMap.put("CookieUtils", CookieUtils.Instance);
