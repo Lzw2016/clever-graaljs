@@ -41,9 +41,6 @@ public final class TupleTow<A, B> {
 
     @Override
     public String toString() {
-        return "TupleTow{" +
-                "value1=" + value1 +
-                ", value2=" + value2 +
-                '}';
+        return "TupleTow{" + "value1=" + value1 + ", value2=" + value2 + '}';
     }
 }

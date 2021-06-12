@@ -51,6 +51,7 @@
     <modules>
         <module>clever-graaljs-core</module>
         <module>clever-graaljs-data-common</module>
+        <module>clever-graaljs-data-jdbc</module>
     </modules>
 
     <properties>
@@ -64,10 +65,34 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <graalvm.version>21.1.0</graalvm.version>
+        <clever-dynamic-sql.version>1.0.0-SNAPSHOT</clever-dynamic-sql.version>
     </properties>
 
     <dependencyManagement>
         <dependencies>
+            <!--当前项目模块-->
+            <dependency>
+                <groupId>org.clever</groupId>
+                <artifactId>clever-graaljs-core</artifactId>
+                <version>${revision}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.clever</groupId>
+                <artifactId>clever-graaljs-data-common</artifactId>
+                <version>${revision}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.clever</groupId>
+                <artifactId>clever-graaljs-data-jdbc</artifactId>
+                <version>${revision}</version>
+            </dependency>
+            <!--clever依赖-->
+            <dependency>
+                <groupId>org.clever</groupId>
+                <artifactId>clever-dynamic-sql</artifactId>
+                <version>${clever-dynamic-sql.version}</version>
+            </dependency>
+            <!--三方依赖-->
             <dependency>
                 <groupId>org.graalvm.truffle</groupId>
                 <artifactId>truffle-api</artifactId>
@@ -107,6 +132,12 @@
                 <groupId>org.dom4j</groupId>
                 <artifactId>dom4j</artifactId>
                 <version>2.1.3</version>
+            </dependency>
+            <dependency>
+                <groupId>com.github.jsqlparser</groupId>
+                <artifactId>jsqlparser</artifactId>
+                <!--<version>3.1</version>-->
+                <version>3.2</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

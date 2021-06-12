@@ -8,7 +8,7 @@ import java.util.Map;
  * 作者：lizw <br/>
  * 创建时间：2021/06/11 12:47 <br/>
  */
-@SuppressWarnings("all")
+@SuppressWarnings("ALL")
 public interface MultiValueMap<K, V> extends Map<K, List<V>> {
 
     /**

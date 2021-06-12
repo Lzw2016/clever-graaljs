@@ -8,7 +8,7 @@ import java.util.*;
  * 作者：lizw <br/>
  * 创建时间：2021/06/11 12:49 <br/>
  */
-@SuppressWarnings("all")
+@SuppressWarnings("ALL")
 public class LinkedMultiValueMap<K, V> implements MultiValueMap<K, V>, Serializable, Cloneable {
 
     private static final long serialVersionUID = 3801124242820219131L;
