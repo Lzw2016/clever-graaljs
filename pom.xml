@@ -55,7 +55,7 @@
         <module>clever-graaljs-data-common</module>
         <module>clever-graaljs-data-jdbc</module>
         <module>clever-graaljs-data-redis</module>
-        <module>clever-graaljs-spring-core</module>
+        <module>clever-graaljs-spring-common</module>
     </modules>
 
     <properties>
@@ -108,7 +108,7 @@
             </dependency>
             <dependency>
                 <groupId>org.clever</groupId>
-                <artifactId>clever-graaljs-spring-core</artifactId>
+                <artifactId>clever-graaljs-spring-common</artifactId>
                 <version>${revision}</version>
             </dependency>
             <!--clever依赖-->

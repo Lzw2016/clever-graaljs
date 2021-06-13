@@ -1,4 +1,4 @@
-package org.clever.graaljs.data.common.model.request;
+package org.clever.graaljs.spring.mvc.model.request;
 
 import lombok.Data;
 

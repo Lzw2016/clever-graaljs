@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.apache.commons.lang3.StringUtils;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -15,7 +16,7 @@ import java.util.Map;
  * 作者：lzw <br/>
  * 创建时间：2017-09-03 22:15 <br/>
  */
-public class QueryBySort extends BaseRequest {
+public class QueryBySort implements Serializable {
     private static final long serialVersionUID = 1L;
 
     public static final String ASC = "ASC";
