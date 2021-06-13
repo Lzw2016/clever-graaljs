@@ -1,8 +1,8 @@
 package org.clever.graaljs.meta.data.builtin.adapter;
 
-import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import lombok.extern.slf4j.Slf4j;
+import org.clever.graaljs.meta.data.BaseTest;
 import org.clever.graaljs.meta.data.model.DataBaseSummary;
 import org.clever.graaljs.meta.data.model.TableSchema;
 import org.junit.jupiter.api.AfterAll;
@@ -22,15 +22,7 @@ public class MateDataServiceTest {
 
     @BeforeAll
     public static void init() {
-        HikariConfig hikariConfig = new HikariConfig();
-        hikariConfig.setDriverClassName("com.mysql.cj.jdbc.Driver");
-        hikariConfig.setJdbcUrl("jdbc:mysql://192.168.1.201:12000/test-data");
-        hikariConfig.setUsername("test-data");
-        hikariConfig.setPassword("Aa123456!");
-        hikariConfig.setAutoCommit(false);
-        hikariConfig.setMinimumIdle(1);
-        hikariConfig.setMaximumPoolSize(10);
-        dataSource = new HikariDataSource(hikariConfig);
+        dataSource = BaseTest.newHikariDataSource();
         mateDataService = new MateDataService(dataSource);
         mateDataService.reload();
     }
