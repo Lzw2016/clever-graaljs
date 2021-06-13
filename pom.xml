@@ -66,8 +66,9 @@
         <maven.compiler.compilerVersion>1.8</maven.compiler.compilerVersion>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <graalvm.version>21.1.0</graalvm.version>
         <clever-dynamic-sql.version>1.0.0-SNAPSHOT</clever-dynamic-sql.version>
+        <graalvm.version>21.1.0</graalvm.version>
+        <schemacrawler.version>16.14.6</schemacrawler.version>
     </properties>
 
     <dependencyManagement>
@@ -150,6 +151,37 @@
                 <artifactId>jsqlparser</artifactId>
                 <!--<version>3.1</version>-->
                 <version>3.2</version>
+            </dependency>
+            <!--schemacrawler-->
+            <dependency>
+                <groupId>us.fatehi</groupId>
+                <artifactId>schemacrawler</artifactId>
+                <version>${schemacrawler.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>us.fatehi</groupId>
+                <artifactId>schemacrawler-commandline</artifactId>
+                <version>${schemacrawler.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>us.fatehi</groupId>
+                <artifactId>schemacrawler-mysql</artifactId>
+                <version>${schemacrawler.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>us.fatehi</groupId>
+                <artifactId>schemacrawler-postgresql</artifactId>
+                <version>${schemacrawler.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>us.fatehi</groupId>
+                <artifactId>schemacrawler-oracle</artifactId>
+                <version>${schemacrawler.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>us.fatehi</groupId>
+                <artifactId>schemacrawler-sqlserver</artifactId>
+                <version>${schemacrawler.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

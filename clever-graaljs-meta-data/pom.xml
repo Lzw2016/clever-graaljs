@@ -12,4 +12,57 @@
         <artifactId>clever-graaljs</artifactId>
         <version>${revision}</version>
     </parent>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.clever</groupId>
+            <artifactId>clever-graaljs-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.clever</groupId>
+            <artifactId>clever-graaljs-data-common</artifactId>
+        </dependency>
+        <!--schemacrawler-->
+        <dependency>
+            <groupId>us.fatehi</groupId>
+            <artifactId>schemacrawler</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>us.fatehi</groupId>
+            <artifactId>schemacrawler-commandline</artifactId>
+            <optional>true</optional>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.slf4j</groupId>
+                    <artifactId>slf4j-jdk14</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>us.fatehi</groupId>
+            <artifactId>schemacrawler-mysql</artifactId>
+            <optional>true</optional>
+        </dependency>
+        <dependency>
+            <groupId>us.fatehi</groupId>
+            <artifactId>schemacrawler-postgresql</artifactId>
+            <optional>true</optional>
+        </dependency>
+        <dependency>
+            <groupId>us.fatehi</groupId>
+            <artifactId>schemacrawler-oracle</artifactId>
+            <optional>true</optional>
+        </dependency>
+        <dependency>
+            <groupId>us.fatehi</groupId>
+            <artifactId>schemacrawler-sqlserver</artifactId>
+            <optional>true</optional>
+        </dependency>
+        <!--HikariCP-->
+        <dependency>
+            <groupId>com.zaxxer</groupId>
+            <artifactId>HikariCP</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
 </project>
