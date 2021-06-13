@@ -1038,7 +1038,7 @@ public class HttpUtils {
         Map<String, List<String>> resHeaders = response.headers().toMultimap();
         for (Map.Entry<String, List<String>> entry : resHeaders.entrySet()) {
             String key = entry.getKey();
-            httpResponse.getHeaders().addAll(key, entry.getValue());
+            httpResponse.getHeaders().addAll(StringUtils.lowerCase(key), entry.getValue());
         }
         return httpResponse;
     }
@@ -1091,7 +1091,7 @@ public class HttpUtils {
          * @param header 响应头名称
          */
         public List<String> getHeader(String header) {
-            return headers.get(header);
+            return headers.get(StringUtils.lowerCase(header));
         }
 
         /**
@@ -1100,7 +1100,7 @@ public class HttpUtils {
          * @param header 响应头名称
          */
         public String getFirstHeader(String header) {
-            return headers.getFirst(header);
+            return headers.getFirst(StringUtils.lowerCase(header));
         }
 
         /**
@@ -1117,7 +1117,7 @@ public class HttpUtils {
          * @param defaultValue 默认值
          */
         public String getFirstHeader(String header, String defaultValue) {
-            String value = headers.getFirst(header);
+            String value = headers.getFirst(StringUtils.lowerCase(header));
             return value == null ? defaultValue : value;
         }
 

@@ -86,12 +86,6 @@
             <groupId>org.dom4j</groupId>
             <artifactId>dom4j</artifactId>
         </dependency>
-        <!--TODO 移除servlet-api-->
-        <dependency>
-            <groupId>javax.servlet</groupId>
-            <artifactId>javax.servlet-api</artifactId>
-            <scope>provided</scope>
-        </dependency>
         <dependency>
             <groupId>com.squareup.okhttp3</groupId>
             <artifactId>okhttp</artifactId>

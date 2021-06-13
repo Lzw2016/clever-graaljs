@@ -1,7 +1,8 @@
-package org.clever.graaljs.core.utils;
+package org.clever.graaljs.spring.core.utils;
 
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.clever.graaljs.core.utils.ExceptionUtils;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;

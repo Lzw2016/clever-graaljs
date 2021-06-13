@@ -1,6 +1,7 @@
-package org.clever.graaljs.core.utils;
+package org.clever.graaljs.spring.core.utils;
 
 import lombok.extern.slf4j.Slf4j;
+import org.clever.graaljs.core.utils.ExceptionUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import java.net.URLDecoder;

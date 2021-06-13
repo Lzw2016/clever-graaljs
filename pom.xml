@@ -50,11 +50,12 @@
 
     <modules>
         <module>clever-graaljs-core</module>
+        <module>clever-graaljs-meta-data</module>
+        <module>clever-graaljs-freemarker</module>
         <module>clever-graaljs-data-common</module>
         <module>clever-graaljs-data-jdbc</module>
         <module>clever-graaljs-data-redis</module>
-        <module>clever-graaljs-meta-data</module>
-        <module>clever-graaljs-freemarker</module>
+        <module>clever-graaljs-spring-core</module>
     </modules>
 
     <properties>
@@ -103,6 +104,11 @@
             <dependency>
                 <groupId>org.clever</groupId>
                 <artifactId>clever-graaljs-freemarker</artifactId>
+                <version>${revision}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.clever</groupId>
+                <artifactId>clever-graaljs-spring-core</artifactId>
                 <version>${revision}</version>
             </dependency>
             <!--clever依赖-->

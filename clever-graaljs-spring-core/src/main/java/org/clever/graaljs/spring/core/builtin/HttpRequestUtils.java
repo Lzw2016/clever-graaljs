@@ -1,6 +1,6 @@
-package org.clever.graaljs.core.builtin;
+package org.clever.graaljs.spring.core.builtin;
 
-import org.clever.graaljs.core.utils.HttpServletRequestUtils;
+import org.clever.graaljs.spring.core.utils.HttpServletRequestUtils;
 
 import javax.servlet.http.HttpServletRequest;
 

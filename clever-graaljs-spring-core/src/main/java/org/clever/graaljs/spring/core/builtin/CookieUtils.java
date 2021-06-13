@@ -1,4 +1,4 @@
-package org.clever.graaljs.core.builtin;
+package org.clever.graaljs.spring.core.builtin;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -23,7 +23,7 @@ public class CookieUtils {
      * @param maxAge   Cookie生存时间，单位：秒。负数表示Cookie永不过期，0表示删除Cookie
      */
     public void setCookie(HttpServletResponse response, String path, String name, String value, int maxAge) {
-        org.clever.graaljs.core.utils.CookieUtils.setCookie(response, path, name, value, maxAge);
+        org.clever.graaljs.spring.core.utils.CookieUtils.setCookie(response, path, name, value, maxAge);
     }
 
     /**
@@ -35,7 +35,7 @@ public class CookieUtils {
      * @param value    值
      */
     public void setCookie(HttpServletResponse response, String path, String name, String value) {
-        org.clever.graaljs.core.utils.CookieUtils.setCookie(response, path, name, value);
+        org.clever.graaljs.spring.core.utils.CookieUtils.setCookie(response, path, name, value);
     }
 
     /**
@@ -45,7 +45,7 @@ public class CookieUtils {
      * @param value 值
      */
     public void setCookieForCurrentPath(HttpServletResponse response, String name, String value) {
-        org.clever.graaljs.core.utils.CookieUtils.setCookieForCurrentPath(response, name, value);
+        org.clever.graaljs.spring.core.utils.CookieUtils.setCookieForCurrentPath(response, name, value);
     }
 
     /**
@@ -55,7 +55,7 @@ public class CookieUtils {
      * @param value 值
      */
     public void setCookieForRooPath(HttpServletResponse response, String name, String value) {
-        org.clever.graaljs.core.utils.CookieUtils.setCookieForRooPath(response, name, value);
+        org.clever.graaljs.spring.core.utils.CookieUtils.setCookieForRooPath(response, name, value);
     }
 
     /**
@@ -66,7 +66,7 @@ public class CookieUtils {
      * @return Cookie值，不存在返回null
      */
     public String getCookie(HttpServletRequest request, String name) {
-        return org.clever.graaljs.core.utils.CookieUtils.getCookie(request, name);
+        return org.clever.graaljs.spring.core.utils.CookieUtils.getCookie(request, name);
     }
 
     /**
@@ -78,7 +78,7 @@ public class CookieUtils {
      * @param path     Cookie的Path
      */
     public void delCookie(HttpServletRequest request, HttpServletResponse response, String name, String path) {
-        org.clever.graaljs.core.utils.CookieUtils.delCookie(request, response, name, path);
+        org.clever.graaljs.spring.core.utils.CookieUtils.delCookie(request, response, name, path);
     }
 
     /**
@@ -89,7 +89,7 @@ public class CookieUtils {
      * @param name     名称
      */
     public void delCookieForCurrentPath(HttpServletRequest request, HttpServletResponse response, String name) {
-        org.clever.graaljs.core.utils.CookieUtils.delCookieForCurrentPath(request, response, name);
+        org.clever.graaljs.spring.core.utils.CookieUtils.delCookieForCurrentPath(request, response, name);
     }
 
     /**
@@ -100,6 +100,6 @@ public class CookieUtils {
      * @param name     名称
      */
     public void delCookieForRooPath(HttpServletRequest request, HttpServletResponse response, String name) {
-        org.clever.graaljs.core.utils.CookieUtils.delCookieForRooPath(request, response, name);
+        org.clever.graaljs.spring.core.utils.CookieUtils.delCookieForRooPath(request, response, name);
     }
 }

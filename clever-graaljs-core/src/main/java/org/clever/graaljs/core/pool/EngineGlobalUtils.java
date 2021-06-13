@@ -38,8 +38,6 @@ public class EngineGlobalUtils {
         contextMap.put("UnderlineToCamelUtils", UnderlineToCamelUtils.Instance);
         // 特定场景
         contextMap.put("TreeUtils", TreeUtils.Instance);
-        contextMap.put("CookieUtils", CookieUtils.Instance);
-        contextMap.put("HttpRequestUtils", HttpRequestUtils.Instance);
         contextMap.put("ImageValidateUtils", ImageValidateUtils.Instance);
         contextMap.put("ZxingUtils", ZxingUtils.Instance);
         contextMap.put("DataSizeUtils", DataSizeUtils.Instance);
