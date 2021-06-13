@@ -54,6 +54,7 @@
         <module>clever-graaljs-data-jdbc</module>
         <module>clever-graaljs-data-redis</module>
         <module>clever-graaljs-meta-data</module>
+        <module>clever-graaljs-freemarker</module>
     </modules>
 
     <properties>
@@ -97,6 +98,11 @@
             <dependency>
                 <groupId>org.clever</groupId>
                 <artifactId>clever-graaljs-meta-data</artifactId>
+                <version>${revision}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.clever</groupId>
+                <artifactId>clever-graaljs-freemarker</artifactId>
                 <version>${revision}</version>
             </dependency>
             <!--clever依赖-->

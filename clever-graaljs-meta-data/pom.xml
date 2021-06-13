@@ -18,10 +18,6 @@
             <groupId>org.clever</groupId>
             <artifactId>clever-graaljs-core</artifactId>
         </dependency>
-        <dependency>
-            <groupId>org.clever</groupId>
-            <artifactId>clever-graaljs-data-common</artifactId>
-        </dependency>
         <!--schemacrawler-->
         <dependency>
             <groupId>us.fatehi</groupId>
