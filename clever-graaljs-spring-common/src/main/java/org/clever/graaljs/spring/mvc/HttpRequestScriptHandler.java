@@ -2,6 +2,9 @@
 //
 //import lombok.extern.slf4j.Slf4j;
 //import org.apache.commons.lang3.StringUtils;
+//import org.clever.graaljs.core.ScriptEngineInstance;
+//import org.clever.graaljs.core.utils.TupleTow;
+//import org.clever.graaljs.spring.mvc.support.UrlPathUtils;
 //import org.springframework.core.io.Resource;
 //import org.springframework.http.HttpStatus;
 //import org.springframework.util.Assert;
@@ -55,9 +58,9 @@
 //     */
 //    protected final ScriptHandlerCorsConfig corsConfig;
 //    /**
-//     * 引擎实例对象池
+//     * 脚本引擎实例
 //     */
-//    protected final EngineInstancePool<E, T> engineInstancePool;
+//    protected final ScriptEngineInstance scriptEngineInstance;
 //    /**
 //     * 异常处理对象
 //     */
@@ -68,19 +71,19 @@
 //    protected final CorsProcessor corsProcessor = new DefaultCorsProcessor();
 //
 //    /**
-//     * @param prefixMapping      “请求路径”和“脚本路径”映射规则
-//     * @param supportSuffix      支持的请求后缀
-//     * @param corsConfig         跨域配置
-//     * @param engineInstancePool 引擎实例对象池
-//     * @param exceptionResolver  异常处理对象
+//     * @param prefixMapping        “请求路径”和“脚本路径”映射规则
+//     * @param supportSuffix        支持的请求后缀
+//     * @param corsConfig           跨域配置
+//     * @param scriptEngineInstance 脚本引擎实例
+//     * @param exceptionResolver    异常处理对象
 //     */
 //    public HttpRequestScriptHandler(
 //            LinkedHashMap<String, String> prefixMapping,
 //            Set<String> supportSuffix,
 //            ScriptHandlerCorsConfig corsConfig,
-//            EngineInstancePool<E, T> engineInstancePool,
+//            ScriptEngineInstance scriptEngineInstance,
 //            ExceptionResolver exceptionResolver) {
-//        Assert.notNull(engineInstancePool, "参数engineInstancePool不能为空");
+//        Assert.notNull(scriptEngineInstance, "参数scriptEngineInstance不能为空");
 //        this.prefixMapping = prefixMapping == null || prefixMapping.isEmpty() ? new LinkedHashMap<String, String>() {{
 //            put("/!/", "");
 //        }} : prefixMapping;
@@ -88,15 +91,15 @@
 //        supportSuffix = supportSuffix.stream().filter(Objects::nonNull).map(StringUtils::trim).collect(Collectors.toSet());
 //        this.supportSuffix = Collections.unmodifiableSet(supportSuffix);
 //        this.corsConfig = corsConfig == null ? new ScriptHandlerCorsConfig() : corsConfig;
-//        this.engineInstancePool = engineInstancePool;
+//        this.scriptEngineInstance = scriptEngineInstance;
 //        this.exceptionResolver = exceptionResolver;
 //    }
 //
 //    /**
-//     * @param engineInstancePool 引擎实例对象池
+//     * @param scriptEngineInstance 脚本引擎实例
 //     */
-//    public HttpRequestScriptHandler(EngineInstancePool<E, T> engineInstancePool) {
-//        this(null, null, null, engineInstancePool, null);
+//    public HttpRequestScriptHandler(ScriptEngineInstance scriptEngineInstance) {
+//        this(null, null, null, scriptEngineInstance, null);
 //    }
 //
 //    /**
@@ -188,7 +191,7 @@
 //     * 获取处理请求的 Script 文件全路径<br/>
 //     * {@code TupleTow<ScriptFileFullPath, MethodName>}
 //     */
-//    protected TupleTow<String, String> getScriptInfo(ScriptEngineInstance<E, T> engineInstance, HttpServletRequest request) {
+//    protected TupleTow<String, String> getScriptInfo(ScriptEngineInstance scriptEngineInstance, HttpServletRequest request) {
 //        // 根据请求url解析 scriptInfo(filePath, method) - 请求例子: /!aaa/bbb/ccc/ddd/fff@biz.json
 //        String requestUri = request.getRequestURI();
 //        for (String suffix : supportSuffix) {
@@ -228,7 +231,7 @@
 //                // 构造scriptInfo
 //                TupleTow<String, String> scriptInfo = TupleTow.creat(filePath.startsWith("/") ? filePath : String.format("/%s", filePath), method);
 //                // 判断文件是否存在
-//                if (fileExists(engineInstance, scriptInfo.getValue1())) {
+//                if (fileExists(scriptEngineInstance, scriptInfo.getValue1())) {
 //                    return scriptInfo;
 //                } else {
 //                    log.debug("Script File不存在，filePath=[{}]", scriptInfo.getValue1());
@@ -241,10 +244,10 @@
 //    /**
 //     * 判断Script File是否存在
 //     *
-//     * @param engineInstance 脚本引擎实例
-//     * @param fullPath       文件全路径
+//     * @param scriptEngineInstance 脚本引擎实例
+//     * @param fullPath             文件全路径
 //     */
-//    protected abstract boolean fileExists(ScriptEngineInstance<E, T> engineInstance, String fullPath);
+//    protected abstract boolean fileExists(ScriptEngineInstance scriptEngineInstance, String fullPath);
 //
 //    /**
 //     * 获取 Script 文件对应的 Script 对象和执行函数名
