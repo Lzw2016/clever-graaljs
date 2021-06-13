@@ -61,7 +61,7 @@ public abstract class HttpRequestScriptHandler implements HandlerInterceptor, Sc
      */
     protected final CorsProcessor corsProcessor = new DefaultCorsProcessor();
     /**
-     * MVC请求数据装换
+     * mvc请求数据转换对象
      */
     private final ObjectProvider<ConversionService> conversionService;
 
@@ -70,6 +70,7 @@ public abstract class HttpRequestScriptHandler implements HandlerInterceptor, Sc
      * @param corsConfig           跨域配置
      * @param scriptEngineInstance 脚本引擎实例
      * @param exceptionResolver    异常处理对象
+     * @param conversionService    mvc请求数据转换对象
      */
     public HttpRequestScriptHandler(
             String supportPrefix,
