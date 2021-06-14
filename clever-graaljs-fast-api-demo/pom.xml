@@ -18,5 +18,10 @@
             <groupId>org.clever</groupId>
             <artifactId>clever-graaljs-fast-api</artifactId>
         </dependency>
+        <!--spring-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
     </dependencies>
 </project>

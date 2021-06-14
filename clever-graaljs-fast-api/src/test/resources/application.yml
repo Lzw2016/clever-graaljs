@@ -1,0 +1,58 @@
+###################################################################################
+### clever
+###################################################################################
+clever:
+  hinny:
+    script-path: 'D:\SourceCode\clever\clever-hinny-js'
+    script-file-watcher:
+      enable-watcher: true
+      interval: 3s
+      delay-millis: 300ms
+      include:
+        - '*.js'
+        - '*.json'
+      exclude:
+        - '*\node_modules\*'
+    engine-instance-pool:
+      max-wait-millis: -1
+      min-idle: 2
+      max-idle: 8
+      max-total: 8
+    mvc-handler:
+      support-suffix:
+        - ''
+        - '.json'
+        - '.action'
+      prefix-mappings:
+        - request-path: '/!/'
+          script-path: ''
+    mybatis-mapper-config:
+      enable-watcher: true
+      mapper-path: 'D:\SourceCode\clever\clever-hinny-js\test\mvc'
+      interval: 1s
+      include: [ '*.xml' ]
+
+#    multiple-jdbc:
+#      default-jdbc: 'xxx'
+#      global-config:
+#        k1: v1
+#        k2: v2
+#      jdbc-map:
+#        jdbc-1:
+#          k1: v1
+#          k2: v2
+#        jdbc-2:
+#          k1: v1
+#          k2: v2
+#    multiple-redis:
+#      default-redis: 'xxx'
+#      global-config:
+#        k1: v1
+#        k2: v2
+#      redis-map:
+#        redis-1:
+#          k1: v1
+#          k2: v2
+#        redis-2:
+#          k1: v1
+#          k2: v2

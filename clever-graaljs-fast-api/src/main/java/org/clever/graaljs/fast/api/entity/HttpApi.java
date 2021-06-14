@@ -35,7 +35,7 @@ public class HttpApi implements Serializable {
     private String requestMapping;
 
     /**
-     * http请求method，GET HEAD POST PUT DELETE CONNECT OPTIONS TRACE PATCH
+     * http请求method，ALL GET HEAD POST PUT DELETE CONNECT OPTIONS TRACE PATCH
      */
     private String requestMethod;
 

@@ -4,12 +4,17 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.clever.graaljs.core.ScriptEngineInstance;
 import org.clever.graaljs.core.ScriptObject;
+import org.clever.graaljs.core.internal.jackson.JacksonMapperSupport;
 import org.clever.graaljs.core.utils.TupleOne;
 import org.clever.graaljs.core.utils.TupleTow;
 import org.clever.graaljs.spring.mvc.builtin.wrap.HttpContext;
+import org.clever.graaljs.spring.mvc.support.IntegerToDateConverter;
+import org.clever.graaljs.spring.mvc.support.StringToDateConverter;
+import org.graalvm.polyglot.PolyglotException;
 import org.graalvm.polyglot.Value;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.core.convert.ConversionService;
+import org.springframework.core.convert.support.GenericConversionService;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpStatus;
 import org.springframework.util.Assert;
@@ -25,6 +30,7 @@ import org.springframework.web.servlet.resource.ResourceHttpRequestHandler;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.lang.reflect.Method;
+import java.util.Date;
 
 /**
  * 作者：lizw <br/>
@@ -41,6 +47,10 @@ public abstract class HttpInterceptorScriptHandler implements HandlerInterceptor
      */
     @SuppressWarnings("UastIncorrectHttpHeaderInspection")
     protected static final String USE_SCRIPT_HANDLER_HEAD = "script-file-resource";
+    /**
+     * 初始化状态
+     */
+    protected volatile boolean initialized = false;
     /**
      * 支持的请求前缀
      */
@@ -64,7 +74,7 @@ public abstract class HttpInterceptorScriptHandler implements HandlerInterceptor
     /**
      * mvc请求数据转换对象
      */
-    private final ObjectProvider<ConversionService> conversionService;
+    protected final ObjectProvider<ConversionService> conversionService;
 
     /**
      * @param supportPrefix        支持的请求前缀
@@ -85,6 +95,21 @@ public abstract class HttpInterceptorScriptHandler implements HandlerInterceptor
         this.scriptEngineInstance = scriptEngineInstance;
         this.exceptionResolver = exceptionResolver;
         this.conversionService = conversionService;
+        init();
+    }
+
+    private synchronized void init() {
+        if (initialized) {
+            return;
+        }
+        ConversionService conversion = conversionService.getIfAvailable();
+        if (conversion instanceof GenericConversionService) {
+            GenericConversionService genericConversionService = (GenericConversionService) conversion;
+            genericConversionService.addConverter(String.class, Date.class, StringToDateConverter.Instance);
+            genericConversionService.addConverter(Integer.class, Date.class, IntegerToDateConverter.Instance);
+            genericConversionService.addConverter(int.class, Date.class, IntegerToDateConverter.Instance);
+            initialized = true;
+        }
     }
 
     /**
@@ -154,17 +179,34 @@ public abstract class HttpInterceptorScriptHandler implements HandlerInterceptor
     /**
      * 返回对象是否是空值
      */
-    protected abstract boolean resIsEmpty(Value res);
+    protected boolean resIsEmpty(Value res) {
+        return res == null || res.isNull();
+    }
 
     /**
      * 序列化返回对象
      */
-    protected abstract String serializeRes(Object res);
+    protected String serializeRes(Object res) {
+        return JacksonMapperSupport.getHttpApiJacksonMapper().toJson(res);
+    }
 
     /**
      * 异常处理
      */
     protected void errHandle(Throwable e) throws Exception {
+        PolyglotException polyglotException = null;
+        if (e instanceof PolyglotException) {
+            polyglotException = (PolyglotException) e;
+        } else if (e.getCause() instanceof PolyglotException) {
+            polyglotException = (PolyglotException) e.getCause();
+        }
+        if (polyglotException != null && polyglotException.isHostException()) {
+            Throwable err = polyglotException.asHostException();
+            if (err == null) {
+                throw polyglotException;
+            }
+            e = err;
+        }
         if (e instanceof Exception) {
             throw (Exception) e;
         }

@@ -25,7 +25,7 @@ public class FileResource implements Serializable {
     private String namespace;
 
     /**
-     * 文件路径
+     * 文件路径(以"/"结束)
      */
     private String path;
 

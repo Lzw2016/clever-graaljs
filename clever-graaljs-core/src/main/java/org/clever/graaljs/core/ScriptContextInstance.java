@@ -11,6 +11,7 @@ import org.graalvm.polyglot.Value;
 
 import java.io.Closeable;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
@@ -21,7 +22,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class ScriptContextInstance implements Closeable {
     private static final AtomicInteger FUC_COUNTER = new AtomicInteger(0);
     private static final int CODE_MAP_CAPACITY = 20480;
-    private static final ConcurrentHashMap<String, Integer> CODE_MAP = new ConcurrentHashMap<>(CODE_MAP_CAPACITY);
+    private static final ConcurrentMap<String, Integer> CODE_MAP = new ConcurrentHashMap<>(CODE_MAP_CAPACITY);
 
     /**
      * 缓存code的count值

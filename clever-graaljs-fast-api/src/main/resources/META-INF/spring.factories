@@ -1,0 +1,2 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+org.clever.graaljs.fast.api.autoconfigure.FastApiAutoConfiguration
