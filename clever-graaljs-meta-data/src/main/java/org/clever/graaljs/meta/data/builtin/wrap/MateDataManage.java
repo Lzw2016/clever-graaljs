@@ -117,7 +117,7 @@ public class MateDataManage {
     public void delAll() {
         Iterator<Map.Entry<String, MateDataService>> iterator = MateDataService_Map.entrySet().iterator();
         while (iterator.hasNext()) {
-            Map.Entry<String, MateDataService> entry = iterator.next();
+            // Map.Entry<String, MateDataService> entry = iterator.next();
             iterator.remove();
         }
         defaultName = null;
