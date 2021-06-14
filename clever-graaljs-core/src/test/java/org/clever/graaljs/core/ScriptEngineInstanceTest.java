@@ -89,4 +89,39 @@ public class ScriptEngineInstanceTest {
         scriptEngineInstance.wrapFunctionAndEval(code, (Consumer<ScriptObject>) ScriptObject::executeVoid);
         scriptEngineInstance.close();
     }
+
+//    @Test
+//    public void t06() throws IOException, InterruptedException {
+//        String code = getSourceCode("/t06.js");
+//        Map<String, Object> contextMap = new HashMap<>();
+//        contextMap.put("JavaInterop", JavaInteropTest.Instance);
+//        Map<String, Object> global = new HashMap<>();
+//        global.put("a", "aa");
+//        final ScriptEngineConfig config = new ScriptEngineConfig();
+//        ScriptEngineInstance scriptEngineInstance = new ScriptEngineInstance(config, null, contextMap, global);
+//        Value value = scriptEngineInstance.wrapFunctionAndEval(code, (Function<ScriptObject, Value>) ScriptObject::execute);
+//        final int count = 16;
+//        List<Thread> list = new ArrayList<>(count);
+//        for (int i = 0; i < count; i++) {
+//            list.add(new Thread(() -> {
+//                log.info("### -> {}", GraalObjectToString.Instance.toString(value));
+//            }));
+//        }
+//        for (Thread thread : list) {
+//            thread.start();
+//        }
+//        Thread.sleep(5 * 1000);
+//        scriptEngineInstance.close();
+//        list.clear();
+//        for (int i = 0; i < count; i++) {
+//            list.add(new Thread(() -> {
+//                log.info("### -> {}", GraalObjectToString.Instance.toString(value));
+//            }));
+//        }
+//        for (Thread thread : list) {
+//            thread.start();
+//        }
+//        Thread.sleep(5 * 1000);
+//        log.info("### END");
+//    }
 }

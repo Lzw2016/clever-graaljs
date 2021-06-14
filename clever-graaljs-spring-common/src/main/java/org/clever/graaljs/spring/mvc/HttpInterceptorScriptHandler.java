@@ -5,6 +5,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.clever.graaljs.core.ScriptEngineInstance;
 import org.clever.graaljs.core.ScriptObject;
 import org.clever.graaljs.core.utils.TupleOne;
+import org.clever.graaljs.core.utils.TupleTow;
 import org.clever.graaljs.spring.mvc.builtin.wrap.HttpContext;
 import org.graalvm.polyglot.Value;
 import org.springframework.beans.factory.ObjectProvider;
@@ -30,7 +31,7 @@ import java.lang.reflect.Method;
  * 创建时间：2020/08/24 21:34 <br/>
  */
 @Slf4j
-public abstract class HttpRequestScriptHandler implements HandlerInterceptor, ScriptHandler {
+public abstract class HttpInterceptorScriptHandler implements HandlerInterceptor, ScriptHandler {
     /**
      * 是否强制使用Script Handler处理请求
      */
@@ -72,7 +73,7 @@ public abstract class HttpRequestScriptHandler implements HandlerInterceptor, Sc
      * @param exceptionResolver    异常处理对象
      * @param conversionService    mvc请求数据转换对象
      */
-    public HttpRequestScriptHandler(
+    public HttpInterceptorScriptHandler(
             String supportPrefix,
             ScriptHandlerCorsConfig corsConfig,
             ScriptEngineInstance scriptEngineInstance,
@@ -126,28 +127,16 @@ public abstract class HttpRequestScriptHandler implements HandlerInterceptor, Sc
                 support = false;
             }
         }
-        // 判断请求
-        if (support) {
-            support = existsScriptFileResource(request);
-        }
         return support;
     }
-
-    /**
-     * 判断处理请求的Script File Resource是否存在
-     *
-     * @param request 请求对象
-     */
-    protected abstract boolean existsScriptFileResource(HttpServletRequest request);
 
     /**
      * 获取处理请求的Script File Resource
      *
      * @param request 请求对象
+     * @return {@code TupleTow<FullPath, Content>}
      */
-    protected abstract String getScriptFileResource(HttpServletRequest request);
-
-//    protected abstract TupleTow<String, String> getScriptInfo(HttpServletRequest request);
+    protected abstract TupleTow<String, String> getScriptFileResource(HttpServletRequest request);
 
     /**
      * 当前请求真实处理逻辑
@@ -184,22 +173,25 @@ public abstract class HttpRequestScriptHandler implements HandlerInterceptor, Sc
 
     @Override
     public boolean handle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        // TupleTow<String, String> scriptInfo = null;
-        // 1.判断请求是否支持 Script 处理
+        // 判断请求是否支持 Script 处理
         if (!supportScript(request, handler)) {
             return false;
         }
         long startTime1 = -1;                                   // 开始查找脚本文件时间
         long startTime2 = -1;                                   // 开始执行脚本时间
         final TupleOne<Long> startTime3 = TupleOne.creat(-1L);  // 开始序列化返回值时间;
+        TupleTow<String, String> scriptInfo = null;
         try {
             // 1.加载执行脚本代码
             startTime1 = System.currentTimeMillis();
-            final String scriptFucCode = getScriptFileResource(request);
+            scriptInfo = getScriptFileResource(request);
+            if (scriptInfo == null) {
+                return false;
+            }
             // 2.执行脚本
             startTime2 = System.currentTimeMillis();
-            response.setHeader(USE_SCRIPT_HANDLER_HEAD, String.format("%s#%s", /*scriptInfo.getValue1()*/"-", /*scriptInfo.getValue2()*/ "-"));
-            String resJson = scriptEngineInstance.wrapFunctionAndEval(scriptFucCode, scriptObject -> {
+            response.setHeader(USE_SCRIPT_HANDLER_HEAD, scriptInfo.getValue1());
+            String resJson = scriptEngineInstance.wrapFunctionAndEval(scriptInfo.getValue2(), scriptObject -> {
                 Value res = doHandle(request, response, scriptObject);
                 // 3.序列化返回数据
                 startTime3.setValue1(System.currentTimeMillis());
@@ -215,22 +207,23 @@ public abstract class HttpRequestScriptHandler implements HandlerInterceptor, Sc
         } catch (Throwable e) {
             errHandle(e);
         } finally {
-            final long endTime = System.currentTimeMillis();
-            final long howLongSum = endTime - startTime1;                                                   // 总耗时
-            final long howLong1 = startTime2 <= -1 ? -1 : startTime2 - startTime1;                          // 查找脚本耗时
-            final long howLong2 = startTime3.getValue1() <= -1 ? -1 : startTime3.getValue1() - startTime2;  // 执行脚本耗时
-            final long howLong3 = startTime3.getValue1() <= -1 ? -1 : endTime - startTime3.getValue1();     // 序列化耗时
-            // 8.请求处理完成 - 打印日志
-            String logText = String.format(
-                    "Script处理请求 | [总]耗时:%-8s | 查找脚本耗时:%-8s | 执行脚本耗时:%-8s | 序列化耗时:%-8s | Script=[%s#%s]",
-                    howLongSum + "ms",
-                    howLong1 <= -1 ? "-" : howLong1 + "ms",
-                    howLong2 <= -1 ? "-" : howLong2 + "ms",
-                    howLong3 <= -1 ? "-" : howLong3 + "ms",
-                    /*scriptInfo == null ? "-" : scriptInfo.getValue1()*/ "-",
-                    /*scriptInfo == null ? "-" : scriptInfo.getValue2()*/ "-"
-            );
-            log.debug(logText);
+            if (scriptInfo != null) {
+                final long endTime = System.currentTimeMillis();
+                final long howLongSum = endTime - startTime1;                                                   // 总耗时
+                final long howLong1 = startTime2 <= -1 ? -1 : startTime2 - startTime1;                          // 查找脚本耗时
+                final long howLong2 = startTime3.getValue1() <= -1 ? -1 : startTime3.getValue1() - startTime2;  // 执行脚本耗时
+                final long howLong3 = startTime3.getValue1() <= -1 ? -1 : endTime - startTime3.getValue1();     // 序列化耗时
+                // 8.请求处理完成 - 打印日志
+                String logText = String.format(
+                        "Script处理请求 | [总]耗时:%-8s | 查找脚本耗时:%-8s | 执行脚本耗时:%-8s | 序列化耗时:%-8s | Script=[%s]",
+                        howLongSum + "ms",
+                        howLong1 <= -1 ? "-" : howLong1 + "ms",
+                        howLong2 <= -1 ? "-" : howLong2 + "ms",
+                        howLong3 <= -1 ? "-" : howLong3 + "ms",
+                        scriptInfo.getValue1()
+                );
+                log.debug(logText);
+            }
         }
         return true;
     }
