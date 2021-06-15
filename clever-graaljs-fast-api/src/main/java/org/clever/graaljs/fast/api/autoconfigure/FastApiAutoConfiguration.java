@@ -14,12 +14,13 @@ import org.clever.graaljs.meta.data.builtin.wrap.MateDataManage;
 import org.clever.graaljs.spring.mvc.DefaultExceptionResolver;
 import org.clever.graaljs.spring.mvc.ExceptionResolver;
 import org.springframework.beans.factory.ObjectProvider;
+import org.springframework.boot.autoconfigure.AutoConfigureOrder;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.annotation.Order;
+import org.springframework.core.Ordered;
 import org.springframework.core.convert.ConversionService;
 
 import java.util.HashMap;
@@ -30,9 +31,9 @@ import java.util.Map;
  * 创建时间：2021/06/14 09:57 <br/>
  */
 @ComponentScan(basePackages = {"org.clever.graaljs.fast.api.controller", "org.clever.graaljs.fast.api.service"})
+@AutoConfigureOrder(Ordered.LOWEST_PRECEDENCE)
 @EnableConfigurationProperties({FastApiConfig.class})
 @Configuration
-@Order
 @Slf4j
 public class FastApiAutoConfiguration {
     private final FastApiConfig fastApiConfig;
@@ -104,21 +105,21 @@ public class FastApiAutoConfiguration {
         return DefaultExceptionResolver.Instance;
     }
 
-    @Bean("scriptEngineInstance")
-    @ConditionalOnMissingBean
-    public FastApiHttpInterceptor fastApiHttpInterceptor(
-            ExceptionResolver exceptionResolver,
-            ScriptEngineInstance scriptEngineInstance,
-            FileResourceCacheService fileResourceCacheServices,
-            ObjectProvider<ConversionService> conversionService) {
-        final MvcConfig mvc = fastApiConfig.getMvc();
-        return new FastApiHttpInterceptor(
-                mvc.getPrefix(),
-                mvc.getCors(),
-                scriptEngineInstance,
-                exceptionResolver,
-                conversionService,
-                fileResourceCacheServices
-        );
-    }
+//    @Bean("scriptEngineInstance")
+//    @ConditionalOnMissingBean
+//    public FastApiHttpInterceptor fastApiHttpInterceptor(
+//            ExceptionResolver exceptionResolver,
+//            ScriptEngineInstance scriptEngineInstance,
+//            FileResourceCacheService fileResourceCacheServices,
+//            ObjectProvider<ConversionService> conversionService) {
+//        final MvcConfig mvc = fastApiConfig.getMvc();
+//        return new FastApiHttpInterceptor(
+//                mvc.getPrefix(),
+//                mvc.getCors(),
+//                scriptEngineInstance,
+//                exceptionResolver,
+//                conversionService,
+//                fileResourceCacheServices
+//        );
+//    }
 }

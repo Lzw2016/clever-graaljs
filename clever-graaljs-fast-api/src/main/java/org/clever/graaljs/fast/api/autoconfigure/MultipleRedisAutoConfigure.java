@@ -10,11 +10,12 @@ import org.clever.graaljs.fast.api.config.MultipleRedisConfig;
 import org.clever.graaljs.fast.api.utils.MergeRedisProperties;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.boot.autoconfigure.AutoConfigureOrder;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.data.redis.RedisProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.annotation.Order;
+import org.springframework.core.Ordered;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 
 import java.util.List;
@@ -23,10 +24,11 @@ import java.util.List;
  * 作者：lizw <br/>
  * 创建时间：2021/06/14 14:53 <br/>
  */
-@Configuration
+
+@AutoConfigureOrder(Ordered.LOWEST_PRECEDENCE)
 @EnableConfigurationProperties({FastApiConfig.class})
 @ConditionalOnClass({RedisProperties.class, RedisConnectionFactory.class, RedisDataSource.class, RedisDatabase.class})
-@Order
+@Configuration
 @Slf4j
 public class MultipleRedisAutoConfigure implements CommandLineRunner {
     private final MultipleRedisConfig multipleRedis;

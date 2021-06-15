@@ -1,0 +1,162 @@
+###################################################################################
+### Web服务器配置
+###################################################################################
+server:
+  port: 18081
+  servlet:
+    context-path: /
+
+###################################################################################
+### logging(logback)
+###################################################################################
+logging:
+  config: classpath:logback.xml
+  level:
+    org.springframework: warn
+    org.springframework.jdbc.datasource.DataSourceTransactionManager: debug
+    org.springframework.beans.factory: warn
+    com.zaxxer.hikari: info
+    org.apache.ibatis: info
+    org.hibernate.validator: warn
+    io.lettuce: warn
+    io.netty: warn
+    springfox.documentation: warn
+    schemacrawler: error
+    us.fatehi: error
+    org.clever: debug
+
+###################################################################################
+### Spring配置
+###################################################################################
+spring:
+  profiles.active: dev
+  application.name: graaljs-test
+  aop.proxy-target-class: true
+
+  servlet: #------------------------------------------------------------ 文件上传配置
+    multipart:
+      enabled: true
+      max-file-size: 10MB
+      max-request-size: 10MB
+      location: 'data/temp'
+
+#  http: #------------------------------------------------------------------ http配置
+#    converters:
+#      preferred-json-mapper: jackson
+#    encoding:
+#      charset: UTF-8
+#      force: false
+
+  jackson: #------------------------------------------------------------ jackson配置
+    date-format: yyyy-MM-dd HH:mm:ss
+    locale: zh_CN
+    time-zone: GMT+8
+
+  resources: #------------------------------------------------ html、js、css 静态资源
+    chain:
+      cache: false
+      compressed: true
+    cache:
+      period: 0s
+    static-locations: [ 'classpath:/static/' ]
+
+  datasource: #----------------------------------------------------------- 数据库配置
+    type: com.zaxxer.hikari.HikariDataSource
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://192.168.1.201:12000/test-data
+    username: test-data
+    password: Aa123456!
+    hikari:
+      pool-name: defaultDataSource
+      data-source-properties:
+        serverTimezone: GMT+8
+        useUnicode: true
+        characterEncoding: utf-8
+        zeroDateTimeBehavior: convert_to_null
+        useSSL: false
+        useCursorFetch: true
+      auto-commit: false
+      maximum-pool-size: 1
+      minimum-idle: 1
+      max-lifetime: 1800000
+      connection-test-query: SELECT 1
+  redis:
+    host: 192.168.1.201
+    port: 12001
+    password: a123456!@#
+    lettuce.pool:
+      min-idle: 2
+      max-active: 32
+
+  freemarker:
+    request-context-attribute: req  #req访问request
+    suffix: .html  #后缀名
+    content-type: text/html
+    enabled: true
+    cache: false #缓存配置
+    template-loader-path: classpath:/templates/ #模板加载路径 按需配置
+    charset: UTF-8 #编码格式
+    settings:
+      number_format: '0.##'   #数字格式化，无小数点
+
+###################################################################################
+### clever
+###################################################################################
+clever:
+  fast-api:
+    namespace: 'default'
+    scan-interval: 3s
+    script-engine:
+      max-wait-millis: 1000
+      min-idle: 1
+      max-idle: 1
+      max-total: 1
+    mvc:
+      prefix: '/api'
+      cors:
+        allowed-origins: [ '*' ]
+        allowed-methods: [ '*' ]
+        allowed-headers: [ '*' ]
+        exposed-headers: [ ]
+        allow-credentials: true
+    multiple-jdbc:
+      disable: false
+      default-name: default
+      global:
+        driver-class-name: com.mysql.cj.jdbc.Driver
+        data-source-properties:
+          serverTimezone: GMT+8
+          useUnicode: true
+          characterEncoding: utf-8
+          zeroDateTimeBehavior: convert_to_null
+          useSSL: false
+          useCursorFetch: true
+        auto-commit: false
+        maximum-pool-size: 100
+        minimum-idle: 5
+        max-lifetime: 1800000
+        connection-test-query: SELECT 1
+      jdbc-map:
+        default:
+          jdbc-url: jdbc:mysql://192.168.1.201:12000/test-data
+          username: test-data
+          password: Aa123456!
+    multiple-redis:
+      disable: false
+      default-name: default
+      global:
+        database: 0
+        port: 6379
+        lettuce:
+          pool:
+            max-active: 16
+            max-idle: 8
+            min-idle: 1
+      redis-map:
+        default:
+          host: 192.168.1.201
+          port: 12001
+          password: a123456!@#
+          lettuce.pool:
+            min-idle: 2
+            max-active: 32

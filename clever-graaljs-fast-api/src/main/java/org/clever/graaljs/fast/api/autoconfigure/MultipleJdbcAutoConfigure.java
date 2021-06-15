@@ -16,10 +16,11 @@ import org.clever.graaljs.meta.data.builtin.wrap.MateDataManage;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
+import org.springframework.boot.autoconfigure.AutoConfigureOrder;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.annotation.Order;
+import org.springframework.core.Ordered;
 
 import javax.sql.DataSource;
 import java.util.ArrayList;
@@ -32,10 +33,10 @@ import java.util.Map;
  * 创建时间：2021/06/14 14:19 <br/>
  */
 @AutoConfigureAfter({FastApiAutoConfiguration.class})
+@AutoConfigureOrder(Ordered.LOWEST_PRECEDENCE)
 @EnableConfigurationProperties({FastApiConfig.class})
-@Configuration
 @ConditionalOnClass({HikariDataSource.class, JdbcDataSource.class, JdbcDatabase.class, MyBatisJdbcDataSource.class, MyBatisJdbcDatabase.class})
-@Order
+@Configuration
 @Slf4j
 public class MultipleJdbcAutoConfigure implements CommandLineRunner {
     private final List<DataSource> dataSourceList = new ArrayList<>();
@@ -47,10 +48,10 @@ public class MultipleJdbcAutoConfigure implements CommandLineRunner {
     public MultipleJdbcAutoConfigure(
             ObjectProvider<DataSource> dataSourceList,
             FastApiConfig fastApiConfig,
-            MyBatisMapperSql mybatisMapperSql) {
+            ObjectProvider<MyBatisMapperSql> mybatisMapperSql) {
         dataSourceList.forEach(this.dataSourceList::add);
         this.multipleJdbc = fastApiConfig.getMultipleJdbc() == null ? new MultipleJdbcConfig() : fastApiConfig.getMultipleJdbc();
-        this.mybatisMapperSql = mybatisMapperSql;
+        this.mybatisMapperSql = mybatisMapperSql.getIfAvailable();
     }
 
     @Override

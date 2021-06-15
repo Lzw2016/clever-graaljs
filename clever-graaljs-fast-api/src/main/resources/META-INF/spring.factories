@@ -1,6 +1,5 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-org.clever.graaljs.fast.api.autoconfigure.EngineInstanceAutoConfiguration,\
-org.clever.graaljs.fast.api.autoconfigure.FastApiHttpInterceptorAutoConfiguration,\
 org.clever.graaljs.fast.api.autoconfigure.FastApiAutoConfiguration,\
+org.clever.graaljs.fast.api.autoconfigure.FastApiWebMvcConfigurer,\
 org.clever.graaljs.fast.api.autoconfigure.MultipleJdbcAutoConfigure,\
 org.clever.graaljs.fast.api.autoconfigure.MultipleRedisAutoConfigure
