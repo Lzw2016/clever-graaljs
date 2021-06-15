@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.clever.graaljs.core.internal.jackson.JacksonMapperSupport;
 import org.clever.graaljs.data.redis.builtin.adapter.RedisDataSource;
 import org.clever.graaljs.data.redis.builtin.wrap.RedisDatabase;
+import org.clever.graaljs.fast.api.config.FastApiConfig;
 import org.clever.graaljs.fast.api.config.MultipleRedisConfig;
 import org.clever.graaljs.fast.api.utils.MergeRedisProperties;
 import org.springframework.beans.factory.ObjectProvider;
@@ -22,21 +23,23 @@ import java.util.List;
  * 作者：lizw <br/>
  * 创建时间：2021/06/14 14:53 <br/>
  */
-@Order
-@ConditionalOnClass({RedisProperties.class, RedisConnectionFactory.class, RedisDataSource.class, RedisDatabase.class})
 @Configuration
-@EnableConfigurationProperties({MultipleRedisConfig.class})
+@EnableConfigurationProperties({FastApiConfig.class})
+@ConditionalOnClass({RedisProperties.class, RedisConnectionFactory.class, RedisDataSource.class, RedisDatabase.class})
+@Order
 @Slf4j
 public class MultipleRedisAutoConfigure implements CommandLineRunner {
-    private final MultipleRedisConfig multipleRedisConfig;
+    private final MultipleRedisConfig multipleRedis;
     private final List<RedisConnectionFactory> redisConnectionFactoryList;
     private final ObjectMapper objectMapper;
 
     protected boolean initialized = false;
 
-    public MultipleRedisAutoConfigure(ObjectProvider<List<RedisConnectionFactory>> redisConnectionFactoryList, MultipleRedisConfig multipleRedisConfig) {
+    public MultipleRedisAutoConfigure(
+            ObjectProvider<List<RedisConnectionFactory>> redisConnectionFactoryList,
+            FastApiConfig fastApiConfig) {
         this.redisConnectionFactoryList = redisConnectionFactoryList.getIfAvailable();
-        this.multipleRedisConfig = multipleRedisConfig;
+        this.multipleRedis = fastApiConfig.getMultipleRedis() == null ? new MultipleRedisConfig() : fastApiConfig.getMultipleRedis();
         this.objectMapper = JacksonMapperSupport.getRedisJacksonMapper().getMapper();
     }
 
@@ -46,7 +49,7 @@ public class MultipleRedisAutoConfigure implements CommandLineRunner {
             return;
         }
         initialized = true;
-        if (multipleRedisConfig.isDisable()) {
+        if (multipleRedis.isDisable()) {
             return;
         }
         // 加入已存在的数据源
@@ -61,8 +64,8 @@ public class MultipleRedisAutoConfigure implements CommandLineRunner {
             }
         }
         // 初始化配置的数据源
-        final RedisProperties globalConfig = multipleRedisConfig.getGlobalConfig();
-        multipleRedisConfig.getRedisMap().forEach((name, redisConfig) -> {
+        final RedisProperties globalConfig = multipleRedis.getGlobal();
+        multipleRedis.getRedisMap().forEach((name, redisConfig) -> {
             if (RedisDatabase.Instance.hasDataSource(name)) {
                 throw new RuntimeException("redis数据源名称重复: " + name);
             }
@@ -71,7 +74,7 @@ public class MultipleRedisAutoConfigure implements CommandLineRunner {
             RedisDatabase.Instance.add(name, redisDataSource);
             log.info("初始化 RedisDataSource: {}", name);
         });
-        RedisDatabase.Instance.setDefault(multipleRedisConfig.getDefaultName());
-        log.info("默认的 RedisDataSource: {}", multipleRedisConfig.getDefaultName());
+        RedisDatabase.Instance.setDefault(multipleRedis.getDefaultName());
+        log.info("默认的 RedisDataSource: {}", multipleRedis.getDefaultName());
     }
 }

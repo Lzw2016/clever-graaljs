@@ -4,7 +4,9 @@ import org.apache.commons.lang3.StringUtils;
 import org.clever.graaljs.fast.api.entity.EnumConstant;
 import org.clever.graaljs.fast.api.model.HttpApiFileResource;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.stereotype.Component;
 
+import javax.annotation.Resource;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
@@ -14,6 +16,7 @@ import java.util.stream.Collectors;
  * 作者：lizw <br/>
  * 创建时间：2021/06/14 11:52 <br/>
  */
+@Component
 public class FileResourceCacheService {
     private final static String BASE_SQL = "" +
             "select " +
@@ -31,16 +34,20 @@ public class FileResourceCacheService {
             "%s " +
             "order by a.update_at desc, a.id desc, b.update_at desc, b.id desc";
 
+    @Resource
+    private final JdbcTemplate jdbcTemplate;
     /**
      * HttpApiFileResource缓存 {@code Map<requestMapping, HttpApiFileResource>}
      */
     private volatile ConcurrentMap<String, HttpApiFileResource> httpApiCache = new ConcurrentHashMap<>();
-
+    /**
+     * 文件资源最后修改时间
+     */
     private volatile Date lastModifiedTime;
-
+    /**
+     * 操作缓存锁
+     */
     private final Object lock = new Object();
-
-    private final JdbcTemplate jdbcTemplate;
 
     public FileResourceCacheService(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;

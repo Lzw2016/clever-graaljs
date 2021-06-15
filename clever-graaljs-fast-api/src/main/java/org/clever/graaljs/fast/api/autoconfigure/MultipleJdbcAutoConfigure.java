@@ -9,11 +9,13 @@ import org.clever.graaljs.data.jdbc.builtin.adapter.MyBatisJdbcDataSource;
 import org.clever.graaljs.data.jdbc.builtin.wrap.JdbcDatabase;
 import org.clever.graaljs.data.jdbc.builtin.wrap.MyBatisJdbcDatabase;
 import org.clever.graaljs.data.jdbc.mybatis.MyBatisMapperSql;
-import org.clever.graaljs.fast.api.config.MultipleDataSourceConfig;
+import org.clever.graaljs.fast.api.config.FastApiConfig;
+import org.clever.graaljs.fast.api.config.MultipleJdbcConfig;
 import org.clever.graaljs.fast.api.utils.MergeDataSourceConfig;
 import org.clever.graaljs.meta.data.builtin.wrap.MateDataManage;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
@@ -29,28 +31,26 @@ import java.util.Map;
  * 作者：lizw <br/>
  * 创建时间：2021/06/14 14:19 <br/>
  */
-@Order
-@ConditionalOnClass({HikariDataSource.class, JdbcDataSource.class, JdbcDatabase.class, MyBatisJdbcDataSource.class, MyBatisJdbcDatabase.class})
-//@AutoConfigureAfter({AutoConfigureMyBatisMapperSql.class})
+@AutoConfigureAfter({FastApiAutoConfiguration.class})
+@EnableConfigurationProperties({FastApiConfig.class})
 @Configuration
-@EnableConfigurationProperties({MultipleDataSourceConfig.class})
+@ConditionalOnClass({HikariDataSource.class, JdbcDataSource.class, JdbcDatabase.class, MyBatisJdbcDataSource.class, MyBatisJdbcDatabase.class})
+@Order
 @Slf4j
-public class MultipleDataSourceAutoConfigure implements CommandLineRunner {
+public class MultipleJdbcAutoConfigure implements CommandLineRunner {
     private final List<DataSource> dataSourceList = new ArrayList<>();
-    private final MultipleDataSourceConfig multipleDataSourceConfig;
+    private final MultipleJdbcConfig multipleJdbc;
     private final MyBatisMapperSql mybatisMapperSql;
 
     protected volatile boolean initialized = false;
 
-    public MultipleDataSourceAutoConfigure(
+    public MultipleJdbcAutoConfigure(
             ObjectProvider<DataSource> dataSourceList,
-            ObjectProvider<MultipleDataSourceConfig> multipleDataSourceConfig,
-            ObjectProvider<MyBatisMapperSql> mybatisMapperSql) {
-        for (DataSource dataSource : dataSourceList) {
-            this.dataSourceList.add(dataSource);
-        }
-        this.multipleDataSourceConfig = multipleDataSourceConfig.getIfAvailable() == null ? new MultipleDataSourceConfig() : multipleDataSourceConfig.getIfAvailable();
-        this.mybatisMapperSql = mybatisMapperSql.getIfAvailable();
+            FastApiConfig fastApiConfig,
+            MyBatisMapperSql mybatisMapperSql) {
+        dataSourceList.forEach(this.dataSourceList::add);
+        this.multipleJdbc = fastApiConfig.getMultipleJdbc() == null ? new MultipleJdbcConfig() : fastApiConfig.getMultipleJdbc();
+        this.mybatisMapperSql = mybatisMapperSql;
     }
 
     @Override
@@ -59,10 +59,10 @@ public class MultipleDataSourceAutoConfigure implements CommandLineRunner {
             return;
         }
         initialized = true;
-        if (multipleDataSourceConfig.isDisable()) {
+        if (multipleJdbc.isDisable()) {
             return;
         }
-        int dataSourceCount = multipleDataSourceConfig.getJdbcMap().size() + dataSourceList.size();
+        int dataSourceCount = multipleJdbc.getJdbcMap().size() + dataSourceList.size();
         final Map<String, DataSource> dataSourceMap = new HashMap<>(dataSourceCount);
         // 加入已存在的数据源
         for (DataSource dataSource : dataSourceList) {
@@ -78,16 +78,16 @@ public class MultipleDataSourceAutoConfigure implements CommandLineRunner {
                 throw new RuntimeException("JdbcDataSource 名称重复: " + name);
             }
             dataSourceMap.put(name, dataSource);
-            if (StringUtils.isBlank(multipleDataSourceConfig.getDefaultName())) {
-                multipleDataSourceConfig.setDefaultName(name);
+            if (StringUtils.isBlank(multipleJdbc.getDefaultName())) {
+                multipleJdbc.setDefaultName(name);
             }
         }
-        if (StringUtils.isBlank(multipleDataSourceConfig.getDefaultName())) {
+        if (StringUtils.isBlank(multipleJdbc.getDefaultName())) {
             throw new RuntimeException("默认的数据源名称 defaultName 不能是空");
         }
         // 初始化配置的数据源
-        final HikariConfig dataSourceGlobalConfig = multipleDataSourceConfig.getGlobalConfig();
-        multipleDataSourceConfig.getJdbcMap().forEach((name, hikariConfig) -> {
+        final HikariConfig dataSourceGlobalConfig = multipleJdbc.getGlobal();
+        multipleJdbc.getJdbcMap().forEach((name, hikariConfig) -> {
             if (dataSourceMap.containsKey(name)) {
                 throw new RuntimeException("JdbcDataSource 名称重复: " + name);
             }
@@ -117,15 +117,15 @@ public class MultipleDataSourceAutoConfigure implements CommandLineRunner {
             }
         }
         // 默认的 MateDataManage
-        MateDataManage.Instance.setDefault(multipleDataSourceConfig.getDefaultName());
-        log.info("默认的 MateDataManage: {}", multipleDataSourceConfig.getDefaultName());
+        MateDataManage.Instance.setDefault(multipleJdbc.getDefaultName());
+        log.info("默认的 MateDataManage: {}", multipleJdbc.getDefaultName());
         // 默认的 JdbcDataSource
-        JdbcDatabase.Instance.setDefault(multipleDataSourceConfig.getDefaultName());
+        JdbcDatabase.Instance.setDefault(multipleJdbc.getDefaultName());
         log.info("默认的 JdbcDataSource: {}", JdbcDatabase.Instance.getDefaultName());
         // 默认的 MyBatisJdbcDataSource
         if (mybatisMapperSql != null) {
-            MyBatisJdbcDatabase.Instance.setDefault(multipleDataSourceConfig.getDefaultName());
-            log.info("默认的 MyBatisJdbcDataSource: {}", multipleDataSourceConfig.getDefaultName());
+            MyBatisJdbcDatabase.Instance.setDefault(multipleJdbc.getDefaultName());
+            log.info("默认的 MyBatisJdbcDataSource: {}", multipleJdbc.getDefaultName());
         }
     }
 }

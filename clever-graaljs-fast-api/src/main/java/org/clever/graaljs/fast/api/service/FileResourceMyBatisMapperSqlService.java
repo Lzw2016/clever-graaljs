@@ -2,11 +2,13 @@ package org.clever.graaljs.fast.api.service;
 
 import org.clever.graaljs.data.jdbc.mybatis.AbstractMyBatisMapperSql;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.stereotype.Component;
 
 /**
  * 作者：lizw <br/>
  * 创建时间：2021/06/14 14:42 <br/>
  */
+@Component
 public class FileResourceMyBatisMapperSqlService extends AbstractMyBatisMapperSql {
     private final JdbcTemplate jdbcTemplate;
 

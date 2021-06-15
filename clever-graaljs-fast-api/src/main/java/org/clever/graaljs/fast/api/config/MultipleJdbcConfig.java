@@ -12,9 +12,8 @@ import java.util.Map;
  * 作者：lizw <br/>
  * 创建时间：2019/09/30 11:47 <br/>
  */
-@ConfigurationProperties(prefix = Constant.MULTIPLE_JDBC_CONFIG)
 @Data
-public class MultipleDataSourceConfig {
+public class MultipleJdbcConfig {
     /**
      * 是否禁用MultipleDataSource配置
      */
@@ -25,13 +24,13 @@ public class MultipleDataSourceConfig {
     private String defaultName = "default";
 
     /**
-     * 数据源全局配置
+     * JDBC数据源全局配置
      */
     @NestedConfigurationProperty
-    private HikariConfig globalConfig = new HikariConfig();
+    private HikariConfig global = new HikariConfig();
 
     /**
-     * 数据源集合(数据源名称 --> 数据源配置)
+     * JDBC数据源集合(数据源名称 --> 数据源配置)
      */
     private Map<String, HikariConfig> jdbcMap = Collections.emptyMap();
 }
