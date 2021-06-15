@@ -27,11 +27,11 @@ public abstract class AbstractMyBatisMapperSql implements MyBatisMapperSql {
     /**
      * 所有的Mapper文件 {@code MultiValueMap<Mapper文件绝对路径, SqlId>}
      */
-    protected final MultiValueMap<String, String> mapperFiles = new LinkedMultiValueMap<>(32);
+    protected final MultiValueMap<String, String> mapperFiles = new LinkedMultiValueMap<>(128);
     /**
      * SqlSource对象 {@code Map<SqlId, SqlSource对象>}
      */
-    protected final ConcurrentHashMap<String, SqlSource> sqlSourceMap = new ConcurrentHashMap<>(64);
+    protected final ConcurrentHashMap<String, SqlSource> sqlSourceMap = new ConcurrentHashMap<>(512);
 
     /**
      * 获取 SqlSource

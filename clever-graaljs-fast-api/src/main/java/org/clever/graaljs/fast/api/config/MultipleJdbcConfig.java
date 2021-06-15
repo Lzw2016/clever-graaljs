@@ -2,7 +2,6 @@ package org.clever.graaljs.fast.api.config;
 
 import com.zaxxer.hikari.HikariConfig;
 import lombok.Data;
-import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.NestedConfigurationProperty;
 
 import java.util.Collections;

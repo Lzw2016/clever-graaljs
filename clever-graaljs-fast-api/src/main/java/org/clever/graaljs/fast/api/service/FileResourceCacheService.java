@@ -1,12 +1,12 @@
 package org.clever.graaljs.fast.api.service;
 
 import org.apache.commons.lang3.StringUtils;
+import org.clever.graaljs.fast.api.config.FastApiConfig;
 import org.clever.graaljs.fast.api.entity.EnumConstant;
 import org.clever.graaljs.fast.api.model.HttpApiFileResource;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.Resource;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
@@ -31,11 +31,15 @@ public class FileResourceCacheService {
             "    b.content as content, " +
             "    if(ifnull(a.update_at, a.create_at) > ifnull(b.update_at, b.create_at), ifnull(a.update_at, a.create_at), ifnull(b.update_at, b.create_at)) as lastModifiedTime " +
             "from http_api a left join file_resource b on (a.file_resource_id = b.id) " +
+            "where a.namespace=? and b.namespace=? " +
             "%s " +
             "order by a.update_at desc, a.id desc, b.update_at desc, b.id desc";
 
-    @Resource
     private final JdbcTemplate jdbcTemplate;
+    /**
+     * FileResource 命名空间
+     */
+    private final String namespace;
     /**
      * HttpApiFileResource缓存 {@code Map<requestMapping, HttpApiFileResource>}
      */
@@ -49,17 +53,18 @@ public class FileResourceCacheService {
      */
     private final Object lock = new Object();
 
-    public FileResourceCacheService(JdbcTemplate jdbcTemplate) {
+    public FileResourceCacheService(JdbcTemplate jdbcTemplate, FastApiConfig fastApiConfig) {
         this.jdbcTemplate = jdbcTemplate;
+        this.namespace = fastApiConfig.getNamespace();
     }
 
     /**
      * 全量加载缓存
      */
     public void reload() {
-        String sql = String.format(BASE_SQL, "where a.disable_request=0 and b.id is not null");
+        String sql = String.format(BASE_SQL, "and a.disable_request=0");
         synchronized (lock) {
-            List<HttpApiFileResource> list = jdbcTemplate.queryForList(sql, HttpApiFileResource.class);
+            List<HttpApiFileResource> list = jdbcTemplate.queryForList(sql, HttpApiFileResource.class, namespace, namespace);
             ConcurrentMap<String, HttpApiFileResource> newCache = new ConcurrentHashMap<>(list.size());
             for (HttpApiFileResource resource : list) {
                 if (resource.getLastModifiedTime() != null) {
@@ -74,7 +79,7 @@ public class FileResourceCacheService {
     }
 
     /**
-     * 更新缓存
+     * 增量更新缓存
      */
     public void updateCache() {
         // 全量加载
@@ -84,8 +89,8 @@ public class FileResourceCacheService {
         }
         // 增量更新
         synchronized (lock) {
-            String sql = String.format(BASE_SQL, "where (a.update_at>? or b.update_at>?)");
-            List<HttpApiFileResource> list = jdbcTemplate.queryForList(sql, HttpApiFileResource.class, lastModifiedTime, lastModifiedTime);
+            String sql = String.format(BASE_SQL, "and (a.update_at>? or b.update_at>?)");
+            List<HttpApiFileResource> list = jdbcTemplate.queryForList(sql, HttpApiFileResource.class, namespace, namespace, lastModifiedTime, lastModifiedTime);
             Set<Long> removeHttpApiIds = new HashSet<>();
             for (HttpApiFileResource resource : list) {
                 // 更新lastModifiedTime

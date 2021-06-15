@@ -8,5 +8,5 @@ public interface EnumConstant {
     /**
      * 禁用http请求：0-启用，1-禁用
      */
-     Integer DISABLE_REQUEST_0 = 0;
+    Integer DISABLE_REQUEST_0 = 0;
 }

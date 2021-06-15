@@ -1,9 +1,9 @@
 package org.clever.graaljs.fast.api.entity;
 
-import java.util.Date;
-import java.io.Serializable;
-
 import lombok.Data;
+
+import java.io.Serializable;
+import java.util.Date;
 
 /**
  * 资源文件(FileResource)实体类
