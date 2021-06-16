@@ -4,6 +4,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.clever.graaljs.fast.api.config.FastApiConfig;
 import org.clever.graaljs.fast.api.entity.EnumConstant;
 import org.clever.graaljs.fast.api.model.HttpApiFileResource;
+import org.springframework.jdbc.core.DataClassRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 
@@ -64,7 +65,7 @@ public class FileResourceCacheService {
     public void reload() {
         String sql = String.format(BASE_SQL, "and a.disable_request=0");
         synchronized (lock) {
-            List<HttpApiFileResource> list = jdbcTemplate.queryForList(sql, HttpApiFileResource.class, namespace, namespace);
+            List<HttpApiFileResource> list = jdbcTemplate.query(sql, DataClassRowMapper.newInstance(HttpApiFileResource.class), namespace, namespace);
             ConcurrentMap<String, HttpApiFileResource> newCache = new ConcurrentHashMap<>(list.size());
             for (HttpApiFileResource resource : list) {
                 if (resource.getLastModifiedTime() != null) {
@@ -90,8 +91,8 @@ public class FileResourceCacheService {
         // 增量更新
         synchronized (lock) {
             String sql = String.format(BASE_SQL, "and (a.create_at>? or a.update_at>? or b.create_at>? or b.update_at>?)");
-            List<HttpApiFileResource> list = jdbcTemplate.queryForList(
-                    sql, HttpApiFileResource.class, namespace, namespace,
+            List<HttpApiFileResource> list = jdbcTemplate.query(
+                    sql, DataClassRowMapper.newInstance(HttpApiFileResource.class), namespace, namespace,
                     lastModifiedTime, lastModifiedTime, lastModifiedTime, lastModifiedTime
             );
             Set<Long> removeHttpApiIds = new HashSet<>();

@@ -117,7 +117,7 @@ public class GraalSingleEngineFactory extends BasePooledObjectFactory<ScriptCont
             }
         }
         instance.putBindingsMember(COUNTER_NAME, counter);
-        log.info("创建 GraalScriptEngineInstance | counter={}", counter);
+        log.debug("创建 GraalScriptEngineInstance | counter={}", counter);
         return instance;
     }
 
@@ -134,7 +134,7 @@ public class GraalSingleEngineFactory extends BasePooledObjectFactory<ScriptCont
      */
     @Override
     public boolean validateObject(PooledObject<ScriptContextInstance> p) {
-        // log.info("validateObject");
+        // log.debug("validateObject");
         return true;
     }
 
@@ -146,7 +146,7 @@ public class GraalSingleEngineFactory extends BasePooledObjectFactory<ScriptCont
         contextMap.forEach((identifier, value) -> p.getObject().putBindingsMember(identifier, value));
         p.getObject().putBindingsMember(GraalConstant.Engine_Global, global);
         Object counter = p.getObject().getBindingsMember(COUNTER_NAME);
-        log.info("初始化 ScriptContextInstance 全局变量 | counter={}", counter);
+        log.debug("初始化 ScriptContextInstance 全局变量 | counter={}", counter);
     }
 
     /**
@@ -154,7 +154,7 @@ public class GraalSingleEngineFactory extends BasePooledObjectFactory<ScriptCont
      */
     @Override
     public void passivateObject(PooledObject<ScriptContextInstance> p) {
-        // log.info("passivateObject");
+        // log.debug("passivateObject");
     }
 
     /**
@@ -165,7 +165,7 @@ public class GraalSingleEngineFactory extends BasePooledObjectFactory<ScriptCont
         if (p.getObject() != null) {
             p.getObject().close();
             Object counter = p.getObject().getBindingsMember(COUNTER_NAME);
-            log.info("关闭 GraalScriptEngineInstance | counter={}", counter);
+            log.debug("关闭 GraalScriptEngineInstance | counter={}", counter);
         }
     }
 

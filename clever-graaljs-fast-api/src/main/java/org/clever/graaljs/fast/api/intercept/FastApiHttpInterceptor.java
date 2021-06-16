@@ -45,9 +45,12 @@ public class FastApiHttpInterceptor extends HttpInterceptorScriptHandler {
     protected TupleTow<String, String> getScriptFileResource(HttpServletRequest request) {
         final String requestMapping = request.getRequestURI().substring(supportPrefix.length());
         final String requestMethod = request.getMethod();
-        final HttpApiFileResource httpApiFileResource = fileResourceCacheService.getScriptFileResource(requestMapping, requestMethod);
-        final String fullPath = httpApiFileResource.getPath() + httpApiFileResource.getName();
-        final String content = httpApiFileResource.getContent();
+        final HttpApiFileResource resource = fileResourceCacheService.getScriptFileResource(requestMapping, requestMethod);
+        if (resource == null) {
+            return null;
+        }
+        final String fullPath = resource.getPath() + resource.getName();
+        final String content = resource.getContent();
         return TupleTow.creat(fullPath, ScriptCodeUtils.compressCode(content, true));
     }
 }

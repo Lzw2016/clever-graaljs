@@ -147,10 +147,10 @@ public class ScriptObject {
     public Value execute(Object... arguments) {
         Assert.isTrue(original.canExecute(), "当前脚本对象不能执行");
         try {
-            original.getContext().enter();
+            // original.getContext().enter();
             return original.execute(arguments);
         } finally {
-            original.getContext().leave();
+            // original.getContext().leave();
         }
     }
 
@@ -162,10 +162,10 @@ public class ScriptObject {
     public void executeVoid(Object... arguments) {
         Assert.isTrue(original.canExecute(), "当前脚本对象不能执行");
         try {
-            original.getContext().enter();
+            // original.getContext().enter();
             original.executeVoid(arguments);
         } finally {
-            original.getContext().leave();
+            // original.getContext().leave();
         }
     }
 }

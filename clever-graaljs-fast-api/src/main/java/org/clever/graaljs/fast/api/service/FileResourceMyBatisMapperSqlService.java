@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.clever.graaljs.data.jdbc.mybatis.AbstractMyBatisMapperSql;
 import org.clever.graaljs.fast.api.config.FastApiConfig;
 import org.clever.graaljs.fast.api.model.MapperFileResource;
+import org.springframework.jdbc.core.DataClassRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 
@@ -63,7 +64,7 @@ public class FileResourceMyBatisMapperSqlService extends AbstractMyBatisMapperSq
     public void reloadAll() {
         String sql = String.format(BASE_SQL, "and lower(name) like '%.xml'");
         synchronized (lock) {
-            List<MapperFileResource> list = jdbcTemplate.queryForList(sql, MapperFileResource.class, namespace);
+            List<MapperFileResource> list = jdbcTemplate.query(sql, DataClassRowMapper.newInstance(MapperFileResource.class), namespace);
             ConcurrentMap<String, MapperFileResource> newCache = new ConcurrentHashMap<>(list.size());
             for (MapperFileResource resource : list) {
                 if (resource.getLastModifiedTime() != null) {
@@ -131,8 +132,8 @@ public class FileResourceMyBatisMapperSqlService extends AbstractMyBatisMapperSq
         // 增量更新
         synchronized (lock) {
             String sql = String.format(BASE_SQL, "and (create_at>? or update_at>?)");
-            List<MapperFileResource> list = jdbcTemplate.queryForList(
-                    sql, MapperFileResource.class, namespace,
+            List<MapperFileResource> list = jdbcTemplate.query(
+                    sql, DataClassRowMapper.newInstance(MapperFileResource.class), namespace,
                     lastModifiedTime, lastModifiedTime
             );
             for (MapperFileResource resource : list) {

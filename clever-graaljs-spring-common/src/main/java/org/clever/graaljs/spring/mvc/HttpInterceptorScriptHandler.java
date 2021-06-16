@@ -255,7 +255,7 @@ public abstract class HttpInterceptorScriptHandler implements HandlerInterceptor
                 final long howLong3 = startTime3.getValue1() <= -1 ? -1 : endTime - startTime3.getValue1();     // 序列化耗时
                 // 8.请求处理完成 - 打印日志
                 String logText = String.format(
-                        "Script处理请求 | [总]耗时:%-8s | 查找脚本耗时:%-8s | 执行脚本耗时:%-8s | 序列化耗时:%-8s | Script=[%s]",
+                        "Script处理请求 | [总]耗时:%-3s | 查找脚本耗时:%-3s | 执行脚本耗时:%-3s | 序列化耗时:%-3s | Script=[%s]",
                         howLongSum + "ms",
                         howLong1 <= -1 ? "-" : howLong1 + "ms",
                         howLong2 <= -1 ? "-" : howLong2 + "ms",
