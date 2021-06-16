@@ -1,12 +1,4 @@
 ###################################################################################
-### Web服务器配置
-###################################################################################
-server:
-  port: 18081
-  servlet:
-    context-path: /
-
-###################################################################################
 ### logging(logback)
 ###################################################################################
 logging:
@@ -27,41 +19,43 @@ logging:
     org.clever: debug
 
 ###################################################################################
+### Web服务器配置
+###################################################################################
+server:
+  port: 18081
+  servlet:
+    context-path: /
+    encoding:
+      charset: UTF-8
+      force: false
+
+###################################################################################
 ### Spring配置
 ###################################################################################
 spring:
   profiles.active: dev
   application.name: graaljs-test
   aop.proxy-target-class: true
-
-  servlet: #------------------------------------------------------------ 文件上传配置
+  servlet:
     multipart:
       enabled: true
       max-file-size: 10MB
       max-request-size: 10MB
       location: 'data/temp'
-
-#  http: #------------------------------------------------------------------ http配置
-#    converters:
-#      preferred-json-mapper: jackson
-#    encoding:
-#      charset: UTF-8
-#      force: false
-
-  jackson: #------------------------------------------------------------ jackson配置
+  mvc:
+    converters:
+      preferred-json-mapper: jackson
+  jackson:
     date-format: yyyy-MM-dd HH:mm:ss
     locale: zh_CN
     time-zone: GMT+8
-
-#  resources: #------------------------------------------------ html、js、css 静态资源
-#    chain:
-#      cache: false
-#      compressed: true
-#    cache:
-#      period: 0s
-#    static-locations: [ 'classpath:/static/' ]
-
-  datasource: #----------------------------------------------------------- 数据库配置
+  web:
+    resources:
+      static-locations: [ 'classpath:/static/', 'classpath:/resources/' ]
+      chain:
+        cache: false
+        compressed: true
+  datasource:
     type: com.zaxxer.hikari.HikariDataSource
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://192.168.1.201:12000/fast-api
@@ -88,17 +82,6 @@ spring:
     lettuce.pool:
       min-idle: 2
       max-active: 32
-
-  freemarker:
-    request-context-attribute: req  #req访问request
-    suffix: .html  #后缀名
-    content-type: text/html
-    enabled: true
-    cache: false #缓存配置
-    template-loader-path: classpath:/templates/ #模板加载路径 按需配置
-    charset: UTF-8 #编码格式
-    settings:
-      number_format: '0.##'   #数字格式化，无小数点
 
 ###################################################################################
 ### clever
