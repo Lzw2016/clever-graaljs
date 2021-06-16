@@ -61,39 +61,39 @@ public class FastApiAutoConfiguration {
         );
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
             try {
-                log.info("### 关闭MateDataManage,开始...");
+                log.info("关闭MateDataManage,开始...");
                 MateDataManage.Instance.delAll();
-                log.info("### 关闭MateDataManage,完成!");
+                log.info("关闭MateDataManage,完成!");
             } catch (Exception e) {
-                log.warn("### 关闭MateDataManage,失败", e);
+                log.warn("关闭MateDataManage,失败", e);
             }
             try {
-                log.info("### 关闭JdbcDatabase,开始...");
+                log.info("关闭JdbcDatabase,开始...");
                 JdbcDatabase.Instance.delAll();
-                log.info("### 关闭JdbcDatabase,完成!");
+                log.info("关闭JdbcDatabase,完成!");
             } catch (Exception e) {
-                log.warn("### 关闭JdbcDatabase,失败", e);
+                log.warn("关闭JdbcDatabase,失败", e);
             }
             try {
-                log.info("### 关闭MyBatisJdbcDatabase,开始...");
+                log.info("关闭MyBatisJdbcDatabase,开始...");
                 MyBatisJdbcDatabase.Instance.delAll();
-                log.info("### 关闭MyBatisJdbcDatabase,完成!");
+                log.info("关闭MyBatisJdbcDatabase,完成!");
             } catch (Exception e) {
-                log.warn("### 关闭MyBatisJdbcDatabase,失败", e);
+                log.warn("关闭MyBatisJdbcDatabase,失败", e);
             }
             try {
-                log.info("### 关闭RedisDatabase,开始...");
+                log.info("关闭RedisDatabase,开始...");
                 RedisDatabase.Instance.delAll();
-                log.info("### 关闭RedisDatabase,完成!");
+                log.info("关闭RedisDatabase,完成!");
             } catch (Exception e) {
-                log.warn("### 关闭RedisDatabase,失败", e);
+                log.warn("关闭RedisDatabase,失败", e);
             }
             try {
-                log.info("### 关闭脚本引擎,开始...");
+                log.info("关闭脚本引擎,开始...");
                 scriptEngineInstance.close();
-                log.info("### 关闭脚本引擎,完成!");
+                log.info("关闭脚本引擎,完成!");
             } catch (Exception e) {
-                log.warn("### 关闭脚本引擎,失败", e);
+                log.warn("关闭脚本引擎,失败", e);
             }
         }));
         return scriptEngineInstance;
