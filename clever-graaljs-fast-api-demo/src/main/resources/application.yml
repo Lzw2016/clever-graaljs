@@ -17,7 +17,7 @@ logging:
     org.springframework.jdbc.datasource.DataSourceTransactionManager: debug
     org.springframework.beans.factory: warn
     com.zaxxer.hikari: info
-    org.apache.ibatis: info
+    reactor.util.Loggers: info
     org.hibernate.validator: warn
     io.lettuce: warn
     io.netty: warn
