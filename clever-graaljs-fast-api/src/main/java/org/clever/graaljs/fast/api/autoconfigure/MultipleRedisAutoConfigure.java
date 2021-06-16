@@ -18,6 +18,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.Ordered;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -31,16 +32,16 @@ import java.util.List;
 @Configuration
 @Slf4j
 public class MultipleRedisAutoConfigure implements CommandLineRunner {
+    private final List<RedisConnectionFactory> redisConnectionFactoryList = new ArrayList<>();
     private final MultipleRedisConfig multipleRedis;
-    private final List<RedisConnectionFactory> redisConnectionFactoryList;
     private final ObjectMapper objectMapper;
 
     protected boolean initialized = false;
 
     public MultipleRedisAutoConfigure(
-            ObjectProvider<List<RedisConnectionFactory>> redisConnectionFactoryList,
+            ObjectProvider<RedisConnectionFactory> redisConnectionFactoryList,
             FastApiConfig fastApiConfig) {
-        this.redisConnectionFactoryList = redisConnectionFactoryList.getIfAvailable();
+        redisConnectionFactoryList.forEach(this.redisConnectionFactoryList::add);
         this.multipleRedis = fastApiConfig.getMultipleRedis() == null ? new MultipleRedisConfig() : fastApiConfig.getMultipleRedis();
         this.objectMapper = JacksonMapperSupport.getRedisJacksonMapper().getMapper();
     }
@@ -55,15 +56,13 @@ public class MultipleRedisAutoConfigure implements CommandLineRunner {
             return;
         }
         // 加入已存在的数据源
-        if (redisConnectionFactoryList != null) {
-            int index = 0;
-            for (RedisConnectionFactory redisConnectionFactory : redisConnectionFactoryList) {
-                index++;
-                RedisDataSource redisDataSource = new RedisDataSource(redisConnectionFactory, objectMapper);
-                String name = String.format("autowired-redis-%s", index);
-                RedisDatabase.Instance.add(name, redisDataSource);
-                log.info("初始化 RedisDataSource: {}", name);
-            }
+        int index = 0;
+        for (RedisConnectionFactory redisConnectionFactory : redisConnectionFactoryList) {
+            index++;
+            RedisDataSource redisDataSource = new RedisDataSource(redisConnectionFactory, objectMapper);
+            String name = String.format("autowired-redis-%s", index);
+            RedisDatabase.Instance.add(name, redisDataSource);
+            log.info("初始化 RedisDataSource: {}", name);
         }
         // 初始化配置的数据源
         final RedisProperties globalConfig = multipleRedis.getGlobal();

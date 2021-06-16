@@ -22,6 +22,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.Ordered;
 import org.springframework.core.convert.ConversionService;
+import org.springframework.util.Assert;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -61,39 +62,39 @@ public class FastApiAutoConfiguration {
         );
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
             try {
-                log.info("关闭MateDataManage,开始...");
+                log.info("关闭MateDataManage 开始...");
                 MateDataManage.Instance.delAll();
-                log.info("关闭MateDataManage,完成!");
+                log.info("关闭MateDataManage 完成!");
             } catch (Exception e) {
-                log.warn("关闭MateDataManage,失败", e);
+                log.warn("关闭MateDataManage 失败", e);
             }
             try {
-                log.info("关闭JdbcDatabase,开始...");
+                log.info("关闭JdbcDatabase 开始...");
                 JdbcDatabase.Instance.delAll();
-                log.info("关闭JdbcDatabase,完成!");
+                log.info("关闭JdbcDatabase 完成!");
             } catch (Exception e) {
-                log.warn("关闭JdbcDatabase,失败", e);
+                log.warn("关闭JdbcDatabase 失败", e);
             }
             try {
-                log.info("关闭MyBatisJdbcDatabase,开始...");
+                log.info("关闭MyBatisJdbcDatabase 开始...");
                 MyBatisJdbcDatabase.Instance.delAll();
-                log.info("关闭MyBatisJdbcDatabase,完成!");
+                log.info("关闭MyBatisJdbcDatabase 完成!");
             } catch (Exception e) {
-                log.warn("关闭MyBatisJdbcDatabase,失败", e);
+                log.warn("关闭MyBatisJdbcDatabase 失败", e);
             }
             try {
-                log.info("关闭RedisDatabase,开始...");
+                log.info("关闭RedisDatabase 开始...");
                 RedisDatabase.Instance.delAll();
-                log.info("关闭RedisDatabase,完成!");
+                log.info("关闭RedisDatabase 完成!");
             } catch (Exception e) {
-                log.warn("关闭RedisDatabase,失败", e);
+                log.warn("关闭RedisDatabase 失败", e);
             }
             try {
-                log.info("关闭脚本引擎,开始...");
+                log.info("关闭脚本引擎 开始...");
                 scriptEngineInstance.close();
-                log.info("关闭脚本引擎,完成!");
+                log.info("关闭脚本引擎 完成!");
             } catch (Exception e) {
-                log.warn("关闭脚本引擎,失败", e);
+                log.warn("关闭脚本引擎 失败", e);
             }
         }));
         return scriptEngineInstance;
@@ -112,13 +113,14 @@ public class FastApiAutoConfiguration {
             ScriptEngineInstance scriptEngineInstance,
             FileResourceCacheService fileResourceCacheServices,
             ObjectProvider<ConversionService> conversionService) {
+        Assert.notNull(conversionService.getIfAvailable(), String.format("依赖实例%s未注入", ConversionService.class.getName()));
         final MvcConfig mvc = fastApiConfig.getMvc();
         return new FastApiHttpInterceptor(
                 mvc.getPrefix(),
                 mvc.getCors(),
                 scriptEngineInstance,
                 exceptionResolver,
-                conversionService,
+                conversionService.getIfAvailable(),
                 fileResourceCacheServices
         );
     }

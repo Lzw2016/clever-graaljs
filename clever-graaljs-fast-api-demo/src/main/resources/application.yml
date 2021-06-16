@@ -52,13 +52,13 @@ spring:
     locale: zh_CN
     time-zone: GMT+8
 
-  resources: #------------------------------------------------ html、js、css 静态资源
-    chain:
-      cache: false
-      compressed: true
-    cache:
-      period: 0s
-    static-locations: [ 'classpath:/static/' ]
+#  resources: #------------------------------------------------ html、js、css 静态资源
+#    chain:
+#      cache: false
+#      compressed: true
+#    cache:
+#      period: 0s
+#    static-locations: [ 'classpath:/static/' ]
 
   datasource: #----------------------------------------------------------- 数据库配置
     type: com.zaxxer.hikari.HikariDataSource

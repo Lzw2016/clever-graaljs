@@ -21,6 +21,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.Ordered;
+import org.springframework.util.Assert;
 
 import javax.sql.DataSource;
 import java.util.ArrayList;
@@ -49,9 +50,10 @@ public class MultipleJdbcAutoConfigure implements CommandLineRunner {
             ObjectProvider<DataSource> dataSourceList,
             FastApiConfig fastApiConfig,
             ObjectProvider<MyBatisMapperSql> mybatisMapperSql) {
+        Assert.notNull(mybatisMapperSql.getIfUnique(), String.format("依赖实例%s未注入或注入多个", MyBatisMapperSql.class.getName()));
         dataSourceList.forEach(this.dataSourceList::add);
         this.multipleJdbc = fastApiConfig.getMultipleJdbc() == null ? new MultipleJdbcConfig() : fastApiConfig.getMultipleJdbc();
-        this.mybatisMapperSql = mybatisMapperSql.getIfAvailable();
+        this.mybatisMapperSql = mybatisMapperSql.getIfUnique();
     }
 
     @Override

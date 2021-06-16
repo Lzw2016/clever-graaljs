@@ -9,10 +9,9 @@ import org.springframework.boot.autoconfigure.AutoConfigureOrder;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.Ordered;
+import org.springframework.util.Assert;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
-
-import java.util.Objects;
 
 /**
  * 作者：lizw <br/>
@@ -27,7 +26,8 @@ public class FastApiWebMvcConfigurer implements WebMvcConfigurer {
     private final FastApiHttpInterceptor fastApiHttpInterceptor;
 
     public FastApiWebMvcConfigurer(ObjectProvider<FastApiHttpInterceptor> fastApiHttpInterceptor) {
-        this.fastApiHttpInterceptor = Objects.requireNonNull(fastApiHttpInterceptor.getIfAvailable());
+        Assert.notNull(fastApiHttpInterceptor.getIfUnique(), String.format("依赖实例%s未注入或注入多个", FastApiHttpInterceptor.class.getName()));
+        this.fastApiHttpInterceptor = fastApiHttpInterceptor.getIfUnique();
     }
 
     @Override

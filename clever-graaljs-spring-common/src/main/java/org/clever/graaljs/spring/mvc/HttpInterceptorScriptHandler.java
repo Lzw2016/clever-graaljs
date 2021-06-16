@@ -12,7 +12,6 @@ import org.clever.graaljs.spring.mvc.support.IntegerToDateConverter;
 import org.clever.graaljs.spring.mvc.support.StringToDateConverter;
 import org.graalvm.polyglot.PolyglotException;
 import org.graalvm.polyglot.Value;
-import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.core.convert.support.GenericConversionService;
 import org.springframework.core.io.Resource;
@@ -74,7 +73,7 @@ public abstract class HttpInterceptorScriptHandler implements HandlerInterceptor
     /**
      * mvc请求数据转换对象
      */
-    protected final ObjectProvider<ConversionService> conversionService;
+    protected final ConversionService conversionService;
 
     /**
      * @param supportPrefix        支持的请求前缀
@@ -88,7 +87,7 @@ public abstract class HttpInterceptorScriptHandler implements HandlerInterceptor
             ScriptHandlerCorsConfig corsConfig,
             ScriptEngineInstance scriptEngineInstance,
             ExceptionResolver exceptionResolver,
-            ObjectProvider<ConversionService> conversionService) {
+            ConversionService conversionService) {
         Assert.notNull(scriptEngineInstance, "参数scriptEngineInstance不能为空");
         this.supportPrefix = StringUtils.isBlank(supportPrefix) ? StringUtils.EMPTY : StringUtils.trim(supportPrefix);
         this.corsConfig = corsConfig == null ? new ScriptHandlerCorsConfig() : corsConfig;
@@ -102,9 +101,8 @@ public abstract class HttpInterceptorScriptHandler implements HandlerInterceptor
         if (initialized) {
             return;
         }
-        ConversionService conversion = conversionService.getIfAvailable();
-        if (conversion instanceof GenericConversionService) {
-            GenericConversionService genericConversionService = (GenericConversionService) conversion;
+        if (conversionService instanceof GenericConversionService) {
+            GenericConversionService genericConversionService = (GenericConversionService) conversionService;
             genericConversionService.addConverter(String.class, Date.class, StringToDateConverter.Instance);
             genericConversionService.addConverter(Integer.class, Date.class, IntegerToDateConverter.Instance);
             genericConversionService.addConverter(int.class, Date.class, IntegerToDateConverter.Instance);
@@ -172,7 +170,7 @@ public abstract class HttpInterceptorScriptHandler implements HandlerInterceptor
      * @return 响应对象
      */
     protected Value doHandle(HttpServletRequest request, HttpServletResponse response, ScriptObject handlerScriptObject) {
-        final HttpContext httpContext = new HttpContext(request, response, conversionService.getIfAvailable());
+        final HttpContext httpContext = new HttpContext(request, response, conversionService);
         return handlerScriptObject.execute(httpContext);
     }
 

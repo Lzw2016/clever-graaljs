@@ -8,7 +8,6 @@ import org.clever.graaljs.fast.api.service.FileResourceCacheService;
 import org.clever.graaljs.spring.mvc.ExceptionResolver;
 import org.clever.graaljs.spring.mvc.HttpInterceptorScriptHandler;
 import org.clever.graaljs.spring.mvc.ScriptHandlerCorsConfig;
-import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.core.convert.ConversionService;
 
 import javax.servlet.http.HttpServletRequest;
@@ -36,7 +35,7 @@ public class FastApiHttpInterceptor extends HttpInterceptorScriptHandler {
             ScriptHandlerCorsConfig corsConfig,
             ScriptEngineInstance scriptEngineInstance,
             ExceptionResolver exceptionResolver,
-            ObjectProvider<ConversionService> conversionService,
+            ConversionService conversionService,
             FileResourceCacheService fileResourceCacheService) {
         super(supportPrefix, corsConfig, scriptEngineInstance, exceptionResolver, conversionService);
         this.fileResourceCacheService = fileResourceCacheService;
