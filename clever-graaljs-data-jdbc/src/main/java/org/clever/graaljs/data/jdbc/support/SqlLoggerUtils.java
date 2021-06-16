@@ -134,7 +134,7 @@ public class SqlLoggerUtils {
                 sb.append(", ");
             }
             sb.append(name).append("=");
-            if(value instanceof Date) {
+            if (value instanceof Date) {
                 sb.append(DateTimeUtils.formatToString((Date) value, "yyyy-MM-dd HH:mm:ssZ"));
             } else {
                 sb.append(value);

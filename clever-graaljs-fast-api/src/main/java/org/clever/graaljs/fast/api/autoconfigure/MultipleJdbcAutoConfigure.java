@@ -34,7 +34,7 @@ import java.util.Map;
  * 创建时间：2021/06/14 14:19 <br/>
  */
 @AutoConfigureAfter({FastApiAutoConfiguration.class})
-@AutoConfigureOrder(Ordered.LOWEST_PRECEDENCE-2)
+@AutoConfigureOrder(Ordered.LOWEST_PRECEDENCE - 2)
 @EnableConfigurationProperties({FastApiConfig.class})
 @ConditionalOnClass({HikariDataSource.class, JdbcDataSource.class, JdbcDatabase.class, MyBatisJdbcDataSource.class, MyBatisJdbcDatabase.class})
 @Configuration
