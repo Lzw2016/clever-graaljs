@@ -64,8 +64,8 @@ spring:
   datasource: #----------------------------------------------------------- 数据库配置
     type: com.zaxxer.hikari.HikariDataSource
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://192.168.1.201:12000/test-data
-    username: test-data
+    url: jdbc:mysql://192.168.1.201:12000/fast-api
+    username: fast-api
     password: Aa123456!
     hikari:
       pool-name: defaultDataSource

@@ -134,7 +134,7 @@ public class GraalSingleEngineFactory extends BasePooledObjectFactory<ScriptCont
      */
     @Override
     public boolean validateObject(PooledObject<ScriptContextInstance> p) {
-        // log.info("# validateObject");
+        // log.info("validateObject");
         return true;
     }
 
@@ -154,7 +154,7 @@ public class GraalSingleEngineFactory extends BasePooledObjectFactory<ScriptCont
      */
     @Override
     public void passivateObject(PooledObject<ScriptContextInstance> p) {
-        // log.info("# passivateObject");
+        // log.info("passivateObject");
     }
 
     /**

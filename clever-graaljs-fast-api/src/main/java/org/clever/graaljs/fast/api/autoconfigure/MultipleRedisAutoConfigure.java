@@ -26,7 +26,7 @@ import java.util.List;
  * 创建时间：2021/06/14 14:53 <br/>
  */
 
-@AutoConfigureOrder(Ordered.LOWEST_PRECEDENCE)
+@AutoConfigureOrder(Ordered.LOWEST_PRECEDENCE - 1)
 @EnableConfigurationProperties({FastApiConfig.class})
 @ConditionalOnClass({RedisProperties.class, RedisConnectionFactory.class, RedisDataSource.class, RedisDatabase.class})
 @Configuration

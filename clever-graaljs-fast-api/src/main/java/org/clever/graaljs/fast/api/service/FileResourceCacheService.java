@@ -89,8 +89,11 @@ public class FileResourceCacheService {
         }
         // 增量更新
         synchronized (lock) {
-            String sql = String.format(BASE_SQL, "and (a.update_at>? or b.update_at>?)");
-            List<HttpApiFileResource> list = jdbcTemplate.queryForList(sql, HttpApiFileResource.class, namespace, namespace, lastModifiedTime, lastModifiedTime);
+            String sql = String.format(BASE_SQL, "and (a.create_at>? or a.update_at>? or b.create_at>? or b.update_at>?)");
+            List<HttpApiFileResource> list = jdbcTemplate.queryForList(
+                    sql, HttpApiFileResource.class, namespace, namespace,
+                    lastModifiedTime, lastModifiedTime, lastModifiedTime, lastModifiedTime
+            );
             Set<Long> removeHttpApiIds = new HashSet<>();
             for (HttpApiFileResource resource : list) {
                 // 更新lastModifiedTime
