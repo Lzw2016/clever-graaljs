@@ -12,6 +12,7 @@ server:
 logging:
   config: classpath:logback.xml
   level:
+    _org.springframework: warn
     org.springframework: warn
     org.springframework.jdbc.datasource.DataSourceTransactionManager: debug
     org.springframework.beans.factory: warn

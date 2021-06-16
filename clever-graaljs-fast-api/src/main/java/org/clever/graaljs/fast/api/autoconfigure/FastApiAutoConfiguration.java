@@ -60,6 +60,12 @@ public class FastApiAutoConfiguration {
                 contextMap,
                 global
         );
+        log.info(
+                "ScriptEngineInstance创建成功 -> Name={} | Version={} | {}",
+                scriptEngineInstance.getEngineName(),
+                scriptEngineInstance.getEngineVersion(),
+                scriptEngineInstance.getLanguageVersion()
+        );
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
             try {
                 log.info("关闭MateDataManage 开始...");
