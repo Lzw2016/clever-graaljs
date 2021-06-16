@@ -105,21 +105,21 @@ public class FastApiAutoConfiguration {
         return DefaultExceptionResolver.Instance;
     }
 
-//    @Bean("scriptEngineInstance")
-//    @ConditionalOnMissingBean
-//    public FastApiHttpInterceptor fastApiHttpInterceptor(
-//            ExceptionResolver exceptionResolver,
-//            ScriptEngineInstance scriptEngineInstance,
-//            FileResourceCacheService fileResourceCacheServices,
-//            ObjectProvider<ConversionService> conversionService) {
-//        final MvcConfig mvc = fastApiConfig.getMvc();
-//        return new FastApiHttpInterceptor(
-//                mvc.getPrefix(),
-//                mvc.getCors(),
-//                scriptEngineInstance,
-//                exceptionResolver,
-//                conversionService,
-//                fileResourceCacheServices
-//        );
-//    }
+    @Bean("fastApiHttpInterceptor")
+    @ConditionalOnMissingBean
+    public FastApiHttpInterceptor fastApiHttpInterceptor(
+            ExceptionResolver exceptionResolver,
+            ScriptEngineInstance scriptEngineInstance,
+            FileResourceCacheService fileResourceCacheServices,
+            ObjectProvider<ConversionService> conversionService) {
+        final MvcConfig mvc = fastApiConfig.getMvc();
+        return new FastApiHttpInterceptor(
+                mvc.getPrefix(),
+                mvc.getCors(),
+                scriptEngineInstance,
+                exceptionResolver,
+                conversionService,
+                fileResourceCacheServices
+        );
+    }
 }
