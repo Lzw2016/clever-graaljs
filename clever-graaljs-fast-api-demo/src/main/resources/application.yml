@@ -34,7 +34,7 @@ server:
 ###################################################################################
 spring:
   profiles.active: dev
-  application.name: graaljs-test
+  application.name: fast-api-demo
   aop.proxy-target-class: true
   servlet:
     multipart:
