@@ -11,6 +11,10 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.Ordered;
 import org.springframework.util.Assert;
 
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
+
 /**
  * 作者：lizw <br/>
  * 创建时间：2021/06/16 13:27 <br/>
@@ -19,6 +23,7 @@ import org.springframework.util.Assert;
 @Configuration
 @Slf4j
 public class FastApiInitCommandLineRunner implements CommandLineRunner {
+    private final ScheduledExecutorService scheduled = Executors.newSingleThreadScheduledExecutor();
     private final FileResourceCacheService fileResourceCacheService;
     private final MyBatisMapperSql mybatisMapperSql;
 
@@ -39,6 +44,23 @@ public class FastApiInitCommandLineRunner implements CommandLineRunner {
             FileResourceMyBatisMapperSqlService fileResourceMyBatisMapperSqlService = (FileResourceMyBatisMapperSqlService) mybatisMapperSql;
             fileResourceMyBatisMapperSqlService.reload();
         }
+        // 定时更新
+        scheduled.scheduleWithFixedDelay(() -> {
+            try {
+                fileResourceCacheService.updateCache();
+            } catch (Exception e) {
+                log.warn("增量更新FileResource失败", e);
+            }
+            try {
+                if (mybatisMapperSql instanceof FileResourceMyBatisMapperSqlService) {
+                    FileResourceMyBatisMapperSqlService fileResourceMyBatisMapperSqlService = (FileResourceMyBatisMapperSqlService) mybatisMapperSql;
+                    fileResourceMyBatisMapperSqlService.updateCache();
+                }
+            } catch (Exception e) {
+                log.warn("增量更新MyBatisMapperSql失败", e);
+            }
+        }, 1, 3, TimeUnit.SECONDS);
+        Runtime.getRuntime().addShutdownHook(new Thread(scheduled::shutdownNow));
         log.info("FastApi初始化完成!");
     }
 }
