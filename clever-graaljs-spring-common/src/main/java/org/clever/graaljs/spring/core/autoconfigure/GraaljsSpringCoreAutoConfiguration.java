@@ -5,7 +5,6 @@ import org.springframework.boot.autoconfigure.AutoConfigureOrder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.Ordered;
-import org.springframework.core.annotation.Order;
 
 /**
  * 作者：lizw <br/>
@@ -14,7 +13,6 @@ import org.springframework.core.annotation.Order;
 @AutoConfigureOrder(Ordered.LOWEST_PRECEDENCE)
 @Configuration
 public class GraaljsSpringCoreAutoConfiguration {
-    @Order
     @Bean
     public SpringContextHolder springContextHolder() {
         return new SpringContextHolder();
