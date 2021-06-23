@@ -6,7 +6,7 @@ import org.clever.graaljs.fast.api.entity.EnumConstant;
 import org.clever.graaljs.fast.api.model.HttpApiFileResource;
 import org.springframework.jdbc.core.DataClassRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
  * 作者：lizw <br/>
  * 创建时间：2021/06/14 11:52 <br/>
  */
-@Component
+@Service
 public class FileResourceCacheService {
     private final static String BASE_SQL = "" +
             "select " +

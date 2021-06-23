@@ -6,7 +6,7 @@ import org.clever.graaljs.fast.api.config.FastApiConfig;
 import org.clever.graaljs.fast.api.model.MapperFileResource;
 import org.springframework.jdbc.core.DataClassRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.io.ByteArrayInputStream;
 import java.nio.charset.StandardCharsets;
@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
  * 作者：lizw <br/>
  * 创建时间：2021/06/14 14:42 <br/>
  */
-@Component
+@Service
 @Slf4j
 public class FileResourceMyBatisMapperSqlService extends AbstractMyBatisMapperSql {
     private final static String BASE_SQL = "" +

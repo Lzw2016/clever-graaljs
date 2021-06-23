@@ -9,7 +9,6 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.Set;
 
 /**
  * Tree节点数据
@@ -34,22 +33,6 @@ public class SimpleTreeNode<T extends Serializable> implements ITreeNode {
      */
     private boolean isBuild = false;
     /**
-     * 显示节点文本
-     */
-    private String text;
-    /**
-     * 节点图标
-     */
-    private String iconCls;
-    /**
-     * 是否勾选状态
-     */
-    private boolean checked;
-    /**
-     * 节点状态，'open' 或 'closed'，默认：'open'。如果为'closed'的时候，将不自动展开该节点
-     */
-    private String state = "open";
-    /**
      * 子节点
      */
     private List<ITreeNode> children;
@@ -61,54 +44,37 @@ public class SimpleTreeNode<T extends Serializable> implements ITreeNode {
     private T attributes;
 
     public SimpleTreeNode() {
-
     }
 
     /**
      * @param parentId 父级编号
      * @param id       节点标识
-     * @param text     显示节点文本
      */
-    public SimpleTreeNode(Long parentId, Long id, String text) {
+    public SimpleTreeNode(Long parentId, Long id) {
         this.parentId = parentId;
         this.id = id;
-        this.text = text;
-    }
-
-    /**
-     * @param parentId 父级编号
-     * @param id       节点标识
-     * @param text     显示节点文本
-     * @param iconCls  节点图标
-     * @param checked  是否勾选状态
-     * @param state    节点状态 'open' 或 'closed'
-     */
-    public SimpleTreeNode(Long parentId, Long id, String text, String iconCls, boolean checked, String state) {
-        this.parentId = parentId;
-        this.id = id;
-        this.text = text;
-        this.iconCls = iconCls;
-        this.checked = checked;
-        this.state = state;
     }
 
     /**
      * @param parentId   父级编号
      * @param id         节点标识
-     * @param text       显示节点文本
-     * @param iconCls    节点图标
-     * @param checked    是否勾选状态
-     * @param state      节点状态 'open' 或 'closed'
-     * @param children   子节点
      * @param attributes 被添加到节点的自定义属性
      */
-    public SimpleTreeNode(Long parentId, Long id, String text, String iconCls, boolean checked, String state, Set<SimpleTreeNode<?>> children, T attributes) {
+    public SimpleTreeNode(Long parentId, Long id, T attributes) {
         this.parentId = parentId;
         this.id = id;
-        this.text = text;
-        this.iconCls = iconCls;
-        this.checked = checked;
-        this.state = state;
+        this.attributes = attributes;
+    }
+
+    /**
+     * @param parentId   父级编号
+     * @param id         节点标识
+     * @param attributes 被添加到节点的自定义属性
+     * @param children   子节点
+     */
+    public SimpleTreeNode(Long parentId, Long id, T attributes, Collection<SimpleTreeNode<?>> children) {
+        this.parentId = parentId;
+        this.id = id;
         this.attributes = attributes;
         this.addChildren(children);
     }
@@ -162,6 +128,9 @@ public class SimpleTreeNode<T extends Serializable> implements ITreeNode {
      */
     @SuppressWarnings("UnusedReturnValue")
     public SimpleTreeNode<?> addChildren(Collection<SimpleTreeNode<?>> nodes) {
+        if (nodes == null || nodes.isEmpty()) {
+            return this;
+        }
         if (this.children == null) {
             this.children = new ArrayList<>();
         }
