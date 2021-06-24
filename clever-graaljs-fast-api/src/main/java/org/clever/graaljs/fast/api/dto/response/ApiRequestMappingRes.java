@@ -6,10 +6,10 @@ import java.io.Serializable;
 
 /**
  * 作者：lizw <br/>
- * 创建时间：2021/06/23 21:26 <br/>
+ * 创建时间：2021/06/24 10:49 <br/>
  */
 @Data
-public class ApiFileResourceRes implements Serializable {
+public class ApiRequestMappingRes implements Serializable {
     /**
      * HTTP接口id
      */
@@ -19,9 +19,9 @@ public class ApiFileResourceRes implements Serializable {
      */
     private Long fileResourceId;
     /**
-     * 父级编号(资源文件id)
+     * 父级编号(HTTP接口id)
      */
-    private Long parentFileResourceId;
+    private Long parentHttpApiId;
     /**
      * 命名空间
      */
