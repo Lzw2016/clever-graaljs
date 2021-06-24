@@ -1,6 +1,5 @@
 package org.clever.graaljs.fast.api.service;
 
-import org.apache.commons.io.FilenameUtils;
 import org.clever.graaljs.core.utils.tree.BuildTreeUtils;
 import org.clever.graaljs.core.utils.tree.SimpleTreeNode;
 import org.clever.graaljs.fast.api.config.FastApiConfig;
@@ -37,20 +36,51 @@ public class HttpApiManageService {
             "where a.namespace=b.namespace and a.namespace=? " +
             "order by b.name";
 
+    private static final String QUERY_ALL_DIR = "" +
+            "select " +
+            "   id as fileResourceId, " +
+            "   path as path, " +
+            "   name as name, " +
+            "   is_file as isFile, " +
+            "   `read_only` as readOnly " +
+            "from file_resource " +
+            "where is_file=0 and namespace=? " +
+            "order by name";
+
     @Resource
     private FastApiConfig fastApiConfig;
     @Resource
     private JdbcTemplate jdbcTemplate;
 
     public List<SimpleTreeNode<ApiFileResourceRes>> getHttpApiTree() {
-        List<ApiFileResourceRes> list = jdbcTemplate.query(QUERY_ALL_HTTP_API, DataClassRowMapper.newInstance(ApiFileResourceRes.class), fastApiConfig.getNamespace());
+        List<ApiFileResourceRes> allDir = jdbcTemplate.query(
+                QUERY_ALL_DIR,
+                DataClassRowMapper.newInstance(ApiFileResourceRes.class),
+                fastApiConfig.getNamespace()
+        );
+        List<ApiFileResourceRes> list = jdbcTemplate.query(
+                QUERY_ALL_HTTP_API,
+                DataClassRowMapper.newInstance(ApiFileResourceRes.class),
+                fastApiConfig.getNamespace()
+        );
+        list.addAll(allDir);
         List<SimpleTreeNode<ApiFileResourceRes>> tree = new ArrayList<>(list.size());
         for (ApiFileResourceRes apiFileResourceRes : list) {
-            ApiFileResourceRes parent = list.stream()
-                    .filter(api -> Objects.equals(EnumConstant.IS_FILE_0, api.getIsFile()) && Objects.equals(apiFileResourceRes.getPath(), FilenameUtils.concat(api.getPath(), api.getName())))
-                    .findFirst().orElse(null);
-            apiFileResourceRes.setParentFileResourceId(parent != null ? parent.getFileResourceId() : null);
-            SimpleTreeNode<ApiFileResourceRes> node = new SimpleTreeNode<>(apiFileResourceRes.getParentFileResourceId(), apiFileResourceRes.getFileResourceId(), apiFileResourceRes);
+            allDir.stream()
+                    .filter(dir -> {
+                        if (!Objects.equals(EnumConstant.IS_FILE_0, dir.getIsFile())) {
+                            return false;
+                        }
+                        String path = dir.getPath() + dir.getName() + "/";
+                        return Objects.equals(apiFileResourceRes.getPath(), path);
+                    })
+                    .findFirst()
+                    .ifPresent(dir -> apiFileResourceRes.setParentFileResourceId(dir.getFileResourceId()));
+            SimpleTreeNode<ApiFileResourceRes> node = new SimpleTreeNode<>(
+                    apiFileResourceRes.getParentFileResourceId(),
+                    apiFileResourceRes.getFileResourceId(),
+                    apiFileResourceRes
+            );
             tree.add(node);
         }
         return BuildTreeUtils.buildTree(tree);

@@ -20,34 +20,34 @@ public class BuildTreeUtils {
      * @return 构建的所有树的根节点
      */
     public static <T extends ITreeNode> List<T> buildTree(Collection<T> nodes) {
-        log.info("开始构建树结构...");
+        log.debug("开始构建树结构...");
         final long startTime = System.currentTimeMillis();
         long tmpTime = System.currentTimeMillis();
         // 需要构建树的节点，还未构建到树中的节点
         List<T> allTreeNodeList = getCanBuildTreeNodes(nodes);
-        log.info("1 耗时：{}ms", (System.currentTimeMillis() - tmpTime));
+        log.debug("1 耗时：{}ms", (System.currentTimeMillis() - tmpTime));
         // 清除构建状态
         tmpTime = System.currentTimeMillis();
         clearBuild(allTreeNodeList);
-        log.info("2 耗时：{}ms", (System.currentTimeMillis() - tmpTime));
+        log.debug("2 耗时：{}ms", (System.currentTimeMillis() - tmpTime));
         // 查找所有根节点
         tmpTime = System.currentTimeMillis();
         List<T> rootNodeList = findRootNode(allTreeNodeList);
-        log.info("3 耗时：{}ms", (System.currentTimeMillis() - tmpTime));
+        log.debug("3 耗时：{}ms", (System.currentTimeMillis() - tmpTime));
         // 刷新还未构建到树中的节点，减少循环次数
         tmpTime = System.currentTimeMillis();
         List<T> noBuildTreeNodeList = refreshNoBuildNodes(allTreeNodeList);
-        log.info("4 耗时：{}ms", (System.currentTimeMillis() - tmpTime));
+        log.debug("4 耗时：{}ms", (System.currentTimeMillis() - tmpTime));
         // 循环根节点，构建多棵树
         tmpTime = System.currentTimeMillis();
         buildTree(rootNodeList, noBuildTreeNodeList);
-        log.info("5 耗时：{}ms", (System.currentTimeMillis() - tmpTime));
+        log.debug("5 耗时：{}ms", (System.currentTimeMillis() - tmpTime));
         // 刷新还未构建到树中的节点，减少循环次数
         noBuildTreeNodeList = refreshNoBuildNodes(noBuildTreeNodeList);
         final long endTime = System.currentTimeMillis();
         // 校验构建是否正确
         if (noBuildTreeNodeList.size() <= 0) {
-            log.info("树构建成功！耗时：{}ms | 数据量：{}", (endTime - startTime), nodes.size());
+            log.debug("树构建成功！耗时：{}ms | 数据量：{}", (endTime - startTime), nodes.size());
         } else {
             log.error("树构建失败！耗时：{}ms | [{}]", (endTime - startTime), nodesToString(noBuildTreeNodeList));
         }

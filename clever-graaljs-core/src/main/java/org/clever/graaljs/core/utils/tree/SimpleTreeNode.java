@@ -1,8 +1,5 @@
 package org.clever.graaljs.core.utils.tree;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonInclude.Include;
-import com.fasterxml.jackson.annotation.JsonUnwrapped;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -16,7 +13,7 @@ import java.util.List;
  * @author LiZhiWei
  * @version 2015年6月4日 下午9:51:39
  */
-@JsonInclude(Include.NON_NULL)
+// @JsonInclude(Include.NON_NULL)
 @Data
 public class SimpleTreeNode<T extends Serializable> implements ITreeNode {
     private static final long serialVersionUID = 1L;
@@ -40,7 +37,7 @@ public class SimpleTreeNode<T extends Serializable> implements ITreeNode {
     /**
      * 绑定到节点的对象
      */
-    @JsonUnwrapped
+    // @JsonUnwrapped
     private T attributes;
 
     public SimpleTreeNode() {
