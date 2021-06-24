@@ -10,7 +10,7 @@ create table file_resource
     id                  bigint          not null        auto_increment                          comment '主键id',
     namespace           varchar(63)     not null                                                comment '命名空间',
     path                varchar(511)    not null        collate utf8_bin                        comment '文件路径(以"/"结束)',
-    name                varchar(180)    not null        collate utf8_bin                        comment '文件名称',
+    name                varchar(127)    not null        collate utf8_bin                        comment '文件名称',
     content             text                                                                    comment '文件内容',
     is_file             tinyint         not null        default 1                               comment '数据类型：0-文件夹，1-文件',
     `read_only`         tinyint         not null        default 0                               comment '读写权限：0-可读可写，1-只读',
@@ -20,8 +20,8 @@ create table file_resource
     primary key (id)
 ) comment = '资源文件';
 create index idx_file_resource_namespace on file_resource (namespace);
-create index idx_file_resource_path on file_resource (path);
-create index idx_file_resource_name on file_resource (name);
+create index idx_file_resource_path on file_resource (path(127));
+create index idx_file_resource_name on file_resource (name(63));
 create index idx_file_resource_create_at on file_resource (create_at);
 create index idx_file_resource_update_at on file_resource (update_at);
 /*------------------------------------------------------------------------------------------------------------------------
@@ -37,7 +37,7 @@ create table file_resource_history
     id                  bigint          not null        auto_increment                          comment '主键id',
     namespace           varchar(63)     not null                                                comment '命名空间',
     path                varchar(511)    not null        collate utf8_bin                        comment '文件路径(以"/"结束)',
-    name                varchar(180)    not null        collate utf8_bin                        comment '文件名称',
+    name                varchar(127)    not null        collate utf8_bin                        comment '文件名称',
     content             text                                                                    comment '文件内容',
     description         varchar(511)                                                            comment '说明',
     create_at           datetime(3)     not null        default current_timestamp(3)            comment '创建时间',
@@ -45,8 +45,8 @@ create table file_resource_history
     primary key (id)
 ) comment = '资源文件修改历史';
 create index idx_file_resource_history_namespace on file_resource_history (namespace);
-create index idx_file_resource_history_path on file_resource_history (path);
-create index idx_file_resource_history_name on file_resource_history (name);
+create index idx_file_resource_history_path on file_resource_history (path(127));
+create index idx_file_resource_history_name on file_resource_history (name(63));
 create index idx_file_resource_history_create_at on file_resource_history (create_at);
 create index idx_file_resource_history_update_at on file_resource_history (update_at);
 /*------------------------------------------------------------------------------------------------------------------------
@@ -62,7 +62,7 @@ create table http_api
     id                  bigint          not null        auto_increment                          comment '主键id',
     namespace           varchar(63)     not null                                                comment '命名空间',
     file_resource_id    bigint          not null                                                comment '资源文件id',
-    request_mapping     varchar(180)    not null        collate utf8_bin                        comment 'http请求路径',
+    request_mapping     varchar(511)    not null        collate utf8_bin                        comment 'http请求路径',
     request_method      varchar(15)     not null                                                comment 'http请求method，ALL GET HEAD POST PUT DELETE CONNECT OPTIONS TRACE PATCH',
     disable_request     tinyint         not null        default 0                               comment '禁用http请求：0-启用，1-禁用',
     create_at           datetime(3)     not null        default current_timestamp(3)            comment '创建时间',
@@ -71,7 +71,7 @@ create table http_api
 ) comment = 'HTTP接口';
 create index idx_http_api_namespace on http_api (namespace);
 create index idx_http_api_file_resource_id on http_api (file_resource_id);
-create index idx_http_api_request_mapping on http_api (request_mapping);
+create index idx_http_api_request_mapping on http_api (request_mapping(127));
 create index idx_http_api_create_at on http_api (create_at);
 create index idx_http_api_update_at on http_api (update_at);
 /*------------------------------------------------------------------------------------------------------------------------
@@ -111,7 +111,7 @@ create table access_log
     id                  bigint          not null        auto_increment                          comment '主键id',
     namespace           varchar(63)     not null                                                comment '命名空间',
     file_resource_id    bigint          not null                                                comment '资源文件id',
-    request_mapping     varchar(180)    not null        collate utf8_bin                        comment 'http请求路径',
+    request_mapping     varchar(511)    not null        collate utf8_bin                        comment 'http请求路径',
     request_method      varchar(15)     not null                                                comment 'http请求method，ALL GET HEAD POST PUT DELETE CONNECT OPTIONS TRACE PATCH',
     run_start           datetime(3)     not null                                                comment '运行开始时间',
     run_end             datetime(3)                                                             comment '运行结束时间',
@@ -121,7 +121,7 @@ create table access_log
 ) comment = '接口访问日志';
 create index idx_access_log_namespace on access_log (namespace);
 create index idx_access_log_file_resource_id on access_log (file_resource_id);
-create index idx_access_log_request_mapping on access_log (request_mapping);
+create index idx_access_log_request_mapping on access_log (request_mapping(127));
 create index idx_access_log_run_start on access_log (run_start);
 create index idx_access_log_run_end on access_log (run_end);
 /*------------------------------------------------------------------------------------------------------------------------
