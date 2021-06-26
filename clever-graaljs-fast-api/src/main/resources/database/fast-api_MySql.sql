@@ -9,6 +9,7 @@ create table file_resource
 (
     id                  bigint          not null        auto_increment                          comment '主键id',
     namespace           varchar(63)     not null                                                comment '命名空间',
+    module              tinyint         not null                                                comment '所属模块：0-，1-',
     path                varchar(511)    not null        collate utf8_bin                        comment '文件路径(以"/"结束)',
     name                varchar(127)    not null        collate utf8_bin                        comment '文件名称',
     content             text                                                                    comment '文件内容',

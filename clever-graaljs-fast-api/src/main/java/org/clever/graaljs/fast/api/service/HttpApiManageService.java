@@ -5,6 +5,7 @@ import org.clever.graaljs.core.utils.tree.SimpleTreeNode;
 import org.clever.graaljs.fast.api.config.FastApiConfig;
 import org.clever.graaljs.fast.api.dto.response.ApiFileResourceRes;
 import org.clever.graaljs.fast.api.entity.EnumConstant;
+import org.clever.graaljs.fast.api.entity.HttpApi;
 import org.springframework.jdbc.core.DataClassRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
@@ -47,6 +48,8 @@ public class HttpApiManageService {
             "where is_file=0 and namespace=? " +
             "order by name";
 
+    private static final String GET_HTTP_API = "select * from http_api where id=?";
+
     @Resource
     private FastApiConfig fastApiConfig;
     @Resource
@@ -84,5 +87,9 @@ public class HttpApiManageService {
             tree.add(node);
         }
         return BuildTreeUtils.buildTree(tree);
+    }
+
+    public HttpApi getHttpApi(Long id) {
+        return jdbcTemplate.queryForObject(GET_HTTP_API, DataClassRowMapper.newInstance(HttpApi.class), id);
     }
 }
