@@ -44,6 +44,7 @@ public class FileResourceManageService {
         if (count <= 0) {
             throw new BusinessException("文件不存在");
         }
+        // TDO 保存历史记录
         return getFileResource(req.getId());
     }
 }
