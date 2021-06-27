@@ -98,7 +98,7 @@ clever:
     mvc:
       prefix: '/api'
       cors:
-        allowed-origins: [ '*' ]
+        allowed-origin-patterns: [ '*' ]
         allowed-methods: [ '*' ]
         allowed-headers: [ '*' ]
         exposed-headers: [ ]

@@ -16,11 +16,18 @@ import java.util.List;
  */
 public class ScriptHandlerCorsConfig implements Serializable {
     /**
-     * 设置允许的域，"*"为所有域
+     * 设置允许的域，不能使用通配符
      */
     @Getter
     @Setter
     private List<String> allowedOrigins;
+
+    /**
+     * 设置允许的域，可使用通配符，"*"为所有域
+     */
+    @Getter
+    @Setter
+    private List<String> allowedOriginPatterns;
 
     /**
      * 设置允许客户端能发送的Http Method，"*"为所有Method
@@ -70,6 +77,7 @@ public class ScriptHandlerCorsConfig implements Serializable {
         if (forceRefresh || corsConfiguration == null) {
             corsConfiguration = new CorsConfiguration();
             corsConfiguration.setAllowedOrigins(this.allowedOrigins);
+            corsConfiguration.setAllowedOriginPatterns(this.allowedOriginPatterns);
             corsConfiguration.setAllowedMethods(this.allowedMethods);
             corsConfiguration.setAllowedHeaders(this.allowedHeaders);
             corsConfiguration.setAllowCredentials(this.allowCredentials);

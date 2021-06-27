@@ -1,11 +1,10 @@
 package org.clever.graaljs.fast.api.controller;
 
+import org.clever.graaljs.fast.api.dto.request.SaveFileContentReq;
 import org.clever.graaljs.fast.api.entity.FileResource;
 import org.clever.graaljs.fast.api.service.FileResourceManageService;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 
@@ -22,5 +21,10 @@ public class FileResourceManageController {
     @GetMapping("/file_resource")
     public FileResource getFileResource(@RequestParam("id") Long id) {
         return fileResourceManageService.getFileResource(id);
+    }
+
+    @PutMapping("/save_file_content")
+    public FileResource saveFileContent(@RequestBody @Validated SaveFileContentReq req) {
+        return fileResourceManageService.saveFileContent(req);
     }
 }
