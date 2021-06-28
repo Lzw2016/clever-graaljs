@@ -35,6 +35,8 @@ public class FileResourceCacheService {
             "where a.namespace=? and b.namespace=? " +
             "%s " +
             "order by a.update_at desc, a.id desc, b.update_at desc, b.id desc";
+    private final static String RELOAD_SQL = String.format(BASE_SQL, "and a.disable_request=0");
+    private final static String UPDATE_CACHE_SQL = String.format(BASE_SQL, "and (a.create_at>? or a.update_at>? or b.create_at>? or b.update_at>?)");
 
     private final JdbcTemplate jdbcTemplate;
     /**
@@ -63,9 +65,8 @@ public class FileResourceCacheService {
      * 全量加载缓存
      */
     public void reload() {
-        String sql = String.format(BASE_SQL, "and a.disable_request=0");
         synchronized (lock) {
-            List<HttpApiFileResource> list = jdbcTemplate.query(sql, DataClassRowMapper.newInstance(HttpApiFileResource.class), namespace, namespace);
+            List<HttpApiFileResource> list = jdbcTemplate.query(RELOAD_SQL, DataClassRowMapper.newInstance(HttpApiFileResource.class), namespace, namespace);
             ConcurrentMap<String, HttpApiFileResource> newCache = new ConcurrentHashMap<>(list.size());
             for (HttpApiFileResource resource : list) {
                 if (resource.getLastModifiedTime() != null) {
@@ -90,10 +91,9 @@ public class FileResourceCacheService {
         }
         // 增量更新
         synchronized (lock) {
-            String sql = String.format(BASE_SQL, "and (a.create_at>? or a.update_at>? or b.create_at>? or b.update_at>?)");
             List<HttpApiFileResource> list = jdbcTemplate.query(
-                    sql, DataClassRowMapper.newInstance(HttpApiFileResource.class), namespace, namespace,
-                    lastModifiedTime, lastModifiedTime, lastModifiedTime, lastModifiedTime
+                    UPDATE_CACHE_SQL, DataClassRowMapper.newInstance(HttpApiFileResource.class),
+                    namespace, namespace, lastModifiedTime, lastModifiedTime, lastModifiedTime, lastModifiedTime
             );
             Set<Long> removeHttpApiIds = new HashSet<>();
             for (HttpApiFileResource resource : list) {

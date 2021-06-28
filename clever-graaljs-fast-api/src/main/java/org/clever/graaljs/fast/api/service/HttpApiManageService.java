@@ -48,12 +48,20 @@ public class HttpApiManageService {
             "where is_file=0 and namespace=? " +
             "order by name";
 
-    private static final String GET_HTTP_API = "select * from http_api where id=?";
+    private static final String GET_HTTP_API = "select * from http_api where namespace=? and id=?";
 
+    /**
+     * FileResource 命名空间
+     */
+    private final String namespace;
     @Resource
     private FastApiConfig fastApiConfig;
     @Resource
     private JdbcTemplate jdbcTemplate;
+
+    public HttpApiManageService(FastApiConfig fastApiConfig) {
+        this.namespace = fastApiConfig.getNamespace();
+    }
 
     public List<SimpleTreeNode<ApiFileResourceRes>> getHttpApiTree() {
         List<ApiFileResourceRes> allDir = jdbcTemplate.query(
@@ -90,6 +98,6 @@ public class HttpApiManageService {
     }
 
     public HttpApi getHttpApi(Long id) {
-        return jdbcTemplate.queryForObject(GET_HTTP_API, DataClassRowMapper.newInstance(HttpApi.class), id);
+        return jdbcTemplate.queryForObject(GET_HTTP_API, DataClassRowMapper.newInstance(HttpApi.class), namespace, id);
     }
 }

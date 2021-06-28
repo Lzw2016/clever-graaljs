@@ -3,13 +3,37 @@ use `fast-api`;
 
 
 /* ====================================================================================================================
+    data_source_config -- 数据源配置
+==================================================================================================================== */
+create table data_source_config
+(
+    id                  bigint          not null        auto_increment                          comment '主键id',
+    namespace           varchar(63)     not null                                                comment '命名空间',
+    type                varchar(31)     not null                                                comment '数据源类型，jdbc redis rabbitmq rocketmq kafka elasticsearch ...',
+    name                varchar(63)     not null                                                comment '数据源名称',
+    config              text            not null                                                comment '数据源配置',
+    disable             tinyint         not null        default 0                               comment '禁用：0-启用，1-禁用',
+    create_at           datetime(3)     not null        default current_timestamp(3)            comment '创建时间',
+    update_at           datetime(3)                     on update current_timestamp(3)          comment '更新时间',
+    primary key (id)
+) comment = '数据源配置';
+create index idx_data_source_config_namespace on data_source_config (namespace);
+create index idx_data_source_config_name on data_source_config (name);
+create index idx_data_source_config_create_at on data_source_config (create_at);
+create index idx_data_source_config_update_at on data_source_config (update_at);
+/*------------------------------------------------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------------------------------------------------*/
+
+
+/* ====================================================================================================================
     file_resource -- 资源文件
 ==================================================================================================================== */
 create table file_resource
 (
     id                  bigint          not null        auto_increment                          comment '主键id',
     namespace           varchar(63)     not null                                                comment '命名空间',
-    module              tinyint         not null                                                comment '所属模块：0-，1-',
+    module              tinyint         not null                                                comment '所属模块：0-自定义扩展，1-初始化脚本，2-HTTP API，3-定时任务',
     path                varchar(511)    not null        collate utf8_bin                        comment '文件路径(以"/"结束)',
     name                varchar(127)    not null        collate utf8_bin                        comment '文件名称',
     content             text                                                                    comment '文件内容',
@@ -37,6 +61,7 @@ create table file_resource_history
 (
     id                  bigint          not null        auto_increment                          comment '主键id',
     namespace           varchar(63)     not null                                                comment '命名空间',
+    module              tinyint         not null                                                comment '所属模块：0-自定义扩展，1-初始化脚本，2-HTTP API，3-定时任务',
     path                varchar(511)    not null        collate utf8_bin                        comment '文件路径(以"/"结束)',
     name                varchar(127)    not null        collate utf8_bin                        comment '文件名称',
     content             text                                                                    comment '文件内容',
@@ -75,30 +100,6 @@ create index idx_http_api_file_resource_id on http_api (file_resource_id);
 create index idx_http_api_request_mapping on http_api (request_mapping(127));
 create index idx_http_api_create_at on http_api (create_at);
 create index idx_http_api_update_at on http_api (update_at);
-/*------------------------------------------------------------------------------------------------------------------------
-
---------------------------------------------------------------------------------------------------------------------------*/
-
-
-/* ====================================================================================================================
-    data_source_config -- 数据源配置
-==================================================================================================================== */
-create table data_source_config
-(
-    id                  bigint          not null        auto_increment                          comment '主键id',
-    namespace           varchar(63)     not null                                                comment '命名空间',
-    type                varchar(31)     not null                                                comment '数据源类型，jdbc redis rabbitmq rocketmq kafka elasticsearch ...',
-    name                varchar(63)     not null                                                comment '数据源名称',
-    config              text            not null                                                comment '数据源配置',
-    disable             tinyint         not null        default 0                               comment '禁用：0-启用，1-禁用',
-    create_at           datetime(3)     not null        default current_timestamp(3)            comment '创建时间',
-    update_at           datetime(3)                     on update current_timestamp(3)          comment '更新时间',
-    primary key (id)
-) comment = '数据源配置';
-create index idx_data_source_config_namespace on data_source_config (namespace);
-create index idx_data_source_config_name on data_source_config (name);
-create index idx_data_source_config_create_at on data_source_config (create_at);
-create index idx_data_source_config_update_at on data_source_config (update_at);
 /*------------------------------------------------------------------------------------------------------------------------
 
 --------------------------------------------------------------------------------------------------------------------------*/

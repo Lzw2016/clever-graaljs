@@ -36,6 +36,8 @@ public class FileResourceMyBatisMapperSqlService extends AbstractMyBatisMapperSq
             "where is_file=1 and namespace=? " +
             "%s " +
             "order by update_at desc, id desc";
+    private final static String RELOAD_ALL_SQL = String.format(BASE_SQL, "and lower(name) like '%.xml'");
+    private final static String UPDATE_CACHE_SQL = String.format(BASE_SQL, "and (create_at>? or update_at>?)");
 
     private final JdbcTemplate jdbcTemplate;
     /**
@@ -62,9 +64,8 @@ public class FileResourceMyBatisMapperSqlService extends AbstractMyBatisMapperSq
 
     @Override
     public void reloadAll() {
-        String sql = String.format(BASE_SQL, "and lower(name) like '%.xml'");
         synchronized (lock) {
-            List<MapperFileResource> list = jdbcTemplate.query(sql, DataClassRowMapper.newInstance(MapperFileResource.class), namespace);
+            List<MapperFileResource> list = jdbcTemplate.query(RELOAD_ALL_SQL, DataClassRowMapper.newInstance(MapperFileResource.class), namespace);
             ConcurrentMap<String, MapperFileResource> newCache = new ConcurrentHashMap<>(list.size());
             for (MapperFileResource resource : list) {
                 if (resource.getLastModifiedTime() != null) {
@@ -131,10 +132,9 @@ public class FileResourceMyBatisMapperSqlService extends AbstractMyBatisMapperSq
         }
         // 增量更新
         synchronized (lock) {
-            String sql = String.format(BASE_SQL, "and (create_at>? or update_at>?)");
             List<MapperFileResource> list = jdbcTemplate.query(
-                    sql, DataClassRowMapper.newInstance(MapperFileResource.class), namespace,
-                    lastModifiedTime, lastModifiedTime
+                    UPDATE_CACHE_SQL, DataClassRowMapper.newInstance(MapperFileResource.class),
+                    namespace, lastModifiedTime, lastModifiedTime
             );
             for (MapperFileResource resource : list) {
                 // 更新lastModifiedTime

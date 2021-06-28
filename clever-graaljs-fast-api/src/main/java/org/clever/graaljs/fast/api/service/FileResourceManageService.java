@@ -1,6 +1,7 @@
 package org.clever.graaljs.fast.api.service;
 
 import org.clever.graaljs.core.exception.BusinessException;
+import org.clever.graaljs.fast.api.config.FastApiConfig;
 import org.clever.graaljs.fast.api.dto.request.SaveFileContentReq;
 import org.clever.graaljs.fast.api.entity.EnumConstant;
 import org.clever.graaljs.fast.api.entity.FileResource;
@@ -18,14 +19,22 @@ import java.util.Objects;
  */
 @Service
 public class FileResourceManageService {
-    private static final String GET_FILE_RESOURCE = "select * from file_resource where id=?";
-    private static final String SAVE_FILE_CONTENT = "update file_resource set content=? where id=?";
+    private static final String GET_FILE_RESOURCE = "select * from file_resource where namespace=? and id=?";
+    private static final String SAVE_FILE_CONTENT = "update file_resource set content=? where namespace=? and id=?";
 
+    /**
+     * FileResource 命名空间
+     */
+    private final String namespace;
     @Resource
     private JdbcTemplate jdbcTemplate;
 
+    public FileResourceManageService(FastApiConfig fastApiConfig) {
+        this.namespace = fastApiConfig.getNamespace();
+    }
+
     public FileResource getFileResource(Long id) {
-        return jdbcTemplate.queryForObject(GET_FILE_RESOURCE, DataClassRowMapper.newInstance(FileResource.class), id);
+        return jdbcTemplate.queryForObject(GET_FILE_RESOURCE, DataClassRowMapper.newInstance(FileResource.class), namespace, id);
     }
 
     @Transactional
@@ -40,7 +49,7 @@ public class FileResourceManageService {
         if (!Objects.equals(EnumConstant.READ_ONLY_0, fileResource.getReadOnly())) {
             throw new BusinessException("当前文件内容不能更改(只读)");
         }
-        int count = jdbcTemplate.update(SAVE_FILE_CONTENT, req.getContent(), req.getId());
+        int count = jdbcTemplate.update(SAVE_FILE_CONTENT, req.getContent(), namespace, req.getId());
         if (count <= 0) {
             throw new BusinessException("文件不存在");
         }
