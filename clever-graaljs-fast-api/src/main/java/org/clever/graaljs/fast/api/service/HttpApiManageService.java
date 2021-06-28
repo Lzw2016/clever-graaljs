@@ -45,7 +45,7 @@ public class HttpApiManageService {
             "   is_file as isFile, " +
             "   `read_only` as readOnly " +
             "from file_resource " +
-            "where is_file=0 and b.module=3 and namespace=? " +
+            "where is_file=0 and module=3 and namespace=? " +
             "order by name";
 
     private static final String GET_HTTP_API = "select * from http_api where namespace=? and id=?";
