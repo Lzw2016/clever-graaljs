@@ -65,16 +65,13 @@ create table file_resource_history
     path                varchar(511)    not null        collate utf8_bin                        comment '文件路径(以"/"结束)',
     name                varchar(127)    not null        collate utf8_bin                        comment '文件名称',
     content             text                                                                    comment '文件内容',
-    description         varchar(511)                                                            comment '说明',
     create_at           datetime(3)     not null        default current_timestamp(3)            comment '创建时间',
-    update_at           datetime(3)                     on update current_timestamp(3)          comment '更新时间',
     primary key (id)
 ) comment = '资源文件修改历史';
 create index idx_file_resource_history_namespace on file_resource_history (namespace);
 create index idx_file_resource_history_path on file_resource_history (path(127));
 create index idx_file_resource_history_name on file_resource_history (name(63));
 create index idx_file_resource_history_create_at on file_resource_history (create_at);
-create index idx_file_resource_history_update_at on file_resource_history (update_at);
 /*------------------------------------------------------------------------------------------------------------------------
 
 --------------------------------------------------------------------------------------------------------------------------*/

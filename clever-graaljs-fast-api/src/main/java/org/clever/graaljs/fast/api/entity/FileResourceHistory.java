@@ -45,17 +45,7 @@ public class FileResourceHistory implements Serializable {
     private String content;
 
     /**
-     * 说明
-     */
-    private String description;
-
-    /**
      * 创建时间
      */
     private Date createAt;
-
-    /**
-     * 更新时间
-     */
-    private Date updateAt;
 }
