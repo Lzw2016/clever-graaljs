@@ -25,6 +25,11 @@ public class FileResourceHistory implements Serializable {
     private String namespace;
 
     /**
+     * 所属模块：0-自定义扩展，1-资源文件，2-初始化脚本，3-HTTP API，4-定时任务
+     */
+    private Integer module;
+
+    /**
      * 文件路径(以"/"结束)
      */
     private String path;

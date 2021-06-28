@@ -9,7 +9,7 @@ import org.clever.graaljs.data.redis.builtin.wrap.RedisDatabase;
 import org.clever.graaljs.fast.api.config.FastApiConfig;
 import org.clever.graaljs.fast.api.config.MvcConfig;
 import org.clever.graaljs.fast.api.intercept.FastApiHttpInterceptor;
-import org.clever.graaljs.fast.api.service.FileResourceCacheService;
+import org.clever.graaljs.fast.api.service.HttpApiFileResourceCacheService;
 import org.clever.graaljs.meta.data.builtin.wrap.MateDataManage;
 import org.clever.graaljs.spring.mvc.DefaultExceptionResolver;
 import org.clever.graaljs.spring.mvc.ExceptionResolver;
@@ -117,7 +117,7 @@ public class FastApiAutoConfiguration {
     public FastApiHttpInterceptor fastApiHttpInterceptor(
             ExceptionResolver exceptionResolver,
             ScriptEngineInstance scriptEngineInstance,
-            FileResourceCacheService fileResourceCacheServices,
+            HttpApiFileResourceCacheService httpApiFileResourceCacheService,
             ObjectProvider<ConversionService> conversionService) {
         Assert.notNull(conversionService.getIfAvailable(), String.format("依赖实例%s未注入", ConversionService.class.getName()));
         final MvcConfig mvc = fastApiConfig.getMvc();
@@ -127,7 +127,7 @@ public class FastApiAutoConfiguration {
                 scriptEngineInstance,
                 exceptionResolver,
                 conversionService.getIfAvailable(),
-                fileResourceCacheServices
+                httpApiFileResourceCacheService
         );
     }
 }

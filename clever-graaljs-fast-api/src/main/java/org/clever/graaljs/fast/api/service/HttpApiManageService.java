@@ -34,7 +34,7 @@ public class HttpApiManageService {
             "    a.request_method as requestMethod, " +
             "    a.disable_request as disableRequest " +
             "from http_api a left join file_resource b on (a.file_resource_id = b.id) " +
-            "where a.namespace=b.namespace and a.namespace=? " +
+            "where b.is_file=1 and lower(b.name) like '%%.js' and b.module=3 and a.namespace=b.namespace and a.namespace=? " +
             "order by b.name";
 
     private static final String QUERY_ALL_DIR = "" +
@@ -45,7 +45,7 @@ public class HttpApiManageService {
             "   is_file as isFile, " +
             "   `read_only` as readOnly " +
             "from file_resource " +
-            "where is_file=0 and namespace=? " +
+            "where is_file=0 and b.module=3 and namespace=? " +
             "order by name";
 
     private static final String GET_HTTP_API = "select * from http_api where namespace=? and id=?";
@@ -64,11 +64,13 @@ public class HttpApiManageService {
     }
 
     public List<SimpleTreeNode<ApiFileResourceRes>> getHttpApiTree() {
+        // 查询所有文件夹
         List<ApiFileResourceRes> allDir = jdbcTemplate.query(
                 QUERY_ALL_DIR,
                 DataClassRowMapper.newInstance(ApiFileResourceRes.class),
                 fastApiConfig.getNamespace()
         );
+        // 查询所有接口文件
         List<ApiFileResourceRes> list = jdbcTemplate.query(
                 QUERY_ALL_HTTP_API,
                 DataClassRowMapper.newInstance(ApiFileResourceRes.class),

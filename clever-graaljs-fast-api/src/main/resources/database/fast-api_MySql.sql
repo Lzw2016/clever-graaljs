@@ -33,7 +33,7 @@ create table file_resource
 (
     id                  bigint          not null        auto_increment                          comment '主键id',
     namespace           varchar(63)     not null                                                comment '命名空间',
-    module              tinyint         not null                                                comment '所属模块：0-自定义扩展，1-初始化脚本，2-HTTP API，3-定时任务',
+    module              tinyint         not null                                                comment '所属模块：0-自定义扩展，1-资源文件，2-初始化脚本，3-HTTP API，4-定时任务',
     path                varchar(511)    not null        collate utf8_bin                        comment '文件路径(以"/"结束)',
     name                varchar(127)    not null        collate utf8_bin                        comment '文件名称',
     content             text                                                                    comment '文件内容',
@@ -61,7 +61,7 @@ create table file_resource_history
 (
     id                  bigint          not null        auto_increment                          comment '主键id',
     namespace           varchar(63)     not null                                                comment '命名空间',
-    module              tinyint         not null                                                comment '所属模块：0-自定义扩展，1-初始化脚本，2-HTTP API，3-定时任务',
+    module              tinyint         not null                                                comment '所属模块：0-自定义扩展，1-资源文件，2-初始化脚本，3-HTTP API，4-定时任务',
     path                varchar(511)    not null        collate utf8_bin                        comment '文件路径(以"/"结束)',
     name                varchar(127)    not null        collate utf8_bin                        comment '文件名称',
     content             text                                                                    comment '文件内容',
@@ -102,6 +102,31 @@ create index idx_http_api_create_at on http_api (create_at);
 create index idx_http_api_update_at on http_api (update_at);
 /*------------------------------------------------------------------------------------------------------------------------
 
+--------------------------------------------------------------------------------------------------------------------------*/
+
+
+/* ====================================================================================================================
+    TODO timed_task -- 定时任务
+==================================================================================================================== */
+create table timed_task
+(
+    id                  bigint          not null        auto_increment                          comment '主键id',
+    namespace           varchar(63)     not null                                                comment '命名空间',
+    file_resource_id    bigint          not null                                                comment '资源文件id',
+    start_time          datetime(3)                                                             comment '开始时间',
+    end_time            datetime(3)                                                             comment '结束时间',
+    cron                varchar(255)    not null                                                comment '触发cron表达式',
+    disable             tinyint         not null        default 0                               comment '是否禁用：0-启用，1-禁用',
+    create_at           datetime(3)     not null        default current_timestamp(3)            comment '创建时间',
+    update_at           datetime(3)                     on update current_timestamp(3)          comment '更新时间',
+    primary key (id)
+) comment = '定时任务';
+create index idx_timed_task_namespace on timed_task (namespace);
+create index idx_timed_task_file_resource_id on timed_task (file_resource_id);
+create index idx_timed_task_create_at on timed_task (create_at);
+create index idx_timed_task_update_at on timed_task (update_at);
+/*------------------------------------------------------------------------------------------------------------------------
+TODO timed_task_run_log
 --------------------------------------------------------------------------------------------------------------------------*/
 
 

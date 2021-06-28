@@ -4,7 +4,7 @@ import org.clever.graaljs.core.ScriptEngineInstance;
 import org.clever.graaljs.core.utils.ScriptCodeUtils;
 import org.clever.graaljs.core.utils.TupleTow;
 import org.clever.graaljs.fast.api.model.HttpApiFileResource;
-import org.clever.graaljs.fast.api.service.FileResourceCacheService;
+import org.clever.graaljs.fast.api.service.HttpApiFileResourceCacheService;
 import org.clever.graaljs.spring.mvc.ExceptionResolver;
 import org.clever.graaljs.spring.mvc.HttpInterceptorScriptHandler;
 import org.clever.graaljs.spring.mvc.ScriptHandlerCorsConfig;
@@ -20,7 +20,7 @@ public class FastApiHttpInterceptor extends HttpInterceptorScriptHandler {
     /**
      * 资源文件缓存对象
      */
-    protected final FileResourceCacheService fileResourceCacheService;
+    protected final HttpApiFileResourceCacheService fileResourceCacheService;
 
     /**
      * @param supportPrefix            支持的请求前缀
@@ -36,7 +36,7 @@ public class FastApiHttpInterceptor extends HttpInterceptorScriptHandler {
             ScriptEngineInstance scriptEngineInstance,
             ExceptionResolver exceptionResolver,
             ConversionService conversionService,
-            FileResourceCacheService fileResourceCacheService) {
+            HttpApiFileResourceCacheService fileResourceCacheService) {
         super(supportPrefix, corsConfig, scriptEngineInstance, exceptionResolver, conversionService);
         this.fileResourceCacheService = fileResourceCacheService;
     }

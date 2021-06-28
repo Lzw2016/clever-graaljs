@@ -122,7 +122,7 @@ public class FileResourceMyBatisMapperSqlService extends AbstractMyBatisMapperSq
     }
 
     /**
-     * 增量更新缓存
+     * 增量更新缓存(被删除的文件无法增量更新)
      */
     public void updateCache() {
         // 全量加载
