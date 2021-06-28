@@ -1,6 +1,7 @@
 package org.clever.graaljs.fast.api.service;
 
 import org.clever.graaljs.core.exception.BusinessException;
+import org.clever.graaljs.core.utils.ScriptCodeUtils;
 import org.clever.graaljs.fast.api.config.FastApiConfig;
 import org.clever.graaljs.fast.api.dto.request.SaveFileContentReq;
 import org.clever.graaljs.fast.api.entity.EnumConstant;
@@ -64,13 +65,17 @@ public class FileResourceManageService {
             throw new BusinessException("文件不存在");
         }
         // 保存历史记录
-        FileResourceHistory history = new FileResourceHistory();
-        history.setNamespace(fileResource.getNamespace());
-        history.setModule(fileResource.getModule());
-        history.setPath(fileResource.getPath());
-        history.setName(fileResource.getName());
-        history.setContent(req.getContent());
-        namedParameterJdbcTemplate.update(INSERT_HISTORY, new BeanPropertySqlParameterSource(history));
+        String oldCode = ScriptCodeUtils.compressCode(fileResource.getContent(), false);
+        String newCode = ScriptCodeUtils.compressCode(req.getContent(), false);
+        if (!Objects.equals(oldCode, newCode)) {
+            FileResourceHistory history = new FileResourceHistory();
+            history.setNamespace(fileResource.getNamespace());
+            history.setModule(fileResource.getModule());
+            history.setPath(fileResource.getPath());
+            history.setName(fileResource.getName());
+            history.setContent(req.getContent());
+            namedParameterJdbcTemplate.update(INSERT_HISTORY, new BeanPropertySqlParameterSource(history));
+        }
         return getFileResource(req.getId());
     }
 }

@@ -55,8 +55,6 @@ public class HttpApiManageService {
      */
     private final String namespace;
     @Resource
-    private FastApiConfig fastApiConfig;
-    @Resource
     private JdbcTemplate jdbcTemplate;
 
     public HttpApiManageService(FastApiConfig fastApiConfig) {
@@ -68,13 +66,13 @@ public class HttpApiManageService {
         List<ApiFileResourceRes> allDir = jdbcTemplate.query(
                 QUERY_ALL_DIR,
                 DataClassRowMapper.newInstance(ApiFileResourceRes.class),
-                fastApiConfig.getNamespace()
+                namespace
         );
         // 查询所有接口文件
         List<ApiFileResourceRes> list = jdbcTemplate.query(
                 QUERY_ALL_HTTP_API,
                 DataClassRowMapper.newInstance(ApiFileResourceRes.class),
-                fastApiConfig.getNamespace()
+                namespace
         );
         list.addAll(allDir);
         List<SimpleTreeNode<ApiFileResourceRes>> tree = new ArrayList<>(list.size());
