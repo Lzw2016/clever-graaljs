@@ -33,10 +33,10 @@ public class FileResourceMyBatisMapperSqlService extends AbstractMyBatisMapperSq
             "    content, " +
             "    ifnull(update_at, create_at) as lastModifiedTime " +
             "from file_resource " +
-            "where is_file=1 and namespace=? " +
+            "where is_file=1 and lower(name) like '%%.xml' and namespace=? " +
             "%s " +
             "order by update_at desc, id desc";
-    private final static String RELOAD_ALL_SQL = String.format(BASE_SQL, "and lower(name) like '%.xml'");
+    private final static String RELOAD_ALL_SQL = String.format(BASE_SQL, "");
     private final static String UPDATE_CACHE_SQL = String.format(BASE_SQL, "and (create_at>? or update_at>?)");
 
     private final JdbcTemplate jdbcTemplate;
