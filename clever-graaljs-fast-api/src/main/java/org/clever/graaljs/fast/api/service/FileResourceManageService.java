@@ -3,6 +3,7 @@ package org.clever.graaljs.fast.api.service;
 import org.clever.graaljs.core.exception.BusinessException;
 import org.clever.graaljs.core.utils.ScriptCodeUtils;
 import org.clever.graaljs.fast.api.config.FastApiConfig;
+import org.clever.graaljs.fast.api.dto.request.AddDirReq;
 import org.clever.graaljs.fast.api.dto.request.SaveFileContentReq;
 import org.clever.graaljs.fast.api.entity.EnumConstant;
 import org.clever.graaljs.fast.api.entity.FileResource;
@@ -15,6 +16,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -30,6 +33,12 @@ public class FileResourceManageService {
             "  (namespace, module, path, name, content) " +
             "values  " +
             "  (:namespace, :module, :path, :name, :content)";
+    private static final String FULL_PATH_EXISTS = "select count(1) from file_resource where module=? and namespace=? and path=? and name=? limit 1";
+    private static final String INSERT_FILE_RESOURCE = "" +
+            "insert into file_resource " +
+            "(namespace, module, path, name, content, is_file, `read_only`, description) " +
+            "VALUES " +
+            "(:namespace, :module, :path, :name, :content, :isFile, :readOnly, :description)";
 
     /**
      * FileResource 命名空间
@@ -77,5 +86,36 @@ public class FileResourceManageService {
             namedParameterJdbcTemplate.update(INSERT_HISTORY, new BeanPropertySqlParameterSource(history));
         }
         return getFileResource(req.getId());
+    }
+
+    @Transactional
+    public List<FileResource> addDir(AddDirReq req) {
+        List<FileResource> list = new ArrayList<>();
+        String[] paths = req.getFullPath().split("/");
+        if (paths.length <= 0) {
+            throw new BusinessException("目录全路径格式错误");
+        }
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < paths.length; i++) {
+            if (i == 0) {
+                continue;
+            }
+            String path = sb + "/";
+            String name = paths[i];
+            Integer count = jdbcTemplate.queryForObject(FULL_PATH_EXISTS, Integer.class, req.getModule(), namespace, path, name);
+            if (count == null || count <= 0) {
+                FileResource dir = new FileResource();
+                dir.setNamespace(namespace);
+                dir.setModule(req.getModule());
+                dir.setPath(path);
+                dir.setName(name);
+                dir.setIsFile(EnumConstant.IS_FILE_0);
+                dir.setReadOnly(EnumConstant.READ_ONLY_0);
+                dir.setDescription("");
+                namedParameterJdbcTemplate.update(INSERT_FILE_RESOURCE, new BeanPropertySqlParameterSource(dir));
+            }
+            sb.append("/").append(name);
+        }
+        return list;
     }
 }

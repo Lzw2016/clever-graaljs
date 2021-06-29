@@ -1,5 +1,6 @@
 package org.clever.graaljs.fast.api.controller;
 
+import org.clever.graaljs.fast.api.dto.request.AddDirReq;
 import org.clever.graaljs.fast.api.dto.request.SaveFileContentReq;
 import org.clever.graaljs.fast.api.entity.FileResource;
 import org.clever.graaljs.fast.api.service.FileResourceManageService;
@@ -7,6 +8,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * 作者：lizw <br/>
@@ -26,5 +28,10 @@ public class FileResourceManageController {
     @PutMapping("/save_file_content")
     public FileResource saveFileContent(@RequestBody @Validated SaveFileContentReq req) {
         return fileResourceManageService.saveFileContent(req);
+    }
+
+    @PostMapping("/add_dir")
+    public List<FileResource> addDir(@RequestBody @Validated AddDirReq req) {
+        return fileResourceManageService.addDir(req);
     }
 }
