@@ -2,6 +2,7 @@ package org.clever.graaljs.fast.api.controller;
 
 import org.clever.graaljs.core.utils.tree.SimpleTreeNode;
 import org.clever.graaljs.fast.api.dto.response.FileResourceTreeNodeRes;
+import org.clever.graaljs.fast.api.entity.FileResource;
 import org.clever.graaljs.fast.api.service.ExtendFileManageService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,5 +24,10 @@ public class ExtendFileManageController {
     @GetMapping("/extend_tree")
     public List<SimpleTreeNode<FileResourceTreeNodeRes>> getExtendTree() {
         return extendFileManageService.getExtendTree();
+    }
+
+    @GetMapping("/extend_file_list")
+    public List<FileResource> getExtendFileList() {
+        return extendFileManageService.getExtendFileList();
     }
 }

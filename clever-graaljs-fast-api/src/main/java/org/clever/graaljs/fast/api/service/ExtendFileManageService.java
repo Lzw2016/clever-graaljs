@@ -5,6 +5,7 @@ import org.clever.graaljs.core.utils.tree.SimpleTreeNode;
 import org.clever.graaljs.fast.api.config.FastApiConfig;
 import org.clever.graaljs.fast.api.dto.response.FileResourceTreeNodeRes;
 import org.clever.graaljs.fast.api.entity.EnumConstant;
+import org.clever.graaljs.fast.api.entity.FileResource;
 import org.springframework.jdbc.core.DataClassRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
@@ -28,6 +29,7 @@ public class ExtendFileManageService {
             "select id, namespace, module, path, name, is_file,`read_only` " +
             "from file_resource " +
             "where module=0 and is_file=0 and namespace=?";
+    private static final String QUERY_ALL_EXTEND_FILE = "select * from file_resource where module=0 and is_file=1 and namespace=?";
 
     /**
      * FileResource 命名空间
@@ -74,5 +76,13 @@ public class ExtendFileManageService {
             tree.add(node);
         }
         return BuildTreeUtils.buildTree(tree);
+    }
+
+    public List<FileResource> getExtendFileList() {
+        return jdbcTemplate.query(
+                QUERY_ALL_EXTEND_FILE,
+                DataClassRowMapper.newInstance(FileResource.class),
+                namespace
+        );
     }
 }
