@@ -24,7 +24,7 @@ public class AddDirReq implements Serializable {
     /**
      * 文件夹全路径
      */
-    @Pattern(regexp = "^(/[a-zA-Z0-9_-]+)+/?$")
+    @Pattern(regexp = "^(/[a-zA-Z0-9_-\\u4e00-\\u9fa5]+)+/?$")
     @NotBlank
     private String fullPath;
 }

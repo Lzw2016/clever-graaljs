@@ -14,11 +14,11 @@ import java.io.Serializable;
  */
 @Data
 public class AddHttpApiReq implements Serializable {
-    @Pattern(regexp = "^(/[a-zA-Z0-9_-]+)*/?$")
+    @Pattern(regexp = "^(/[a-zA-Z0-9_-\\u4e00-\\u9fa5]+)*/?$")
     @NotBlank
     private String path;
 
-    @Pattern(regexp = "^[a-zA-Z0-9_-]+(\\.[Jj][Ss])?$")
+    @Pattern(regexp = "^[a-zA-Z0-9_-\\u4e00-\\u9fa5]+(\\.[Jj][Ss])?$")
     @NotBlank
     private String name;
 
