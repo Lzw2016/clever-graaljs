@@ -52,4 +52,45 @@ public interface EnumConstant {
      * 所属模块：0-自定义扩展，1-资源文件，2-初始化脚本，3-HTTP API，4-定时任务
      */
     int MODULE_4 = 4;
+
+    /**
+     * http请求method，ALL GET HEAD POST PUT DELETE CONNECT OPTIONS TRACE PATCH
+     */
+    String REQUEST_METHOD_ALL = "ALL";
+    /**
+     * http请求method，ALL GET HEAD POST PUT DELETE CONNECT OPTIONS TRACE PATCH
+     */
+    String REQUEST_METHOD_GET = "GET";
+    /**
+     * http请求method，ALL GET HEAD POST PUT DELETE CONNECT OPTIONS TRACE PATCH
+     */
+    String REQUEST_METHOD_HEAD = "HEAD";
+    /**
+     * http请求method，ALL GET HEAD POST PUT DELETE CONNECT OPTIONS TRACE PATCH
+     */
+    String REQUEST_METHOD_POST = "POST";
+    /**
+     * http请求method，ALL GET HEAD POST PUT DELETE CONNECT OPTIONS TRACE PATCH
+     */
+    String REQUEST_METHOD_PUT = "PUT";
+    /**
+     * http请求method，ALL GET HEAD POST PUT DELETE CONNECT OPTIONS TRACE PATCH
+     */
+    String REQUEST_METHOD_DELETE = "DELETE";
+    /**
+     * http请求method，ALL GET HEAD POST PUT DELETE CONNECT OPTIONS TRACE PATCH
+     */
+    String REQUEST_METHOD_CONNECT = "CONNECT";
+    /**
+     * http请求method，ALL GET HEAD POST PUT DELETE CONNECT OPTIONS TRACE PATCH
+     */
+    String REQUEST_METHOD_OPTIONS = "OPTIONS";
+    /**
+     * http请求method，ALL GET HEAD POST PUT DELETE CONNECT OPTIONS TRACE PATCH
+     */
+    String REQUEST_METHOD_TRACE = "TRACE";
+    /**
+     * http请求method，ALL GET HEAD POST PUT DELETE CONNECT OPTIONS TRACE PATCH
+     */
+    String REQUEST_METHOD_PATCH = "PATCH";
 }

@@ -32,7 +32,7 @@ public class HttpApiFileResourceCacheService {
             "    b.content as content, " +
             "    if(ifnull(a.update_at, a.create_at) > ifnull(b.update_at, b.create_at), ifnull(a.update_at, a.create_at), ifnull(b.update_at, b.create_at)) as lastModifiedTime " +
             "from http_api a left join file_resource b on (a.file_resource_id = b.id) " +
-            "where b.is_file=1 and lower(b.name) like '%%.js' and a.namespace=? and b.namespace=? " +
+            "where b.module=3 and b.is_file=1 and lower(b.name) like '%%.js' and a.namespace=? and b.namespace=? " +
             "%s " +
             "order by a.update_at desc, a.id desc, b.update_at desc, b.id desc";
     private final static String RELOAD_SQL = String.format(BASE_SQL, "and a.disable_request=0");

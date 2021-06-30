@@ -1,14 +1,24 @@
 package org.clever.graaljs.fast.api.service;
 
+import org.apache.commons.lang3.StringUtils;
+import org.clever.graaljs.core.exception.BusinessException;
 import org.clever.graaljs.core.utils.tree.BuildTreeUtils;
 import org.clever.graaljs.core.utils.tree.SimpleTreeNode;
 import org.clever.graaljs.fast.api.config.FastApiConfig;
+import org.clever.graaljs.fast.api.dto.request.AddDirReq;
+import org.clever.graaljs.fast.api.dto.request.AddHttpApiReq;
 import org.clever.graaljs.fast.api.dto.response.ApiFileResourceRes;
+import org.clever.graaljs.fast.api.dto.response.HttpApiFileResourceRes;
 import org.clever.graaljs.fast.api.entity.EnumConstant;
+import org.clever.graaljs.fast.api.entity.FileResource;
 import org.clever.graaljs.fast.api.entity.HttpApi;
 import org.springframework.jdbc.core.DataClassRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
@@ -36,7 +46,6 @@ public class HttpApiManageService {
             "from http_api a left join file_resource b on (a.file_resource_id = b.id) " +
             "where b.is_file=1 and lower(b.name) like '%%.js' and b.module=3 and a.namespace=b.namespace and a.namespace=? " +
             "order by b.name";
-
     private static final String QUERY_ALL_DIR = "" +
             "select " +
             "   id as fileResourceId, " +
@@ -47,15 +56,25 @@ public class HttpApiManageService {
             "from file_resource " +
             "where is_file=0 and module=3 and namespace=? " +
             "order by name";
-
     private static final String GET_HTTP_API = "select * from http_api where namespace=? and id=?";
-
+    private static final String HTTP_API_EXISTS = "" +
+            "select count(1) from http_api " +
+            "where namespace=? and (request_method='ALL' or request_method=?) and request_mapping=? limit 1";
+    private static final String INSERT_HTTP_API = "" +
+            "insert into http_api " +
+            "(namespace, file_resource_id, request_mapping, request_method, disable_request) " +
+            "values " +
+            "(:namespace, :fileResourceId, :requestMapping, :requestMethod, :disableRequest)";
     /**
      * FileResource 命名空间
      */
     private final String namespace;
     @Resource
     private JdbcTemplate jdbcTemplate;
+    @Resource
+    private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
+    @Resource
+    private FileResourceManageService fileResourceManageService;
 
     public HttpApiManageService(FastApiConfig fastApiConfig) {
         this.namespace = fastApiConfig.getNamespace();
@@ -99,5 +118,59 @@ public class HttpApiManageService {
 
     public HttpApi getHttpApi(Long id) {
         return jdbcTemplate.queryForObject(GET_HTTP_API, DataClassRowMapper.newInstance(HttpApi.class), namespace, id);
+    }
+
+    @Transactional
+    public HttpApiFileResourceRes addHttpApi(AddHttpApiReq req) {
+        if (!req.getPath().endsWith("/")) {
+            req.setPath(req.getPath() + "/");
+        }
+        if (!req.getName().toLowerCase().endsWith(".js")) {
+            req.setName(req.getName() + ".js");
+        }
+        final String name = req.getName().substring(0, req.getName().length() - 3);
+        req.setName(name + ".js");
+        if (StringUtils.isBlank(req.getRequestMapping())) {
+            req.setRequestMapping(req.getPath() + name);
+        }
+        if (StringUtils.isBlank(req.getContent())) {
+            req.setContent("//default code \nreturn { ok: true };");
+        }
+        // 校验接口是否存在
+        Integer count = jdbcTemplate.queryForObject(HTTP_API_EXISTS, Integer.class, namespace, req.getRequestMethod(), req.getRequestMapping());
+        if (count != null && count > 0) {
+            throw new BusinessException("接口路径冲突");
+        }
+        // 新增文件
+        FileResource file = new FileResource();
+        file.setNamespace(namespace);
+        file.setModule(EnumConstant.MODULE_3);
+        file.setPath(req.getPath());
+        file.setName(req.getName());
+        file.setContent(req.getContent());
+        file.setIsFile(EnumConstant.IS_FILE_1);
+        file.setReadOnly(EnumConstant.READ_ONLY_0);
+        file.setDescription("");
+        fileResourceManageService.addFileResource(file);
+        // 新增文件夹
+        AddDirReq addDirReq = new AddDirReq();
+        addDirReq.setModule(EnumConstant.MODULE_3);
+        addDirReq.setFullPath(req.getPath());
+        fileResourceManageService.addDir(addDirReq);
+        // 新增HTTP API
+        HttpApi httpApi = new HttpApi();
+        httpApi.setNamespace(namespace);
+        httpApi.setFileResourceId(file.getId());
+        httpApi.setRequestMapping(req.getRequestMapping());
+        httpApi.setRequestMethod(req.getRequestMethod());
+        httpApi.setDisableRequest(EnumConstant.DISABLE_REQUEST_0);
+        GeneratedKeyHolder keyHolder = new GeneratedKeyHolder();
+        namedParameterJdbcTemplate.update(INSERT_HTTP_API, new BeanPropertySqlParameterSource(httpApi), keyHolder);
+        httpApi.setId(Objects.requireNonNull(keyHolder.getKey()).longValue());
+        // 返回数据
+        HttpApiFileResourceRes res = new HttpApiFileResourceRes();
+        res.setFileResource(file);
+        res.setHttpApi(httpApi);
+        return res;
     }
 }
