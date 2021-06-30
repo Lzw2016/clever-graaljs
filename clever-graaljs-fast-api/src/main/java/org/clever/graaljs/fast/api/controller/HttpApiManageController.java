@@ -4,6 +4,7 @@ import org.clever.graaljs.core.utils.tree.SimpleTreeNode;
 import org.clever.graaljs.fast.api.dto.request.AddHttpApiReq;
 import org.clever.graaljs.fast.api.dto.response.AddHttpApiRes;
 import org.clever.graaljs.fast.api.dto.response.ApiFileResourceRes;
+import org.clever.graaljs.fast.api.dto.response.DelHttpApiRes;
 import org.clever.graaljs.fast.api.dto.response.HttpApiFileResourceRes;
 import org.clever.graaljs.fast.api.entity.FileResource;
 import org.clever.graaljs.fast.api.entity.HttpApi;
@@ -51,5 +52,10 @@ public class HttpApiManageController {
     @PostMapping("/add_http_api")
     public AddHttpApiRes addHttpApi(@RequestBody @Validated AddHttpApiReq req) {
         return httpApiManageService.addHttpApi(req);
+    }
+
+    @DeleteMapping("/del_http_api")
+    public DelHttpApiRes delHttpApi(@RequestParam("fileResourceId") Long fileResourceId) {
+        return httpApiManageService.delHttpApi(fileResourceId);
     }
 }

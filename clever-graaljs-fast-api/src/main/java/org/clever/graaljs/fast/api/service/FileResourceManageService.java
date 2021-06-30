@@ -21,6 +21,7 @@ import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 /**
  * 作者：lizw <br/>
@@ -42,6 +43,8 @@ public class FileResourceManageService {
             "(namespace, module, path, name, content, is_file, `read_only`, description) " +
             "VALUES " +
             "(:namespace, :module, :path, :name, :content, :isFile, :readOnly, :description)";
+    private static final String DEL_FILES = "delete from file_resource where module=? and namespace=? and id in (%s)";
+    private static final String QUERY_FILES = "select * from file_resource where module=? and namespace=? and path like concat(?,'%')";
 
     /**
      * FileResource 命名空间
@@ -67,7 +70,11 @@ public class FileResourceManageService {
     }
 
     public FileResource getFileResource(Long id) {
-        return jdbcTemplate.queryForObject(GET_FILE_RESOURCE, DataClassRowMapper.newInstance(FileResource.class), namespace, id);
+        List<FileResource> list = jdbcTemplate.query(GET_FILE_RESOURCE, DataClassRowMapper.newInstance(FileResource.class), namespace, id);
+        if (list.isEmpty()) {
+            return null;
+        }
+        return list.get(0);
     }
 
     @Transactional
@@ -141,6 +148,7 @@ public class FileResourceManageService {
         return list;
     }
 
+    @Transactional
     public void addFileResource(FileResource file) {
         Integer count = jdbcTemplate.queryForObject(
                 FILE_EXISTS, Integer.class,
@@ -153,5 +161,41 @@ public class FileResourceManageService {
         namedParameterJdbcTemplate.update(INSERT_FILE_RESOURCE, new BeanPropertySqlParameterSource(file), keyHolder);
         file.setId(Objects.requireNonNull(keyHolder.getKey()).longValue());
         addHistory(file);
+    }
+
+    @SuppressWarnings("DuplicatedCode")
+    @Transactional
+    public List<FileResource> delFileResource(Long id) {
+        List<FileResource> list = jdbcTemplate.query(GET_FILE_RESOURCE, DataClassRowMapper.newInstance(FileResource.class), namespace, id);
+        if (list.isEmpty()) {
+            return new ArrayList<>();
+        }
+        FileResource root = list.get(0);
+        // 删除文件
+        if (Objects.equals(root.getIsFile(), EnumConstant.IS_FILE_1)) {
+            jdbcTemplate.update(
+                    String.format(DEL_FILES, "?"), Integer.class,
+                    root.getModule(), namespace, root.getId()
+            );
+            return list;
+        }
+        // 删除文件夹
+        final String path = root.getPath() + root.getName() + "/";
+        List<FileResource> children = jdbcTemplate.query(
+                QUERY_FILES, DataClassRowMapper.newInstance(FileResource.class),
+                root.getModule(), namespace, path
+        );
+        list.addAll(children);
+        StringBuilder ids = new StringBuilder();
+        list.forEach(item -> ids.append("?,"));
+        if (ids.toString().endsWith(",")) {
+            ids.deleteCharAt(ids.length() - 1);
+        }
+        List<Object> params = new ArrayList<>();
+        params.add(root.getModule());
+        params.add(namespace);
+        params.addAll(list.stream().map(FileResource::getId).collect(Collectors.toList()));
+        jdbcTemplate.update(String.format(DEL_FILES, ids), params.toArray());
+        return list;
     }
 }

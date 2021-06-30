@@ -9,6 +9,7 @@ import org.clever.graaljs.fast.api.dto.request.AddDirReq;
 import org.clever.graaljs.fast.api.dto.request.AddHttpApiReq;
 import org.clever.graaljs.fast.api.dto.response.AddHttpApiRes;
 import org.clever.graaljs.fast.api.dto.response.ApiFileResourceRes;
+import org.clever.graaljs.fast.api.dto.response.DelHttpApiRes;
 import org.clever.graaljs.fast.api.entity.EnumConstant;
 import org.clever.graaljs.fast.api.entity.FileResource;
 import org.clever.graaljs.fast.api.entity.HttpApi;
@@ -24,6 +25,7 @@ import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 /**
  * 作者：lizw <br/>
@@ -65,6 +67,9 @@ public class HttpApiManageService {
             "(namespace, file_resource_id, request_mapping, request_method, disable_request) " +
             "values " +
             "(:namespace, :fileResourceId, :requestMapping, :requestMethod, :disableRequest)";
+    private static final String DEL_HTTP_API = "delete from http_api where namespace=? and file_resource_id in (%s)";
+    private static final String QUERY_HTTP_API = "select * from http_api where namespace=? and file_resource_id in (%s)";
+
     /**
      * FileResource 命名空间
      */
@@ -171,6 +176,31 @@ public class HttpApiManageService {
         // 返回数据
         res.getFileList().add(file);
         res.setHttpApi(httpApi);
+        return res;
+    }
+
+    @SuppressWarnings("DuplicatedCode")
+    @Transactional
+    public DelHttpApiRes delHttpApi(Long fileResourceId) {
+        DelHttpApiRes res = new DelHttpApiRes();
+        // 删除文件资源
+        List<FileResource> fileList = fileResourceManageService.delFileResource(fileResourceId);
+        res.setFileList(fileList);
+        if (fileList.isEmpty()) {
+            return res;
+        }
+        // 删除HTTP API
+        StringBuilder ids = new StringBuilder();
+        fileList.forEach(item -> ids.append("?,"));
+        if (ids.toString().endsWith(",")) {
+            ids.deleteCharAt(ids.length() - 1);
+        }
+        List<Object> params = new ArrayList<>();
+        params.add(namespace);
+        params.addAll(fileList.stream().map(FileResource::getId).collect(Collectors.toList()));
+        List<HttpApi> httpApiList = jdbcTemplate.query(String.format(QUERY_HTTP_API, ids), DataClassRowMapper.newInstance(HttpApi.class), params.toArray());
+        res.setHttpApiList(httpApiList);
+        jdbcTemplate.update(String.format(DEL_HTTP_API, ids), params.toArray());
         return res;
     }
 }
