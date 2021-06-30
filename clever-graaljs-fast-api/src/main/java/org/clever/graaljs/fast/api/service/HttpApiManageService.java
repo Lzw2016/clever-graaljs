@@ -7,8 +7,8 @@ import org.clever.graaljs.core.utils.tree.SimpleTreeNode;
 import org.clever.graaljs.fast.api.config.FastApiConfig;
 import org.clever.graaljs.fast.api.dto.request.AddDirReq;
 import org.clever.graaljs.fast.api.dto.request.AddHttpApiReq;
+import org.clever.graaljs.fast.api.dto.response.AddHttpApiRes;
 import org.clever.graaljs.fast.api.dto.response.ApiFileResourceRes;
-import org.clever.graaljs.fast.api.dto.response.HttpApiFileResourceRes;
 import org.clever.graaljs.fast.api.entity.EnumConstant;
 import org.clever.graaljs.fast.api.entity.FileResource;
 import org.clever.graaljs.fast.api.entity.HttpApi;
@@ -121,7 +121,8 @@ public class HttpApiManageService {
     }
 
     @Transactional
-    public HttpApiFileResourceRes addHttpApi(AddHttpApiReq req) {
+    public AddHttpApiRes addHttpApi(AddHttpApiReq req) {
+        AddHttpApiRes res = new AddHttpApiRes();
         if (!req.getPath().endsWith("/")) {
             req.setPath(req.getPath() + "/");
         }
@@ -156,7 +157,7 @@ public class HttpApiManageService {
         AddDirReq addDirReq = new AddDirReq();
         addDirReq.setModule(EnumConstant.MODULE_3);
         addDirReq.setFullPath(req.getPath());
-        fileResourceManageService.addDir(addDirReq);
+        res.getFileList().addAll(fileResourceManageService.addDir(addDirReq));
         // 新增HTTP API
         HttpApi httpApi = new HttpApi();
         httpApi.setNamespace(namespace);
@@ -168,8 +169,7 @@ public class HttpApiManageService {
         namedParameterJdbcTemplate.update(INSERT_HTTP_API, new BeanPropertySqlParameterSource(httpApi), keyHolder);
         httpApi.setId(Objects.requireNonNull(keyHolder.getKey()).longValue());
         // 返回数据
-        HttpApiFileResourceRes res = new HttpApiFileResourceRes();
-        res.setFileResource(file);
+        res.getFileList().add(file);
         res.setHttpApi(httpApi);
         return res;
     }

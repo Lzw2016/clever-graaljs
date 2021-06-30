@@ -36,6 +36,7 @@ public class FileResourceManageService {
             "values  " +
             "  (:namespace, :module, :path, :name, :content)";
     private static final String FILE_EXISTS = "select count(1) from file_resource where module=? and namespace=? and path=? and name=? limit 1";
+    private static final String FILE_EXISTS_2 = "select * from file_resource where module=? and namespace=? and path=? and name=? limit 1";
     private static final String INSERT_FILE_RESOURCE = "" +
             "insert into file_resource " +
             "(namespace, module, path, name, content, is_file, `read_only`, description) " +
@@ -115,8 +116,11 @@ public class FileResourceManageService {
                     throw new BusinessException("目录全路径格式错误");
                 }
             }
-            Integer count = jdbcTemplate.queryForObject(FILE_EXISTS, Integer.class, req.getModule(), namespace, path, name);
-            if (count == null || count <= 0) {
+            List<FileResource> exists = jdbcTemplate.query(
+                    FILE_EXISTS_2, DataClassRowMapper.newInstance(FileResource.class),
+                    req.getModule(), namespace, path, name
+            );
+            if (exists.isEmpty()) {
                 FileResource dir = new FileResource();
                 dir.setNamespace(namespace);
                 dir.setModule(req.getModule());
@@ -125,7 +129,12 @@ public class FileResourceManageService {
                 dir.setIsFile(EnumConstant.IS_FILE_0);
                 dir.setReadOnly(EnumConstant.READ_ONLY_0);
                 dir.setDescription("");
-                namedParameterJdbcTemplate.update(INSERT_FILE_RESOURCE, new BeanPropertySqlParameterSource(dir));
+                GeneratedKeyHolder keyHolder = new GeneratedKeyHolder();
+                namedParameterJdbcTemplate.update(INSERT_FILE_RESOURCE, new BeanPropertySqlParameterSource(dir), keyHolder);
+                dir.setId(Objects.requireNonNull(keyHolder.getKey()).longValue());
+                list.add(dir);
+            } else {
+                list.addAll(exists);
             }
             sb.append("/").append(name);
         }
