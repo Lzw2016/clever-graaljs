@@ -1,6 +1,7 @@
 package org.clever.graaljs.fast.api.controller;
 
 import org.clever.graaljs.fast.api.dto.request.AddDirReq;
+import org.clever.graaljs.fast.api.dto.request.FileRenameReq;
 import org.clever.graaljs.fast.api.dto.request.SaveFileContentReq;
 import org.clever.graaljs.fast.api.entity.FileResource;
 import org.clever.graaljs.fast.api.service.FileResourceManageService;
@@ -33,5 +34,10 @@ public class FileResourceManageController {
     @PostMapping("/add_dir")
     public List<FileResource> addDir(@RequestBody @Validated AddDirReq req) {
         return fileResourceManageService.addDir(req);
+    }
+
+    @PostMapping("/rename")
+    public List<FileResource> rename(@RequestBody @Validated FileRenameReq req) {
+        return fileResourceManageService.rename(req);
     }
 }

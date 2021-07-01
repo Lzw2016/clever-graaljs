@@ -62,6 +62,7 @@ create table file_resource_history
     id                  bigint          not null        auto_increment                          comment '主键id',
     namespace           varchar(63)     not null                                                comment '命名空间',
     module              tinyint         not null                                                comment '所属模块：0-自定义扩展，1-资源文件，2-初始化脚本，3-HTTP API，4-定时任务',
+    file_resource_id    bigint          not null                                                comment '资源文件id',
     path                varchar(511)    not null        collate utf8_bin                        comment '文件路径(以"/"结束)',
     name                varchar(127)    not null        collate utf8_bin                        comment '文件名称',
     content             text                                                                    comment '文件内容',
@@ -69,6 +70,7 @@ create table file_resource_history
     primary key (id)
 ) comment = '资源文件修改历史';
 create index idx_file_resource_history_namespace on file_resource_history (namespace);
+create index idx_file_resource_history_file_resource_id on file_resource_history (file_resource_id);
 create index idx_file_resource_history_path on file_resource_history (path(127));
 create index idx_file_resource_history_name on file_resource_history (name(63));
 create index idx_file_resource_history_create_at on file_resource_history (create_at);

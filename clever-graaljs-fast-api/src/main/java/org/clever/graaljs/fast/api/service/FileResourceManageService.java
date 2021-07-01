@@ -5,6 +5,7 @@ import org.clever.graaljs.core.exception.BusinessException;
 import org.clever.graaljs.core.utils.ScriptCodeUtils;
 import org.clever.graaljs.fast.api.config.FastApiConfig;
 import org.clever.graaljs.fast.api.dto.request.AddDirReq;
+import org.clever.graaljs.fast.api.dto.request.FileRenameReq;
 import org.clever.graaljs.fast.api.dto.request.SaveFileContentReq;
 import org.clever.graaljs.fast.api.entity.EnumConstant;
 import org.clever.graaljs.fast.api.entity.FileResource;
@@ -33,11 +34,12 @@ public class FileResourceManageService {
     private static final String SAVE_FILE_CONTENT = "update file_resource set content=? where namespace=? and id=?";
     private static final String INSERT_HISTORY = "" +
             "insert into file_resource_history " +
-            "  (namespace, module, path, name, content) " +
+            "  (namespace, module, file_resource_id, path, name, content) " +
             "values  " +
-            "  (:namespace, :module, :path, :name, :content)";
+            "  (:namespace, :module, :fileResourceId, :path, :name, :content)";
     private static final String FILE_EXISTS = "select count(1) from file_resource where module=? and namespace=? and path=? and name=? limit 1";
     private static final String FILE_EXISTS_2 = "select * from file_resource where module=? and namespace=? and path=? and name=? limit 1";
+    private static final String FILE_EXISTS_3 = "select count(1) from file_resource where module=? and namespace=? and path=? and name=? limit 1";
     private static final String INSERT_FILE_RESOURCE = "" +
             "insert into file_resource " +
             "(namespace, module, path, name, content, is_file, `read_only`, description) " +
@@ -45,6 +47,7 @@ public class FileResourceManageService {
             "(:namespace, :module, :path, :name, :content, :isFile, :readOnly, :description)";
     private static final String DEL_FILES = "delete from file_resource where module=? and namespace=? and id in (%s)";
     private static final String QUERY_FILES = "select * from file_resource where module=? and namespace=? and path like concat(?,'%')";
+    private static final String SET_FILE_NAME = "update file_resource set path=?, name=? where module=? and namespace=? and id=?";
 
     /**
      * FileResource 命名空间
@@ -63,6 +66,7 @@ public class FileResourceManageService {
         FileResourceHistory history = new FileResourceHistory();
         history.setNamespace(file.getNamespace());
         history.setModule(file.getModule());
+        history.setFileResourceId(file.getId());
         history.setPath(file.getPath());
         history.setName(file.getName());
         history.setContent(file.getContent());
@@ -196,6 +200,53 @@ public class FileResourceManageService {
         params.add(namespace);
         params.addAll(list.stream().map(FileResource::getId).collect(Collectors.toList()));
         jdbcTemplate.update(String.format(DEL_FILES, ids), params.toArray());
+        return list;
+    }
+
+    @Transactional
+    public List<FileResource> rename(FileRenameReq req) {
+        List<FileResource> list = jdbcTemplate.query(GET_FILE_RESOURCE, DataClassRowMapper.newInstance(FileResource.class), namespace, req.getId());
+        if (list.isEmpty()) {
+            return new ArrayList<>();
+        }
+        FileResource root = list.get(0);
+        // 重命名文件
+        if (Objects.equals(root.getIsFile(), EnumConstant.IS_FILE_1)) {
+            Integer count = jdbcTemplate.queryForObject(FILE_EXISTS_3, Integer.class, root.getModule(), root.getNamespace(), root.getPath(), root.getName());
+            if (count != null && count > 0) {
+                throw new BusinessException("文件已存在");
+            }
+            jdbcTemplate.update(SET_FILE_NAME, root.getPath(), req.getNewName(), root.getModule(), root.getNamespace(), root.getId());
+            root.setName(req.getNewName());
+            addHistory(root);
+            return list;
+        }
+        // 重命名文件夹
+        final String path = root.getPath() + root.getName() + "/";
+        List<FileResource> children = jdbcTemplate.query(
+                QUERY_FILES, DataClassRowMapper.newInstance(FileResource.class),
+                root.getModule(), namespace, path
+        );
+        root.setName(req.getNewName());
+        final String rootPath = root.getPath();
+        for (FileResource child : children) {
+            String lastPath = child.getPath().substring(rootPath.length());
+            String suffix = lastPath.substring(lastPath.indexOf("/"));
+            child.setPath(rootPath + req.getNewName() + suffix);
+        }
+        list.addAll(children);
+        for (FileResource file : list) {
+            Integer count = jdbcTemplate.queryForObject(FILE_EXISTS_3, Integer.class, file.getModule(), file.getNamespace(), file.getPath(), file.getName());
+            if (count != null && count > 0) {
+                throw new BusinessException("文件已存在");
+            }
+        }
+        for (FileResource file : list) {
+            jdbcTemplate.update(SET_FILE_NAME, file.getPath(), file.getName(), file.getModule(), file.getNamespace(), file.getId());
+            if (Objects.equals(file.getIsFile(), EnumConstant.IS_FILE_1)) {
+                addHistory(file);
+            }
+        }
         return list;
     }
 }

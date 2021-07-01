@@ -30,6 +30,11 @@ public class FileResourceHistory implements Serializable {
     private Integer module;
 
     /**
+     * 资源文件id
+     */
+    private Long fileResourceId;
+
+    /**
      * 文件路径(以"/"结束)
      */
     private String path;

@@ -13,4 +13,14 @@ public class Test01 {
         String[] paths = "/a/a/sd/f".split("/");
         log.info("paths -> {}", (Object) paths);
     }
+
+    @Test
+    public void t02() {
+        String path_1 = "/a/b/";
+        String path_2 = "/a/b/c/d/e/";
+        String str = path_2.substring(path_1.length());
+        // prefix
+        String suffix = str.substring(str.indexOf("/"));
+        log.info("--> {}", (path_1 + "FFF" + suffix));
+    }
 }
