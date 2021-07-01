@@ -211,12 +211,12 @@ public class FileResourceManageService {
         FileResource root = list.get(0);
         // 重命名文件
         if (Objects.equals(root.getIsFile(), EnumConstant.IS_FILE_1)) {
+            root.setName(req.getNewName());
             Integer count = jdbcTemplate.queryForObject(FILE_EXISTS_3, Integer.class, root.getModule(), root.getNamespace(), root.getPath(), root.getName());
             if (count != null && count > 0) {
                 throw new BusinessException("文件已存在");
             }
-            jdbcTemplate.update(SET_FILE_NAME, root.getPath(), req.getNewName(), root.getModule(), root.getNamespace(), root.getId());
-            root.setName(req.getNewName());
+            jdbcTemplate.update(SET_FILE_NAME, root.getPath(), root.getName(), root.getModule(), root.getNamespace(), root.getId());
             addHistory(root);
             return list;
         }
