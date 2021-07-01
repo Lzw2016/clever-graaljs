@@ -46,4 +46,9 @@ public class FileResourceManageController {
     public List<FileResource> addFile(@RequestBody @Validated AddFileReq req) {
         return fileResourceManageService.addFile(req);
     }
+
+    @DeleteMapping("/del_file")
+    public List<FileResource> delFile(@RequestParam("id") Long id) {
+        return fileResourceManageService.delFileResource(id);
+    }
 }
