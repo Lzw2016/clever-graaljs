@@ -177,10 +177,7 @@ public class FileResourceManageService {
         FileResource root = list.get(0);
         // 删除文件
         if (Objects.equals(root.getIsFile(), EnumConstant.IS_FILE_1)) {
-            jdbcTemplate.update(
-                    String.format(DEL_FILES, "?"), Integer.class,
-                    root.getModule(), namespace, root.getId()
-            );
+            jdbcTemplate.update(String.format(DEL_FILES, "?"), root.getModule(), namespace, root.getId());
             return list;
         }
         // 删除文件夹
