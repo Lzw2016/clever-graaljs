@@ -1,10 +1,12 @@
 package org.clever.graaljs.fast.api.service;
 
+import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.clever.graaljs.core.exception.BusinessException;
 import org.clever.graaljs.core.utils.ScriptCodeUtils;
 import org.clever.graaljs.fast.api.config.FastApiConfig;
 import org.clever.graaljs.fast.api.dto.request.AddDirReq;
+import org.clever.graaljs.fast.api.dto.request.AddFileReq;
 import org.clever.graaljs.fast.api.dto.request.FileRenameReq;
 import org.clever.graaljs.fast.api.dto.request.SaveFileContentReq;
 import org.clever.graaljs.fast.api.entity.EnumConstant;
@@ -245,5 +247,38 @@ public class FileResourceManageService {
             }
         }
         return list;
+    }
+
+    @Transactional
+    public List<FileResource> addFile(AddFileReq req) {
+        if (!req.getPath().endsWith("/")) {
+            req.setPath(req.getPath() + "/");
+        }
+        String ext = FilenameUtils.getExtension(req.getName());
+        if (StringUtils.isBlank(ext)) {
+            req.setName(req.getName() + ".d.ts");
+        } else {
+            String name = FilenameUtils.removeExtension(req.getName());
+            req.setName(name + "." + ext.toLowerCase());
+        }
+        // 新增文件
+        FileResource file = new FileResource();
+        file.setNamespace(namespace);
+        file.setModule(req.getModule());
+        file.setPath(req.getPath());
+        file.setName(req.getName());
+        file.setContent(req.getContent());
+        file.setIsFile(EnumConstant.IS_FILE_1);
+        file.setReadOnly(EnumConstant.READ_ONLY_0);
+        file.setDescription("");
+        addFileResource(file);
+        // 新增文件夹
+        AddDirReq addDirReq = new AddDirReq();
+        addDirReq.setModule(req.getModule());
+        addDirReq.setFullPath(req.getPath());
+        List<FileResource> fileList = new ArrayList<>(addDir(addDirReq));
+        // 返回数据
+        fileList.add(file);
+        return fileList;
     }
 }
