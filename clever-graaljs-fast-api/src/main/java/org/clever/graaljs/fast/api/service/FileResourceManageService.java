@@ -261,6 +261,7 @@ public class FileResourceManageService {
             String name = FilenameUtils.removeExtension(req.getName());
             req.setName(name + "." + ext.toLowerCase());
         }
+        List<FileResource> fileList = new ArrayList<>();
         // 新增文件
         FileResource file = new FileResource();
         file.setNamespace(namespace);
@@ -273,10 +274,12 @@ public class FileResourceManageService {
         file.setDescription("");
         addFileResource(file);
         // 新增文件夹
-        AddDirReq addDirReq = new AddDirReq();
-        addDirReq.setModule(req.getModule());
-        addDirReq.setFullPath(req.getPath());
-        List<FileResource> fileList = new ArrayList<>(addDir(addDirReq));
+        if (!Objects.equals(req.getPath(), "/")) {
+            AddDirReq addDirReq = new AddDirReq();
+            addDirReq.setModule(req.getModule());
+            addDirReq.setFullPath(req.getPath());
+            fileList.addAll(addDir(addDirReq));
+        }
         // 返回数据
         fileList.add(file);
         return fileList;
