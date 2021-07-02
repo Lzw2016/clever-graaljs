@@ -1,11 +1,13 @@
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.clever.graaljs.fast.api.dto.request.AddFileReq;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.util.regex.Pattern;
 
 /**
  * 作者：lizw <br/>
@@ -54,5 +56,12 @@ public class Test01 {
             }
             log.info("---> {}", addFileReq);
         });
+    }
+
+    @Test
+    public void t05() {
+        Pattern part_file_pattern = Pattern.compile("\\.part\\d+\\.");
+        String[] arr = part_file_pattern.split("StringUtils.part01.d.ts");
+        log.info("---> {}", StringUtils.joinWith(".", (Object[]) arr));
     }
 }

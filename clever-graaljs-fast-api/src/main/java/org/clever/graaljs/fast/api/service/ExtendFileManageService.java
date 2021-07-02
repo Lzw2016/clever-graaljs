@@ -9,11 +9,15 @@ import org.clever.graaljs.fast.api.entity.FileResource;
 import org.springframework.jdbc.core.DataClassRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
+import java.util.regex.Pattern;
 
 /**
  * 作者：lizw <br/>
@@ -21,6 +25,10 @@ import java.util.Objects;
  */
 @Service
 public class ExtendFileManageService {
+    // xxx.part01.d.ts
+    private static final Pattern PART_FILE_PATTERN = Pattern.compile(".+\\.part\\d+\\..+");
+    private static final Pattern PART_FILE_SPLIT_PATTERN = Pattern.compile("\\.part\\d+\\.");
+
     private static final String QUERY_ALL_RESOURCE = "" +
             "select id, namespace, module, path, name, is_file,`read_only` " +
             "from file_resource " +
@@ -79,10 +87,48 @@ public class ExtendFileManageService {
     }
 
     public List<FileResource> getExtendFileList() {
-        return jdbcTemplate.query(
+        List<FileResource> list = jdbcTemplate.query(
                 QUERY_ALL_EXTEND_FILE,
                 DataClassRowMapper.newInstance(FileResource.class),
                 namespace
         );
+        MultiValueMap<String, FileResource> partFileMap = new LinkedMultiValueMap<>();
+        List<FileResource> res = new ArrayList<>(list.size());
+        for (FileResource resource : list) {
+            final String name = resource.getName();
+            if (PART_FILE_PATTERN.matcher(name).matches()) {
+                String[] arr = PART_FILE_SPLIT_PATTERN.split(name);
+                if (arr.length == 2) {
+                    String partFileName = arr[0] + "." + arr[1];
+                    partFileMap.add(partFileName, resource);
+                    continue;
+                }
+            }
+            res.add(resource);
+        }
+        partFileMap.forEach((partFileName, resources) -> {
+            resources.sort(Comparator.comparing(FileResource::getName));
+            FileResource partResource = new FileResource();
+            partResource.setName(partFileName);
+            StringBuilder content = new StringBuilder();
+            for (FileResource resource : resources) {
+                if (partResource.getNamespace() == null) {
+                    partResource.setId(resource.getId());
+                    partResource.setNamespace(resource.getNamespace());
+                    partResource.setModule(resource.getModule());
+                    partResource.setPath(resource.getPath());
+                    partResource.setContent(resource.getContent());
+                    partResource.setIsFile(resource.getIsFile());
+                    partResource.setReadOnly(resource.getReadOnly());
+                    partResource.setDescription("系统合并的文件");
+                }
+                if (resource.getContent() != null) {
+                    content.append(resource.getContent()).append("\n");
+                }
+            }
+            partResource.setContent(content.toString());
+            res.add(partResource);
+        });
+        return res;
     }
 }
