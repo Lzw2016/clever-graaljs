@@ -2,6 +2,7 @@ package org.clever.graaljs.spring.mvc;
 
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.clever.graaljs.core.GraalConstant;
 import org.clever.graaljs.core.ScriptEngineInstance;
 import org.clever.graaljs.core.ScriptObject;
 import org.clever.graaljs.core.internal.jackson.JacksonMapperSupport;
@@ -170,8 +171,15 @@ public abstract class HttpInterceptorScriptHandler implements HandlerInterceptor
      * @return 响应对象
      */
     protected Value doHandle(HttpServletRequest request, HttpServletResponse response, ScriptObject handlerScriptObject) {
-        final HttpContext httpContext = new HttpContext(request, response, conversionService);
-        return handlerScriptObject.execute(httpContext);
+        final HttpContext ctx = new HttpContext(request, response, conversionService);
+        final Value bindings = handlerScriptObject.getContext().getBindings(GraalConstant.Js_Language_Id);
+        final String ctxName = "ctx";
+        try {
+            bindings.putMember(ctxName, ctx);
+            return handlerScriptObject.execute(ctx);
+        } finally {
+            bindings.removeMember(ctxName);
+        }
     }
 
     /**
