@@ -16,6 +16,13 @@
         </encoder>
     </appender>
 
+    <!--GraalJsDebug输出-->
+    <appender name="GRAALJS_DEBUG" class="org.clever.graaljs.spring.logger.GraalJsDebugLogbackAppender">
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <Pattern>${ENCODER_PATTERN_CONSOLE}</Pattern>
+        </encoder>
+    </appender>
+
     <!-- 文件日志：输出全部日志到文件 -->
     <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <file>${LOG_HOME}/${APP_NAME}.log</file>
@@ -47,5 +54,6 @@
         <appender-ref ref="STDOUT"/>
         <appender-ref ref="FILE"/>
         <appender-ref ref="ERROR_FILE"/>
+        <appender-ref ref="GRAALJS_DEBUG"/>
     </root>
 </configuration>

@@ -6,8 +6,10 @@ import org.clever.graaljs.core.GraalConstant;
 import org.clever.graaljs.core.ScriptEngineInstance;
 import org.clever.graaljs.core.ScriptObject;
 import org.clever.graaljs.core.internal.jackson.JacksonMapperSupport;
+import org.clever.graaljs.core.utils.RingBuffer;
 import org.clever.graaljs.core.utils.TupleOne;
 import org.clever.graaljs.core.utils.TupleTow;
+import org.clever.graaljs.spring.logger.GraalJsDebugLogbackAppender;
 import org.clever.graaljs.spring.mvc.builtin.wrap.HttpContext;
 import org.clever.graaljs.spring.mvc.support.IntegerToDateConverter;
 import org.clever.graaljs.spring.mvc.support.StringToDateConverter;
@@ -31,6 +33,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.lang.reflect.Method;
 import java.util.Date;
+import java.util.HashMap;
 
 /**
  * 作者：lizw <br/>
@@ -38,6 +41,10 @@ import java.util.Date;
  */
 @Slf4j
 public abstract class HttpInterceptorScriptHandler implements HandlerInterceptor, ScriptHandler {
+    /**
+     * 是否调试接口
+     */
+    protected static final String API_DEBUG_HEADER = "api-debug";
     /**
      * 是否强制使用Script Handler处理请求
      */
@@ -170,23 +177,46 @@ public abstract class HttpInterceptorScriptHandler implements HandlerInterceptor
      * @param handlerScriptObject 当前请求处理函数对象
      * @return 响应对象
      */
-    protected Value doHandle(HttpServletRequest request, HttpServletResponse response, ScriptObject handlerScriptObject) {
+    protected Object doHandle(HttpServletRequest request, HttpServletResponse response, ScriptObject handlerScriptObject) {
+        final String apiDebugUniqueId = StringUtils.trim(request.getHeader(API_DEBUG_HEADER));
+        final boolean isDebug = StringUtils.isNotBlank(apiDebugUniqueId) && apiDebugUniqueId.length() > 16;
+        final int debugBufferSize = 2048;
         final HttpContext ctx = new HttpContext(request, response, conversionService);
         final Value bindings = handlerScriptObject.getContext().getBindings(GraalConstant.Js_Language_Id);
         final String ctxName = "ctx";
         try {
+            if (isDebug) {
+                GraalJsDebugLogbackAppender.apiDebugStart(apiDebugUniqueId, debugBufferSize);
+            }
             bindings.putMember(ctxName, ctx);
-            return handlerScriptObject.execute(ctx);
+            Value value = handlerScriptObject.execute(ctx);
+            if (isDebug) {
+                RingBuffer.BufferContent<String> logs = GraalJsDebugLogbackAppender.apiDebugEnd(apiDebugUniqueId);
+                return new HashMap<String, Object>() {{
+                    put("data", value);
+                    put("logs", logs);
+                }};
+            }
+            return value;
         } finally {
             bindings.removeMember(ctxName);
+            if (isDebug) {
+                GraalJsDebugLogbackAppender.apiDebugEnd(apiDebugUniqueId);
+            }
         }
     }
 
     /**
      * 返回对象是否是空值
      */
-    protected boolean resIsEmpty(Value res) {
-        return res == null || res.isNull();
+    protected boolean resIsEmpty(Object res) {
+        if (res == null) {
+            return true;
+        }
+        if (res instanceof Value) {
+            return ((Value) res).isNull();
+        }
+        return false;
     }
 
     /**
@@ -240,7 +270,7 @@ public abstract class HttpInterceptorScriptHandler implements HandlerInterceptor
             startTime2 = System.currentTimeMillis();
             response.setHeader(USE_SCRIPT_HANDLER_HEAD, scriptInfo.getValue1());
             String resJson = scriptEngineInstance.wrapFunctionAndEval(scriptInfo.getValue2(), scriptObject -> {
-                Value res = doHandle(request, response, scriptObject);
+                Object res = doHandle(request, response, scriptObject);
                 // 3.序列化返回数据
                 startTime3.setValue1(System.currentTimeMillis());
                 if (!resIsEmpty(res) && !response.isCommitted()) {
