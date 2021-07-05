@@ -105,6 +105,30 @@ create index idx_http_api_update_at on http_api (update_at);
 
 
 /* ====================================================================================================================
+    http_api_debug -- HTTP接口调试
+==================================================================================================================== */
+create table http_api_debug
+(
+    id                  bigint          not null        auto_increment                          comment '主键id',
+    namespace           varchar(63)     not null                                                comment '命名空间',
+    http_api_id         bigint          not null                                                comment 'HTTP接口id',
+    title               varchar(127)    not null                                                comment '标题',
+    request_data        mediumtext      not null                                                comment '请求数据json格式',
+    create_at           datetime(3)     not null        default current_timestamp(3)            comment '创建时间',
+    update_at           datetime(3)                     on update current_timestamp(3)          comment '更新时间',
+    primary key (id)
+) comment = 'HTTP接口';
+create index idx_http_api_debug_namespace on http_api_debug (namespace);
+create index idx_http_api_debug_http_api_id on http_api_debug (http_api_id);
+create index idx_http_api_debug_title on http_api_debug (title);
+create index idx_http_api_debug_create_at on http_api_debug (create_at);
+create index idx_http_api_debug_update_at on http_api_debug (update_at);
+/*------------------------------------------------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------------------------------------------------*/
+
+
+/* ====================================================================================================================
     TODO timed_task -- 定时任务
 ==================================================================================================================== */
 create table timed_task

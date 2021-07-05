@@ -198,6 +198,17 @@ public abstract class HttpInterceptorScriptHandler implements HandlerInterceptor
                 }};
             }
             return value;
+        } catch (Throwable e) {
+            if (isDebug) {
+                log.error("执行脚本失败", e);
+                // TODO 优化打印 js 错误位置
+                RingBuffer.BufferContent<String> logs = GraalJsDebugLogbackAppender.apiDebugEnd(apiDebugUniqueId);
+                return new HashMap<String, Object>() {{
+                    put("data", null);
+                    put("logs", logs);
+                }};
+            }
+            throw e;
         } finally {
             bindings.removeMember(ctxName);
             if (isDebug) {
