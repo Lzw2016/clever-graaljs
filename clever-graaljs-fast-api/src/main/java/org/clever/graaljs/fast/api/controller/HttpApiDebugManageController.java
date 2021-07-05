@@ -37,7 +37,7 @@ public class HttpApiDebugManageController {
         return httpApiDebugManageService.addHttpApiDebug(req);
     }
 
-    @PostMapping("/update_debug")
+    @PutMapping("/update_debug")
     public HttpApiDebug updateHttpApiDebug(@RequestBody @Validated UpdateHttpApiDebugReq req) {
         return httpApiDebugManageService.updateHttpApiDebug(req);
     }

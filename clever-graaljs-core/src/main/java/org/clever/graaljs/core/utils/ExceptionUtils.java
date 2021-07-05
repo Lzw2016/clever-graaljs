@@ -50,6 +50,7 @@ public class ExceptionUtils {
                 final String[] codeLines = code.split("\n");
                 final int startLine = section.getStartLine();
                 final int endLine = section.getEndLine();
+                final int width = String.valueOf(endLine).length();
                 final StringBuilder sb = new StringBuilder();
                 sb.append(ex.getMessage()).append("\n");
                 if (startLine == endLine) {
@@ -57,20 +58,16 @@ public class ExceptionUtils {
                 } else {
                     sb.append("错误位置: ").append(startLine).append("行 ~ ").append(endLine).append("行 --->\n");
                 }
-                boolean flag = false;
                 for (int i = startLine - 2; i < endLine + 1; i++) {
                     if (i >= 0 && codeLines.length > i) {
-                        flag = true;
-                        sb.append(StringUtils.rightPad(String.valueOf(i + 1), 6)).append(codeLines[i]).append("\n");
+                        sb.append(StringUtils.rightPad(String.valueOf(i + 1), width)).append("|").append(codeLines[i]).append("\n");
                     }
                 }
                 if (StringUtils.isNotBlank(section.getCharacters())) {
-                    flag = true;
+
                     sb.append("<--- 调用代码: ").append(section.getCharacters());
                 }
-                if (flag) {
-                    return sb.toString();
-                }
+                return sb.toString();
             }
         }
         return StringUtils.EMPTY;

@@ -1,7 +1,9 @@
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.clever.graaljs.core.utils.mapper.JacksonMapper;
 import org.clever.graaljs.fast.api.dto.request.AddFileReq;
+import org.clever.graaljs.fast.api.model.DebugRequestData;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
@@ -63,5 +65,12 @@ public class Test01 {
         Pattern part_file_pattern = Pattern.compile("\\.part\\d+\\.");
         String[] arr = part_file_pattern.split("StringUtils.part01.d.ts");
         log.info("---> {}", StringUtils.joinWith(".", (Object[]) arr));
+    }
+
+    @Test
+    public void t06() {
+        DebugRequestData data = new DebugRequestData();
+        data.getParams().add(new DebugRequestData.RequestItem());
+        log.info("--> {}", JacksonMapper.getInstance().toJson(data));
     }
 }
