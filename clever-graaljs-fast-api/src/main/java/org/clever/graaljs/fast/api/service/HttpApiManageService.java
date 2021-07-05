@@ -80,6 +80,8 @@ public class HttpApiManageService {
     private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
     @Resource
     private FileResourceManageService fileResourceManageService;
+    @Resource
+    private HttpApiFileResourceCacheService httpApiFileResourceCacheService;
 
     public HttpApiManageService(FastApiConfig fastApiConfig) {
         this.namespace = fastApiConfig.getNamespace();
@@ -201,6 +203,8 @@ public class HttpApiManageService {
         List<HttpApi> httpApiList = jdbcTemplate.query(String.format(QUERY_HTTP_API, ids), DataClassRowMapper.newInstance(HttpApi.class), params.toArray());
         res.setHttpApiList(httpApiList);
         jdbcTemplate.update(String.format(DEL_HTTP_API, ids), params.toArray());
+        // 删除缓存
+        httpApiList.forEach(httpApi -> httpApiFileResourceCacheService.delCache(httpApi.getRequestMapping()));
         return res;
     }
 }

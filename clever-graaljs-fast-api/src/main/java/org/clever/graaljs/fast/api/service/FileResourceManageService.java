@@ -59,6 +59,8 @@ public class FileResourceManageService {
     private JdbcTemplate jdbcTemplate;
     @Resource
     private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
+    @Resource
+    private FileResourceMyBatisMapperSqlService fileResourceMyBatisMapperSqlService;
 
     public FileResourceManageService(FastApiConfig fastApiConfig) {
         this.namespace = fastApiConfig.getNamespace();
@@ -199,6 +201,12 @@ public class FileResourceManageService {
         params.add(namespace);
         params.addAll(list.stream().map(FileResource::getId).collect(Collectors.toList()));
         jdbcTemplate.update(String.format(DEL_FILES, ids), params.toArray());
+        // 删除缓存
+        list.forEach(file -> {
+            if (Objects.equals(file.getIsFile(), EnumConstant.IS_FILE_1)) {
+                fileResourceMyBatisMapperSqlService.delCache(file.getPath() + file.getName());
+            }
+        });
         return list;
     }
 

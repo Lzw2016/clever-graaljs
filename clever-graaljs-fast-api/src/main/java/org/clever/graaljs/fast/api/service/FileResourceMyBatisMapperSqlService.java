@@ -164,4 +164,11 @@ public class FileResourceMyBatisMapperSqlService extends AbstractMyBatisMapperSq
             }
         }
     }
+
+    /**
+     * 删除
+     */
+    public void delCache(String fullPath) {
+        mapperCache.remove(fullPath);
+    }
 }

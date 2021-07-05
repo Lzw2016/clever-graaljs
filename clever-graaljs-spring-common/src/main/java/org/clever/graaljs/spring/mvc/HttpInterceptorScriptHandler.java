@@ -6,6 +6,7 @@ import org.clever.graaljs.core.GraalConstant;
 import org.clever.graaljs.core.ScriptEngineInstance;
 import org.clever.graaljs.core.ScriptObject;
 import org.clever.graaljs.core.internal.jackson.JacksonMapperSupport;
+import org.clever.graaljs.core.utils.ExceptionUtils;
 import org.clever.graaljs.core.utils.RingBuffer;
 import org.clever.graaljs.core.utils.TupleOne;
 import org.clever.graaljs.core.utils.TupleTow;
@@ -200,8 +201,7 @@ public abstract class HttpInterceptorScriptHandler implements HandlerInterceptor
             return value;
         } catch (Throwable e) {
             if (isDebug) {
-                log.error("执行脚本失败", e);
-                // TODO 优化打印 js 错误位置
+                log.error("执行脚本失败:\n{}", ExceptionUtils.getErrorCodeLocation(e), e);
                 RingBuffer.BufferContent<String> logs = GraalJsDebugLogbackAppender.apiDebugEnd(apiDebugUniqueId);
                 return new HashMap<String, Object>() {{
                     put("data", null);

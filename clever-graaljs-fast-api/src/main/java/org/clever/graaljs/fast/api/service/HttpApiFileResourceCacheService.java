@@ -127,6 +127,13 @@ public class HttpApiFileResourceCacheService {
         }
     }
 
+    /**
+     * 删除
+     */
+    public void delCache(String requestMapping) {
+        httpApiCache.remove(requestMapping);
+    }
+
     public HttpApiFileResource getScriptFileResource(String requestMapping, String requestMethod) {
         HttpApiFileResource httpApiFileResource = httpApiCache.get(requestMapping);
         if (httpApiFileResource == null) {
