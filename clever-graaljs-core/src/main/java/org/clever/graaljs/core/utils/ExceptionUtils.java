@@ -58,10 +58,10 @@ public class ExceptionUtils {
                     sb.append("错误位置: ").append(startLine).append("行 ~ ").append(endLine).append("行 --->\n");
                 }
                 boolean flag = false;
-                for (int i = startLine - 1; i < endLine; i++) {
-                    if (codeLines.length > i) {
+                for (int i = startLine - 2; i < endLine + 1; i++) {
+                    if (i >= 0 && codeLines.length > i) {
                         flag = true;
-                        sb.append(codeLines[i]).append("\n");
+                        sb.append(StringUtils.rightPad(String.valueOf(i + 1), 6)).append(codeLines[i]).append("\n");
                     }
                 }
                 if (StringUtils.isNotBlank(section.getCharacters())) {
