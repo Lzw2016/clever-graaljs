@@ -92,9 +92,9 @@ clever:
     scan-interval: 3s
     script-engine:
       max-wait-millis: 1000
-      min-idle: 1
-      max-idle: 1
-      max-total: 1
+      min-idle: 2
+      max-idle: 16
+      max-total: 200
     mvc:
       prefix: '/api'
       cors:

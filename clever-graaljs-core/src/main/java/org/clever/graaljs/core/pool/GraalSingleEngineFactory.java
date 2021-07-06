@@ -28,6 +28,9 @@ import java.util.concurrent.atomic.AtomicLong;
  */
 @Slf4j
 public class GraalSingleEngineFactory extends BasePooledObjectFactory<ScriptContextInstance> implements Closeable {
+    /**
+     * 脚本引擎编号
+     */
     private final static String COUNTER_NAME = "org.clever.graaljs.core.ScriptContextInstance#COUNTER";
     private final static AtomicLong COUNTER = new AtomicLong(0);
 
@@ -117,7 +120,7 @@ public class GraalSingleEngineFactory extends BasePooledObjectFactory<ScriptCont
             }
         }
         instance.putBindingsMember(COUNTER_NAME, counter);
-        log.debug("创建 GraalScriptEngineInstance | counter={}", counter);
+        log.debug("创建 GraalScriptEngineInstance | EngineInstance编号={}", counter);
         return instance;
     }
 
@@ -146,7 +149,7 @@ public class GraalSingleEngineFactory extends BasePooledObjectFactory<ScriptCont
         contextMap.forEach((identifier, value) -> p.getObject().putBindingsMember(identifier, value));
         p.getObject().putBindingsMember(GraalConstant.Engine_Global, global);
         Object counter = p.getObject().getBindingsMember(COUNTER_NAME);
-        log.debug("初始化 ScriptContextInstance 全局变量 | counter={}", counter);
+        log.debug("初始化 ScriptContextInstance 全局变量 | EngineInstance编号={}", counter);
     }
 
     /**
@@ -165,7 +168,7 @@ public class GraalSingleEngineFactory extends BasePooledObjectFactory<ScriptCont
         if (p.getObject() != null) {
             p.getObject().close();
             Object counter = p.getObject().getBindingsMember(COUNTER_NAME);
-            log.debug("关闭 GraalScriptEngineInstance | counter={}", counter);
+            log.debug("关闭 GraalScriptEngineInstance | EngineInstance编号={}", counter);
         }
     }
 
