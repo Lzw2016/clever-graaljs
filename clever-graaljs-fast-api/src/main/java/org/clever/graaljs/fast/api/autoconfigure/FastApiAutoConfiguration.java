@@ -11,6 +11,11 @@ import org.clever.graaljs.fast.api.config.MvcConfig;
 import org.clever.graaljs.fast.api.intercept.FastApiHttpInterceptor;
 import org.clever.graaljs.fast.api.service.HttpApiFileResourceCacheService;
 import org.clever.graaljs.meta.data.builtin.wrap.MateDataManage;
+import org.clever.graaljs.spring.core.builtin.CookieUtils;
+import org.clever.graaljs.spring.core.builtin.HttpRequestUtils;
+import org.clever.graaljs.spring.core.builtin.SpringContext;
+import org.clever.graaljs.spring.core.builtin.wrap.ExcelUtils;
+import org.clever.graaljs.spring.core.builtin.wrap.ValidatorUtils;
 import org.clever.graaljs.spring.mvc.DefaultExceptionResolver;
 import org.clever.graaljs.spring.mvc.ExceptionResolver;
 import org.springframework.beans.factory.ObjectProvider;
@@ -48,9 +53,18 @@ public class FastApiAutoConfiguration {
     public ScriptEngineInstance scriptEngineInstance() {
         final ScriptEngineConfig scriptEngine = fastApiConfig.getScriptEngine();
         final Map<String, Object> contextMap = new HashMap<>();
+        // spring-common
+        contextMap.put("CookieUtils", CookieUtils.Instance);
+        contextMap.put("HttpRequestUtils", HttpRequestUtils.Instance);
+        contextMap.put("SpringContext", SpringContext.Instance);
+        contextMap.put("ExcelUtils", ExcelUtils.Instance);
+        contextMap.put("ValidatorUtils", ValidatorUtils.Instance);
+        // meta-data
         contextMap.put("MateDataManage", MateDataManage.Instance);
+        // data-jdbc
         contextMap.put("JdbcDatabase", JdbcDatabase.Instance);
         contextMap.put("MyBatisJdbcDatabase", MyBatisJdbcDatabase.Instance);
+        // data-redis
         contextMap.put("RedisDatabase", RedisDatabase.Instance);
         // TODO 其他内置对象
         final Map<String, Object> global = new HashMap<>();
