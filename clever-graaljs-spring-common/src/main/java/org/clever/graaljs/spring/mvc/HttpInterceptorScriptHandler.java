@@ -7,11 +7,12 @@ import org.clever.graaljs.core.ScriptEngineInstance;
 import org.clever.graaljs.core.ScriptObject;
 import org.clever.graaljs.core.internal.jackson.JacksonMapperSupport;
 import org.clever.graaljs.core.utils.ExceptionUtils;
-import org.clever.graaljs.core.utils.RingBuffer;
 import org.clever.graaljs.core.utils.TupleOne;
 import org.clever.graaljs.core.utils.TupleTow;
 import org.clever.graaljs.spring.logger.GraalJsDebugLogbackAppender;
 import org.clever.graaljs.spring.mvc.builtin.wrap.HttpContext;
+import org.clever.graaljs.spring.mvc.model.request.ApiDebugReq;
+import org.clever.graaljs.spring.mvc.model.response.ApiDebugRes;
 import org.clever.graaljs.spring.mvc.support.IntegerToDateConverter;
 import org.clever.graaljs.spring.mvc.support.StringToDateConverter;
 import org.graalvm.polyglot.PolyglotException;
@@ -34,7 +35,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.lang.reflect.Method;
 import java.util.Date;
-import java.util.HashMap;
 
 /**
  * 作者：lizw <br/>
@@ -42,10 +42,7 @@ import java.util.HashMap;
  */
 @Slf4j
 public abstract class HttpInterceptorScriptHandler implements HandlerInterceptor, ScriptHandler {
-    /**
-     * 是否调试接口
-     */
-    protected static final String API_DEBUG_HEADER = "api-debug";
+    protected static final String CONTENT_TYPE = "application/json;charset=UTF-8";
     /**
      * 是否强制使用Script Handler处理请求
      */
@@ -178,42 +175,15 @@ public abstract class HttpInterceptorScriptHandler implements HandlerInterceptor
      * @param handlerScriptObject 当前请求处理函数对象
      * @return 响应对象
      */
-    protected Object doHandle(HttpServletRequest request, HttpServletResponse response, ScriptObject handlerScriptObject) {
-        final String apiDebugUniqueId = StringUtils.trim(request.getHeader(API_DEBUG_HEADER));
-        final boolean isDebug = StringUtils.isNotBlank(apiDebugUniqueId) && apiDebugUniqueId.length() > 16;
-        final int debugBufferSize = 2048;
+    protected Value doHandle(HttpServletRequest request, HttpServletResponse response, ScriptObject handlerScriptObject) {
         final HttpContext ctx = new HttpContext(request, response, conversionService);
         final Value bindings = handlerScriptObject.getContext().getBindings(GraalConstant.Js_Language_Id);
         final String ctxName = "ctx";
         try {
-            if (isDebug) {
-                GraalJsDebugLogbackAppender.apiDebugStart(apiDebugUniqueId, debugBufferSize);
-            }
             bindings.putMember(ctxName, ctx);
-            Value value = handlerScriptObject.execute(ctx);
-            if (isDebug) {
-                RingBuffer.BufferContent<String> logs = GraalJsDebugLogbackAppender.apiDebugEnd(apiDebugUniqueId);
-                return new HashMap<String, Object>() {{
-                    put("data", value);
-                    put("logs", logs);
-                }};
-            }
-            return value;
-        } catch (Throwable e) {
-            if (isDebug) {
-                log.error("执行脚本失败:\n{}", ExceptionUtils.getErrorCodeLocation(e), e);
-                RingBuffer.BufferContent<String> logs = GraalJsDebugLogbackAppender.apiDebugEnd(apiDebugUniqueId);
-                return new HashMap<String, Object>() {{
-                    put("data", null);
-                    put("logs", logs);
-                }};
-            }
-            throw e;
+            return handlerScriptObject.execute(ctx);
         } finally {
             bindings.removeMember(ctxName);
-            if (isDebug) {
-                GraalJsDebugLogbackAppender.apiDebugEnd(apiDebugUniqueId);
-            }
         }
     }
 
@@ -238,7 +208,7 @@ public abstract class HttpInterceptorScriptHandler implements HandlerInterceptor
     }
 
     /**
-     * 异常处理
+     * 异常处理(转换异常)
      */
     protected void errHandle(Throwable e) throws Exception {
         PolyglotException polyglotException = null;
@@ -266,11 +236,16 @@ public abstract class HttpInterceptorScriptHandler implements HandlerInterceptor
         if (!supportScript(request, handler)) {
             return false;
         }
+        final ApiDebugReq apiDebugReq = (ApiDebugReq) request.getAttribute(ApiDebugReq.REQUEST_ATTRIBUTE);
+        final ApiDebugRes apiDebugRes = new ApiDebugRes(request);
         long startTime1 = -1;                                   // 开始查找脚本文件时间
         long startTime2 = -1;                                   // 开始执行脚本时间
         final TupleOne<Long> startTime3 = TupleOne.creat(-1L);  // 开始序列化返回值时间;
         TupleTow<String, String> scriptInfo = null;
         try {
+            if (apiDebugReq.isDebug()) {
+                GraalJsDebugLogbackAppender.apiDebugStart(apiDebugReq.getApiDebugUniqueId(), apiDebugReq.getDebugBufferSize());
+            }
             // 1.加载执行脚本代码
             startTime1 = System.currentTimeMillis();
             scriptInfo = getScriptFileResource(request);
@@ -282,18 +257,22 @@ public abstract class HttpInterceptorScriptHandler implements HandlerInterceptor
             response.setHeader(USE_SCRIPT_HANDLER_HEAD, scriptInfo.getValue1());
             String resJson = scriptEngineInstance.wrapFunctionAndEval(scriptInfo.getValue2(), scriptObject -> {
                 Object res = doHandle(request, response, scriptObject);
+                if (apiDebugReq.isDebug()) {
+                    apiDebugRes.setData(res);
+                }
                 // 3.序列化返回数据
                 startTime3.setValue1(System.currentTimeMillis());
                 if (!resIsEmpty(res) && !response.isCommitted()) {
-                    response.setContentType("application/json;charset=UTF-8");
                     return serializeRes(res);
                 }
                 return null;
             });
-            if (resJson != null) {
+            if (resJson != null && !response.isCommitted() && !apiDebugReq.isDebug()) {
+                response.setContentType(CONTENT_TYPE);
                 response.getWriter().print(resJson);
             }
         } catch (Throwable e) {
+            log.error("执行脚本失败:\n{}", ExceptionUtils.getErrorCodeLocation(e), e);
             errHandle(e);
         } finally {
             if (scriptInfo != null) {
@@ -312,6 +291,9 @@ public abstract class HttpInterceptorScriptHandler implements HandlerInterceptor
                         scriptInfo.getValue1()
                 );
                 log.debug(logText);
+            }
+            if (apiDebugReq.isDebug()) {
+                apiDebugRes.setLogs(GraalJsDebugLogbackAppender.apiDebugEnd(apiDebugReq.getApiDebugUniqueId()));
             }
         }
         return true;
@@ -332,9 +314,22 @@ public abstract class HttpInterceptorScriptHandler implements HandlerInterceptor
             // 不支持跨域
             return false;
         }
+        final ApiDebugReq apiDebugReq = new ApiDebugReq(request);
         try {
-            return !handle(request, response, handler);
+            final boolean res = !handle(request, response, handler);
+            final ApiDebugRes apiDebugRes = (ApiDebugRes) request.getAttribute(ApiDebugRes.REQUEST_ATTRIBUTE);
+            if (!res && apiDebugReq.isDebug() && !response.isCommitted() && apiDebugRes != null) {
+                response.setContentType(CONTENT_TYPE);
+                String json = serializeRes(apiDebugRes);
+                response.getWriter().print(json);
+            }
+            return res;
         } catch (Exception e) {
+            if (response.isCommitted()) {
+                log.info("Script处理请求异常", e);
+                return false;
+            }
+            final ApiDebugRes apiDebugRes = (ApiDebugRes) request.getAttribute(ApiDebugRes.REQUEST_ATTRIBUTE);
             Object res;
             if (exceptionResolver != null) {
                 res = exceptionResolver.resolveException(request, response, handler, e);
@@ -344,11 +339,19 @@ public abstract class HttpInterceptorScriptHandler implements HandlerInterceptor
                 res = DefaultExceptionResolver.Instance.newErrorResponse(request, response, e);
             }
             if (res != null) {
-                response.setContentType("application/json;charset=UTF-8");
+                response.setContentType(CONTENT_TYPE);
+                if (apiDebugReq.isDebug() && apiDebugRes != null) {
+                    apiDebugRes.setData(res);
+                    res = apiDebugRes;
+                }
                 String json = serializeRes(res);
                 response.getWriter().println(json);
             }
-            return false;
+        } finally {
+            if (apiDebugReq.isDebug()) {
+                GraalJsDebugLogbackAppender.apiDebugEnd(apiDebugReq.getApiDebugUniqueId());
+            }
         }
+        return false;
     }
 }
