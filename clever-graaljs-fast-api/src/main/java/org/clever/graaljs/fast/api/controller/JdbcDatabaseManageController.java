@@ -1,5 +1,7 @@
 package org.clever.graaljs.fast.api.controller;
 
+import org.clever.graaljs.data.jdbc.builtin.wrap.JdbcDatabase;
+import org.clever.graaljs.data.jdbc.support.JdbcDataSourceStatus;
 import org.clever.graaljs.data.jdbc.support.JdbcInfo;
 import org.clever.graaljs.fast.api.dto.request.AddJdbcReq;
 import org.clever.graaljs.fast.api.dto.request.UpdateJdbcReq;
@@ -39,5 +41,10 @@ public class JdbcDatabaseManageController {
     @PutMapping("/update")
     public JdbcInfoRes updateJdbc(@RequestBody @Validated UpdateJdbcReq req) {
         return jdbcDatabaseManageService.updateJdbc(req);
+    }
+
+    @GetMapping("/status")
+    public JdbcDataSourceStatus getStatus(@RequestParam("name") String name) {
+        return JdbcDatabase.Instance.getStatus(name);
     }
 }
