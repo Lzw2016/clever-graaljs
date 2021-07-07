@@ -1,5 +1,6 @@
 package org.clever.graaljs.fast.api.service;
 
+import org.apache.commons.lang3.StringUtils;
 import org.clever.graaljs.core.exception.BusinessException;
 import org.clever.graaljs.core.utils.mapper.JacksonMapper;
 import org.clever.graaljs.fast.api.config.FastApiConfig;
@@ -7,6 +8,7 @@ import org.clever.graaljs.fast.api.dto.request.AddHttpApiDebugReq;
 import org.clever.graaljs.fast.api.dto.request.UpdateHttpApiDebugReq;
 import org.clever.graaljs.fast.api.dto.response.HttpApiDebugRes;
 import org.clever.graaljs.fast.api.dto.response.HttpApiDebugTitleRes;
+import org.clever.graaljs.fast.api.entity.HttpApi;
 import org.clever.graaljs.fast.api.entity.HttpApiDebug;
 import org.clever.graaljs.fast.api.model.DebugRequestData;
 import org.springframework.jdbc.core.DataClassRowMapper;
@@ -35,15 +37,20 @@ public class HttpApiDebugManageService {
             "values " +
             "(:namespace, :httpApiId, :title, :requestData)";
     private static final String UPDATE_HTTP_API_DEBUG = "update http_api_debug set title=?, request_data=? where namespace=? and id=?";
+    private static final String DEL_HTTP_API_DEBUG = "delete from http_api_debug where namespace=? and id=?";
 
     private final String namespace;
+    private final String prefix;
     @Resource
     private JdbcTemplate jdbcTemplate;
     @Resource
     private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
+    @Resource
+    private HttpApiManageService httpApiManageService;
 
     public HttpApiDebugManageService(FastApiConfig fastApiConfig) {
         this.namespace = fastApiConfig.getNamespace();
+        this.prefix = fastApiConfig.getMvc().getPrefix();
     }
 
     public List<HttpApiDebugTitleRes> getTitleList(Long httpApiId) {
@@ -75,10 +82,24 @@ public class HttpApiDebugManageService {
 
     @Transactional
     public HttpApiDebug addHttpApiDebug(AddHttpApiDebugReq req) {
+        HttpApi httpApi = httpApiManageService.getHttpApi(req.getHttpApiId());
+        if (httpApi == null) {
+            throw new BusinessException("HttpApi不存在");
+        }
         HttpApiDebug httpApiDebug = new HttpApiDebug();
         httpApiDebug.setNamespace(namespace);
         httpApiDebug.setHttpApiId(req.getHttpApiId());
         httpApiDebug.setTitle(req.getTitle());
+        if (req.getRequestData() == null) {
+            DebugRequestData requestData = new DebugRequestData();
+            requestData.setMethod(httpApi.getRequestMethod());
+            if (StringUtils.isBlank(prefix)) {
+                requestData.setPath(httpApi.getRequestMapping());
+            } else {
+                requestData.setPath(prefix + httpApi.getRequestMapping());
+            }
+            req.setRequestData(requestData);
+        }
         httpApiDebug.setRequestData(JacksonMapper.getInstance().toJson(req.getRequestData()));
         GeneratedKeyHolder keyHolder = new GeneratedKeyHolder();
         namedParameterJdbcTemplate.update(INSERT_HTTP_API_DEBUG, new BeanPropertySqlParameterSource(httpApiDebug), keyHolder);
@@ -103,6 +124,22 @@ public class HttpApiDebugManageService {
         );
         if (list.isEmpty()) {
             return null;
+        }
+        return list.get(0);
+    }
+
+    @Transactional
+    public HttpApiDebug delHttpApiDebug(Long id) {
+        List<HttpApiDebug> list = jdbcTemplate.query(
+                GET_HTTP_API_DEBUG, DataClassRowMapper.newInstance(HttpApiDebug.class),
+                namespace, id
+        );
+        if (list.isEmpty()) {
+            throw new BusinessException("删除的数据不存在");
+        }
+        int count = jdbcTemplate.update(DEL_HTTP_API_DEBUG, namespace, id);
+        if (count <= 0) {
+            throw new BusinessException("数据不存在");
         }
         return list.get(0);
     }

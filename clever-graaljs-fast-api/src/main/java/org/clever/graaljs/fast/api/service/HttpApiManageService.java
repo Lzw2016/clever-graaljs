@@ -124,7 +124,11 @@ public class HttpApiManageService {
     }
 
     public HttpApi getHttpApi(Long id) {
-        return jdbcTemplate.queryForObject(GET_HTTP_API, DataClassRowMapper.newInstance(HttpApi.class), namespace, id);
+        List<HttpApi> list = jdbcTemplate.query(GET_HTTP_API, DataClassRowMapper.newInstance(HttpApi.class), namespace, id);
+        if (list.isEmpty()) {
+            return null;
+        }
+        return list.get(0);
     }
 
     @Transactional

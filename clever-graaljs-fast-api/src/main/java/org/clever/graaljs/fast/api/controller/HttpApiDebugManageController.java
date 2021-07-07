@@ -41,4 +41,9 @@ public class HttpApiDebugManageController {
     public HttpApiDebug updateHttpApiDebug(@RequestBody @Validated UpdateHttpApiDebugReq req) {
         return httpApiDebugManageService.updateHttpApiDebug(req);
     }
+
+    @DeleteMapping("/del_debug")
+    public HttpApiDebug delHttpApiDebug(@RequestParam("id") Long id) {
+        return httpApiDebugManageService.delHttpApiDebug(id);
+    }
 }

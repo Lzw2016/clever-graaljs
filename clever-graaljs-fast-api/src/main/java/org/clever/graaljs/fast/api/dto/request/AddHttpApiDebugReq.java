@@ -28,6 +28,5 @@ public class AddHttpApiDebugReq implements Serializable {
     /**
      * 请求数据
      */
-    @NotNull
     private DebugRequestData requestData;
 }
