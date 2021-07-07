@@ -2,6 +2,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.clever.graaljs.core.utils.mapper.JacksonMapper;
+import org.clever.graaljs.data.jdbc.builtin.wrap.support.JdbcConfig;
 import org.clever.graaljs.fast.api.dto.request.AddFileReq;
 import org.clever.graaljs.fast.api.model.DebugRequestData;
 import org.junit.jupiter.api.Test;
@@ -72,5 +73,30 @@ public class Test01 {
         DebugRequestData data = new DebugRequestData();
         data.getParams().add(new DebugRequestData.RequestItem());
         log.info("--> {}", JacksonMapper.getInstance().toJson(data));
+    }
+
+    @Test
+    public void t07() {
+        JdbcConfig jdbcConfig = new JdbcConfig();
+        jdbcConfig.setDriverClassName("com.mysql.cj.jdbc.Driver");
+        jdbcConfig.setJdbcUrl("jdbc:mysql://192.168.1.201:12000/fast-api");
+        jdbcConfig.setUsername("xxx");
+        jdbcConfig.setPassword("***");
+        jdbcConfig.getDataSourceProperties().put("serverTimezone", "GMT+8");
+        jdbcConfig.getDataSourceProperties().put("useUnicode", "true");
+        jdbcConfig.getDataSourceProperties().put("characterEncoding", "utf-8");
+        jdbcConfig.getDataSourceProperties().put("zeroDateTimeBehavior", "convert_to_null");
+        jdbcConfig.getDataSourceProperties().put("useSSL", "false");
+        jdbcConfig.getDataSourceProperties().put("useCursorFetch", "true");
+        jdbcConfig.setAutoCommit(false);
+        jdbcConfig.setMaxPoolSize(1);
+        jdbcConfig.setMinIdle(1);
+        jdbcConfig.setMaxLifetimeMs(1800000L);
+        jdbcConfig.setConnectionTestQuery("SELECT 1");
+        String json = JacksonMapper.getInstance().toJson(jdbcConfig);
+        log.info("--> {}", json);
+        jdbcConfig = JacksonMapper.getInstance().fromJson(json, JdbcConfig.class);
+        json = JacksonMapper.getInstance().toJson(jdbcConfig);
+        log.info("--> {}", json);
     }
 }

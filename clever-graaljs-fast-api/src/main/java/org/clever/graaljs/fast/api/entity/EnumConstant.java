@@ -93,4 +93,29 @@ public interface EnumConstant {
      * http请求method，ALL GET HEAD POST PUT DELETE CONNECT OPTIONS TRACE PATCH
      */
     String REQUEST_METHOD_PATCH = "PATCH";
+
+    /**
+     * 数据源类型，jdbc redis rabbitmq rocketmq kafka elasticsearch ...
+     */
+    String TYPE_JDBC = "jdbc";
+    /**
+     * 数据源类型，jdbc redis rabbitmq rocketmq kafka elasticsearch ...
+     */
+    String TYPE_REDIS = "redis";
+    /**
+     * 数据源类型，jdbc redis rabbitmq rocketmq kafka elasticsearch ...
+     */
+    String TYPE_RABBITMQ = "rabbitmq";
+    /**
+     * 数据源类型，jdbc redis rabbitmq rocketmq kafka elasticsearch ...
+     */
+    String TYPE_ROCKETMQ = "rocketmq";
+    /**
+     * 数据源类型，jdbc redis rabbitmq rocketmq kafka elasticsearch ...
+     */
+    String TYPE_KAFKA = "kafka";
+    /**
+     * 数据源类型，jdbc redis rabbitmq rocketmq kafka elasticsearch ...
+     */
+    String TYPE_ELASTICSEARCH = "elasticsearch";
 }

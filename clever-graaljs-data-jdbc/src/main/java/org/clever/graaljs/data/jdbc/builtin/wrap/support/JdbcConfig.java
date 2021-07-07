@@ -1,10 +1,12 @@
 package org.clever.graaljs.data.jdbc.builtin.wrap.support;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.zaxxer.hikari.HikariConfig;
 import lombok.Data;
 import org.clever.graaljs.core.utils.Assert;
 
 import java.io.Serializable;
+import java.util.HashMap;
 import java.util.Map;
 
 @Data
@@ -34,8 +36,9 @@ public class JdbcConfig implements Serializable {
 
     private String connectionTestQuery;
 
-    private Map<String, Object> dataSourceProperties;
+    private Map<String, Object> dataSourceProperties = new HashMap<>();
 
+    @JsonIgnore
     public HikariConfig getHikariConfig() {
         Assert.isNotBlank(driverClassName, "参数driverClassName不能为空");
         Assert.isNotBlank(jdbcUrl, "参数jdbcUrl不能为空");
