@@ -1,6 +1,7 @@
 package org.clever.graaljs.fast.api.dto.response;
 
 import lombok.Data;
+import org.clever.graaljs.data.jdbc.support.JdbcDataSourceStatus;
 import org.clever.graaljs.data.jdbc.support.JdbcInfo;
 import org.clever.graaljs.fast.api.entity.DataSourceConfig;
 
@@ -17,6 +18,8 @@ public class JdbcInfoRes {
     private boolean immutable = false;
 
     private JdbcInfo jdbcInfo;
+
+    private JdbcDataSourceStatus status;
 
     private DataSourceConfig dataSourceConfig;
 }

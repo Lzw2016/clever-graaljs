@@ -2,6 +2,7 @@ package org.clever.graaljs.fast.api.controller;
 
 import org.clever.graaljs.data.jdbc.support.JdbcInfo;
 import org.clever.graaljs.fast.api.dto.request.AddJdbcReq;
+import org.clever.graaljs.fast.api.dto.request.UpdateJdbcReq;
 import org.clever.graaljs.fast.api.dto.response.JdbcInfoRes;
 import org.clever.graaljs.fast.api.service.JdbcDatabaseManageService;
 import org.springframework.validation.annotation.Validated;
@@ -33,5 +34,10 @@ public class JdbcDatabaseManageController {
     @DeleteMapping("/del")
     public JdbcInfo delJdbc(@RequestParam("name") String name) {
         return jdbcDatabaseManageService.delJdbc(name);
+    }
+
+    @PutMapping("/update")
+    public JdbcInfoRes updateJdbc(@RequestBody @Validated UpdateJdbcReq req) {
+        return jdbcDatabaseManageService.updateJdbc(req);
     }
 }
