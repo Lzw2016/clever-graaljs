@@ -4,9 +4,7 @@ import org.clever.graaljs.data.redis.builtin.wrap.RedisDatabase;
 import org.clever.graaljs.data.redis.support.RedisDataSourceStatus;
 import org.clever.graaljs.data.redis.support.RedisInfo;
 import org.clever.graaljs.fast.api.dto.request.AddRedisReq;
-import org.clever.graaljs.fast.api.dto.request.UpdateJdbcReq;
 import org.clever.graaljs.fast.api.dto.request.UpdateRedisReq;
-import org.clever.graaljs.fast.api.dto.response.JdbcInfoRes;
 import org.clever.graaljs.fast.api.dto.response.RedisInfoRes;
 import org.clever.graaljs.fast.api.service.RedisManageService;
 import org.springframework.validation.annotation.Validated;
@@ -44,7 +42,6 @@ public class RedisManageController {
     public RedisInfoRes updateRedis(@RequestBody @Validated UpdateRedisReq req) {
         return redisManageService.updateRedis(req);
     }
-
 
     @GetMapping("/status")
     public RedisDataSourceStatus getStatus(@RequestParam("name") String name) {
