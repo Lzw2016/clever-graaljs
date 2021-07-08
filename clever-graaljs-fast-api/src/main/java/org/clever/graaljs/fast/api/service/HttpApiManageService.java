@@ -6,6 +6,7 @@ import org.clever.graaljs.core.utils.tree.BuildTreeUtils;
 import org.clever.graaljs.core.utils.tree.SimpleTreeNode;
 import org.clever.graaljs.fast.api.config.FastApiConfig;
 import org.clever.graaljs.fast.api.dto.request.AddDirReq;
+import org.clever.graaljs.fast.api.dto.request.AddHttpApiDebugReq;
 import org.clever.graaljs.fast.api.dto.request.AddHttpApiReq;
 import org.clever.graaljs.fast.api.dto.response.AddHttpApiRes;
 import org.clever.graaljs.fast.api.dto.response.ApiFileResourceRes;
@@ -82,6 +83,8 @@ public class HttpApiManageService {
     private FileResourceManageService fileResourceManageService;
     @Resource
     private HttpApiFileResourceCacheService httpApiFileResourceCacheService;
+    @Resource
+    private HttpApiDebugManageService httpApiDebugManageService;
 
     public HttpApiManageService(FastApiConfig fastApiConfig) {
         this.namespace = fastApiConfig.getNamespace();
@@ -179,6 +182,11 @@ public class HttpApiManageService {
         GeneratedKeyHolder keyHolder = new GeneratedKeyHolder();
         namedParameterJdbcTemplate.update(INSERT_HTTP_API, new BeanPropertySqlParameterSource(httpApi), keyHolder);
         httpApi.setId(Objects.requireNonNull(keyHolder.getKey()).longValue());
+        // 新增 Http Api Debug 数据
+        AddHttpApiDebugReq addHttpApiDebugReq = new AddHttpApiDebugReq();
+        addHttpApiDebugReq.setHttpApiId(httpApi.getId());
+        addHttpApiDebugReq.setTitle("000-Default");
+        httpApiDebugManageService.addHttpApiDebug(addHttpApiDebugReq);
         // 返回数据
         res.getFileList().add(file);
         res.setHttpApi(httpApi);

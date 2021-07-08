@@ -45,4 +45,9 @@ public interface GraalConstant {
                     )
             )
     );
+
+    /**
+     * graaljs引擎每个context执行语句的最大限制
+     */
+    String ENGINE_EXECUTED_LIMIT = "graaljs_engine_executed_limit";
 }

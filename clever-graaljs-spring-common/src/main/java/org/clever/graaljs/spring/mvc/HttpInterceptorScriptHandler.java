@@ -184,6 +184,7 @@ public abstract class HttpInterceptorScriptHandler implements HandlerInterceptor
             return handlerScriptObject.execute(ctx);
         } finally {
             bindings.removeMember(ctxName);
+            handlerScriptObject.getContext().resetLimits();
         }
     }
 

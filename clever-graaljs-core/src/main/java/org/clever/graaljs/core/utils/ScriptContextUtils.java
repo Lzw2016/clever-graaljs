@@ -1,5 +1,7 @@
 package org.clever.graaljs.core.utils;
 
+import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.math.NumberUtils;
 import org.clever.graaljs.core.GraalConstant;
 import org.graalvm.polyglot.*;
 
@@ -11,6 +13,7 @@ import java.util.Set;
  * 作者：lizw <br/>
  * 创建时间：2020/07/20 21:59 <br/>
  */
+@Slf4j
 public class ScriptContextUtils {
     /**
      * Context 默认选项
@@ -86,7 +89,16 @@ public class ScriptContextUtils {
         // 沙箱环境控制 - 定义JavaScript可以访问的Class(使用黑名单机制)
         contextBuilder.allowHostAccess(getHostAccessBuilder(denyAccessClass).build());
         // 沙箱环境控制 - 限制JavaScript的资源使用
-        // ResourceLimits resourceLimits = ResourceLimits.newBuilder().statementLimit()
+        final int limit = NumberUtils.toInt(System.getProperty(GraalConstant.ENGINE_EXECUTED_LIMIT), -1);
+        if (limit > 0) {
+            ResourceLimits resourceLimits = ResourceLimits.newBuilder()
+                    .statementLimit(limit, null)
+                    .onLimit(event -> {
+                        log.warn("执行脚本超过连续执行语句的最大限制:limit={} | -> {}", limit, event.toString());
+                    })
+                    .build();
+            contextBuilder.resourceLimits(resourceLimits);
+        }
         return contextBuilder;
     }
 
