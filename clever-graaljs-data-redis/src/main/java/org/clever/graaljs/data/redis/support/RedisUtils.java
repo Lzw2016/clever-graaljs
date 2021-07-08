@@ -64,36 +64,50 @@ public class RedisUtils {
         if (connectionProvider != null && providerClassName.equals(connectionProvider.getClass().getName())) {
             Object pools = getField(Class.forName(providerClassName), "pools", connectionProvider);
             if (pools instanceof Map) {
-                Map<Class<?>, GenericObjectPool<?>> genericObjectPoolMap = (Map<Class<?>, GenericObjectPool<?>>) pools;
-                List<RedisDataSourceStatus> list = new ArrayList<>();
-                for (Map.Entry<Class<?>, GenericObjectPool<?>> entry : genericObjectPoolMap.entrySet()) {
-                    list.add(getRedisDataSourceStatus(entry.getValue()));
-                }
-                if (list.isEmpty()) {
-                    return null;
-                }
-                RedisDataSourceStatus status = new RedisDataSourceStatus();
-                status.setMeanActiveTimeMillis(0L);
-                status.setMeanIdleTimeMillis(0L);
-                for (RedisDataSourceStatus redisDataSourceStatus : list) {
-                    status.setTotalConnections(status.getTotalConnections() + redisDataSourceStatus.getTotalConnections());
-                    status.setActiveConnections(status.getActiveConnections() + redisDataSourceStatus.getActiveConnections());
-                    status.setIdleConnections(status.getIdleConnections() + redisDataSourceStatus.getIdleConnections());
-                    status.setThreadsAwaitingConnection(status.getThreadsAwaitingConnection() + redisDataSourceStatus.getThreadsAwaitingConnection());
-                    if (status.getMaxBorrowWaitTimeMillis() < redisDataSourceStatus.getMaxBorrowWaitTimeMillis()) {
-                        status.setMaxBorrowWaitTimeMillis(redisDataSourceStatus.getMaxBorrowWaitTimeMillis());
-                    }
-                    status.setMeanBorrowWaitTimeMillis(status.getMeanBorrowWaitTimeMillis() + redisDataSourceStatus.getMeanBorrowWaitTimeMillis());
-                    status.setMeanActiveTimeMillis(status.getMeanActiveTimeMillis() + redisDataSourceStatus.getMeanActiveTimeMillis());
-                    status.setMeanIdleTimeMillis(status.getMeanIdleTimeMillis() + redisDataSourceStatus.getMeanIdleTimeMillis());
-                }
-                status.setMeanBorrowWaitTimeMillis(status.getMeanBorrowWaitTimeMillis() / list.size());
-                status.setMeanActiveTimeMillis(status.getMeanActiveTimeMillis() / list.size());
-                status.setMeanIdleTimeMillis(status.getMeanIdleTimeMillis() / list.size());
-                return status;
+                Collection<GenericObjectPool<?>> poolList = ((Map<?, GenericObjectPool<?>>) pools).values();
+                return getRedisDataSourceStatus(poolList);
+            }
+        }
+        final String providerClassName_2 = "org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory$ExceptionTranslatingConnectionProvider";
+        if (connectionProvider != null && providerClassName_2.equals(connectionProvider.getClass().getName())) {
+            Object delegate = getField(connectionProvider.getClass(), "delegate", connectionProvider);
+            if (delegate == null) {
+                return null;
+            }
+            Object poolRef = getField(delegate.getClass(), "poolRef", delegate);
+            if (poolRef instanceof Map) {
+                Collection<GenericObjectPool<?>> poolList = ((Map<?, GenericObjectPool<?>>) poolRef).values();
+                return getRedisDataSourceStatus(poolList);
             }
         }
         return null;
+    }
+
+    protected static RedisDataSourceStatus getRedisDataSourceStatus(Collection<GenericObjectPool<?>> poolList) {
+        List<RedisDataSourceStatus> list = new ArrayList<>();
+        poolList.forEach(tmpPool -> list.add(getRedisDataSourceStatus(tmpPool)));
+        if (list.isEmpty()) {
+            return null;
+        }
+        RedisDataSourceStatus status = new RedisDataSourceStatus();
+        status.setMeanActiveTimeMillis(0L);
+        status.setMeanIdleTimeMillis(0L);
+        for (RedisDataSourceStatus redisDataSourceStatus : list) {
+            status.setTotalConnections(status.getTotalConnections() + redisDataSourceStatus.getTotalConnections());
+            status.setActiveConnections(status.getActiveConnections() + redisDataSourceStatus.getActiveConnections());
+            status.setIdleConnections(status.getIdleConnections() + redisDataSourceStatus.getIdleConnections());
+            status.setThreadsAwaitingConnection(status.getThreadsAwaitingConnection() + redisDataSourceStatus.getThreadsAwaitingConnection());
+            if (status.getMaxBorrowWaitTimeMillis() < redisDataSourceStatus.getMaxBorrowWaitTimeMillis()) {
+                status.setMaxBorrowWaitTimeMillis(redisDataSourceStatus.getMaxBorrowWaitTimeMillis());
+            }
+            status.setMeanBorrowWaitTimeMillis(status.getMeanBorrowWaitTimeMillis() + redisDataSourceStatus.getMeanBorrowWaitTimeMillis());
+            status.setMeanActiveTimeMillis(status.getMeanActiveTimeMillis() + redisDataSourceStatus.getMeanActiveTimeMillis());
+            status.setMeanIdleTimeMillis(status.getMeanIdleTimeMillis() + redisDataSourceStatus.getMeanIdleTimeMillis());
+        }
+        status.setMeanBorrowWaitTimeMillis(status.getMeanBorrowWaitTimeMillis() / list.size());
+        status.setMeanActiveTimeMillis(status.getMeanActiveTimeMillis() / list.size());
+        status.setMeanIdleTimeMillis(status.getMeanIdleTimeMillis() / list.size());
+        return status;
     }
 
     @SuppressWarnings({"unchecked", "DuplicatedCode"})

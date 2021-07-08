@@ -3,6 +3,7 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.clever.graaljs.core.utils.mapper.JacksonMapper;
 import org.clever.graaljs.data.jdbc.builtin.wrap.support.JdbcConfig;
+import org.clever.graaljs.data.redis.builtin.wrap.support.RedisConfig;
 import org.clever.graaljs.fast.api.dto.request.AddFileReq;
 import org.clever.graaljs.fast.api.model.DebugRequestData;
 import org.junit.jupiter.api.Test;
@@ -97,6 +98,16 @@ public class Test01 {
         log.info("--> {}", json);
         jdbcConfig = JacksonMapper.getInstance().fromJson(json, JdbcConfig.class);
         json = JacksonMapper.getInstance().toJson(jdbcConfig);
+        log.info("--> {}", json);
+    }
+
+    @Test
+    public void t08() {
+        RedisConfig redisConfig = new RedisConfig();
+        String json = JacksonMapper.getInstance().toJson(redisConfig);
+        log.info("--> {}", json);
+        redisConfig = JacksonMapper.getInstance().fromJson(json, RedisConfig.class);
+        json = JacksonMapper.getInstance().toJson(redisConfig);
         log.info("--> {}", json);
     }
 }

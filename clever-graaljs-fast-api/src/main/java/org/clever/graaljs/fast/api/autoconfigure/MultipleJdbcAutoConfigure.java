@@ -122,8 +122,8 @@ public class MultipleJdbcAutoConfigure implements CommandLineRunner {
         for (Map.Entry<String, DataSource> entry : dataSourceMap.entrySet()) {
             String name = entry.getKey();
             DataSource dataSource = entry.getValue();
-            IMMUTABLE_DATA_SOURCE_NAMES.add(name);
             addJdbcDataSource(name, dataSource, mybatisMapperSql);
+            IMMUTABLE_DATA_SOURCE_NAMES.add(name);
         }
         // 默认的 MateDataManage
         MateDataManage.Instance.setDefault(multipleJdbc.getDefaultName());
@@ -179,8 +179,14 @@ public class MultipleJdbcAutoConfigure implements CommandLineRunner {
     }
 
     public static void delJdbcDataSource(String name) {
+        log.info("关闭MateDataManage 开始...");
         MateDataManage.Instance.del(name);
+        log.info("关闭MateDataManage 完成!");
+        log.info("关闭JdbcDatabase 开始...");
         JdbcDatabase.Instance.del(name);
+        log.info("关闭JdbcDatabase 完成!");
+        log.info("关闭MyBatisJdbcDatabase 开始...");
         MyBatisJdbcDatabase.Instance.del(name);
+        log.info("关闭MyBatisJdbcDatabase 完成!");
     }
 }

@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.clever.graaljs.core.internal.jackson.JacksonMapperSupport;
 import org.clever.graaljs.data.redis.builtin.adapter.RedisDataSource;
 import org.clever.graaljs.data.redis.builtin.wrap.RedisDatabase;
+import org.clever.graaljs.data.redis.builtin.wrap.support.RedisConfig;
 import org.clever.graaljs.fast.api.config.FastApiConfig;
 import org.clever.graaljs.fast.api.config.MultipleRedisConfig;
 import org.clever.graaljs.fast.api.utils.MergeRedisProperties;
@@ -19,7 +20,9 @@ import org.springframework.core.Ordered;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * 作者：lizw <br/>
@@ -32,6 +35,12 @@ import java.util.List;
 @Configuration
 @Slf4j
 public class MultipleRedisAutoConfigure implements CommandLineRunner {
+    private static final Set<String> IMMUTABLE_DATA_SOURCE_NAMES = new HashSet<>();
+
+    public static boolean isImmutable(String name) {
+        return IMMUTABLE_DATA_SOURCE_NAMES.contains(name);
+    }
+
     private final List<RedisConnectionFactory> redisConnectionFactoryList = new ArrayList<>();
     private final MultipleRedisConfig multipleRedis;
     private final ObjectMapper objectMapper;
@@ -74,8 +83,24 @@ public class MultipleRedisAutoConfigure implements CommandLineRunner {
             RedisDataSource redisDataSource = new RedisDataSource(redisConfig, objectMapper);
             RedisDatabase.Instance.add(name, redisDataSource);
             log.info("初始化 RedisDataSource: {}", name);
+            IMMUTABLE_DATA_SOURCE_NAMES.add(name);
         });
         RedisDatabase.Instance.setDefault(multipleRedis.getDefaultName());
         log.info("默认的 RedisDataSource: {}", multipleRedis.getDefaultName());
+    }
+
+    public static void addRedisDataSource(String name, RedisConfig redisConfig) {
+        RedisDataSource redisDataSource = new RedisDataSource(
+                redisConfig.getRedisProperties(),
+                JacksonMapperSupport.getRedisJacksonMapper().getMapper()
+        );
+        RedisDatabase.Instance.add(name, redisDataSource);
+        log.info("初始化 RedisDataSource: {}", name);
+    }
+
+    public static void delRedisDataSource(String name) {
+        log.info("关闭RedisDatabase 开始...");
+        RedisDatabase.Instance.del(name);
+        log.info("关闭RedisDatabase 完成!");
     }
 }

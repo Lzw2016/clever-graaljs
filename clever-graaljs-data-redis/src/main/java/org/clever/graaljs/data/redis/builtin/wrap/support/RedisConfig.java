@@ -1,5 +1,6 @@
 package org.clever.graaljs.data.redis.builtin.wrap.support;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import org.springframework.boot.autoconfigure.data.redis.RedisProperties;
 
@@ -138,6 +139,7 @@ public class RedisConfig implements Serializable {
         private PoolConfig pool;
     }
 
+    @JsonIgnore
     protected RedisProperties.Pool getPool(PoolConfig poolConfig) {
         if (poolConfig == null) {
             return null;
@@ -155,6 +157,7 @@ public class RedisConfig implements Serializable {
         return pool;
     }
 
+    @JsonIgnore
     public RedisProperties getRedisProperties() {
         RedisProperties redisProperties = new RedisProperties();
         redisProperties.setDatabase(database);
