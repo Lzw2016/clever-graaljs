@@ -2,7 +2,6 @@ package org.clever.graaljs.fast.api.service;
 
 import lombok.extern.slf4j.Slf4j;
 import org.clever.graaljs.core.exception.BusinessException;
-import org.clever.graaljs.core.utils.ExceptionUtils;
 import org.clever.graaljs.core.utils.mapper.JacksonMapper;
 import org.clever.graaljs.data.redis.builtin.wrap.RedisDatabase;
 import org.clever.graaljs.data.redis.builtin.wrap.support.RedisConfig;
@@ -166,13 +165,13 @@ public class RedisManageService {
         try {
             MultipleRedisAutoConfigure.addRedisDataSource(req.getName(), req.getRedisConfig());
         } catch (Exception e) {
-            log.error("更新数据源失败", e);
             // 加入失败，再加入之前的数据源
             MultipleRedisAutoConfigure.addRedisDataSource(
                     oldConfig.getName(),
                     JacksonMapper.getInstance().fromJson(oldConfig.getConfig(), RedisConfig.class)
             );
-            throw ExceptionUtils.unchecked(e);
+            log.error("更新数据源失败", e);
+            throw new BusinessException("更新数据源失败", e);
         }
         // 返回数据
         RedisInfoRes res = new RedisInfoRes();

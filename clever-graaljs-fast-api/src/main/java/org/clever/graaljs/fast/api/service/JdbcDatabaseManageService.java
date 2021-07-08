@@ -170,14 +170,14 @@ public class JdbcDatabaseManageService {
         try {
             MultipleJdbcAutoConfigure.addJdbcDataSource(req.getName(), req.getJdbcConfig(), myBatisMapperSql);
         } catch (Exception e) {
-            log.error("更新数据源失败", e);
             // 加入失败，再加入之前的数据源
             MultipleJdbcAutoConfigure.addJdbcDataSource(
                     oldConfig.getName(),
                     JacksonMapper.getInstance().fromJson(oldConfig.getConfig(), JdbcConfig.class),
                     myBatisMapperSql
             );
-            throw ExceptionUtils.unchecked(e);
+            log.error("更新数据源失败", e);
+            throw new BusinessException("更新数据源失败", e);
         }
         // 返回数据
         JdbcInfoRes res = new JdbcInfoRes();
