@@ -95,13 +95,14 @@ clever:
       min-idle: 2
       max-idle: 16
       max-total: 200
+      test-on-return: true
     mvc:
       prefix: '/api'
       cors:
         allowed-origin-patterns: [ '*' ]
         allowed-methods: [ '*' ]
         allowed-headers: [ '*' ]
-        exposed-headers: [ ]
+        exposed-headers: [ '*' ]
         allow-credentials: true
     multiple-jdbc:
       disable: false

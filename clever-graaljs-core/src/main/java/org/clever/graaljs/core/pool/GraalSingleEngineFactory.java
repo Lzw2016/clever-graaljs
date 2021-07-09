@@ -28,6 +28,7 @@ import java.util.concurrent.atomic.AtomicLong;
  */
 @Slf4j
 public class GraalSingleEngineFactory extends BasePooledObjectFactory<ScriptContextInstance> implements Closeable {
+    // private final static String TEST_SCRIPT_CONTEXT_INSTANCE = "return 1;";
     /**
      * 脚本引擎编号
      */
@@ -137,7 +138,13 @@ public class GraalSingleEngineFactory extends BasePooledObjectFactory<ScriptCont
      */
     @Override
     public boolean validateObject(PooledObject<ScriptContextInstance> p) {
-        // log.debug("validateObject");
+        try {
+            p.getObject().getBindingsMember(COUNTER_NAME);
+            // p.getObject().wrapFunctionObject(TEST_SCRIPT_CONTEXT_INSTANCE).executeVoid();
+        } catch (Exception e) {
+            log.warn("验证 ScriptContextInstance | 结果:验证失败");
+            return false;
+        }
         return true;
     }
 
