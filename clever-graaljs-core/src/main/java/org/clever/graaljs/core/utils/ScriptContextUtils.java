@@ -91,11 +91,10 @@ public class ScriptContextUtils {
         // 沙箱环境控制 - 限制JavaScript的资源使用
         final int limit = NumberUtils.toInt(System.getProperty(GraalConstant.ENGINE_EXECUTED_LIMIT), -1);
         if (limit > 0) {
+            log.info("最大连续执行语句数的限制:limit={}", limit);
             ResourceLimits resourceLimits = ResourceLimits.newBuilder()
                     .statementLimit(limit, null)
-                    .onLimit(event -> {
-                        log.warn("执行脚本超过连续执行语句的最大限制:limit={} | -> {}", limit, event.toString());
-                    })
+                    .onLimit(event -> log.warn("脚本执行超过最大连续执行语句数的限制:limit={} | -> {}", limit, event.toString()))
                     .build();
             contextBuilder.resourceLimits(resourceLimits);
         }

@@ -167,6 +167,35 @@ public class ScriptEngineInstance implements Closeable {
     }
 
     /**
+     * 获取引擎实例状态
+     */
+    public ScriptEngineInstanceStatus getStatus() {
+        ScriptEngineInstanceStatus status = new ScriptEngineInstanceStatus();
+        // 配置
+        status.setMaxTotal(pool.getMaxTotal());
+        status.setMaxIdle(pool.getMaxIdle());
+        status.setMinIdle(pool.getMinIdle());
+        status.setMaxWaitMillis(pool.getMaxWaitMillis());
+        status.setMinEvictableIdleTimeMillis(pool.getMinEvictableIdleTimeMillis());
+        status.setTimeBetweenEvictionRunsMillis(pool.getTimeBetweenEvictionRunsMillis());
+        // 状态
+        status.setNumActive(pool.getNumActive());
+        status.setNumIdle(pool.getNumIdle());
+        status.setNumWaiters(pool.getNumWaiters());
+        status.setActiveTimes(pool.getMeanActiveTimeMillis());
+        status.setIdleTimes(pool.getMeanIdleTimeMillis());
+        status.setWaitTimes(pool.getMeanBorrowWaitTimeMillis());
+        status.setMaxBorrowWaitTimeMillis(pool.getMaxBorrowWaitTimeMillis());
+        status.setCreatedCount(pool.getCreatedCount());
+        status.setBorrowedCount(pool.getBorrowedCount());
+        status.setReturnedCount(pool.getReturnedCount());
+        status.setDestroyedCount(pool.getDestroyedCount());
+        status.setDestroyedByBorrowValidationCount(pool.getDestroyedByBorrowValidationCount());
+        status.setDestroyedByEvictorCount(pool.getDestroyedByEvictorCount());
+        return status;
+    }
+
+    /**
      * 清除池中闲置的引擎对象
      */
     public void clear() {
