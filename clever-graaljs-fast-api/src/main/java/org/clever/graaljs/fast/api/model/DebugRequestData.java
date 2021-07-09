@@ -16,6 +16,7 @@ public class DebugRequestData implements Serializable {
     private String path = "/";
     private List<RequestItem> params = new ArrayList<>();
     private List<RequestItem> headers = new ArrayList<>();
+    private String bodyType = "None";
     private String jsonBody = "";
     private List<FormItem> formBody = new ArrayList<>();
 

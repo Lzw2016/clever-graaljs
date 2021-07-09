@@ -102,7 +102,7 @@ clever:
         allowed-origin-patterns: [ '*' ]
         allowed-methods: [ '*' ]
         allowed-headers: [ '*' ]
-        exposed-headers: [ '*' ]
+        exposed-headers: [ 'set-cookie' ]
         allow-credentials: true
     multiple-jdbc:
       disable: false
