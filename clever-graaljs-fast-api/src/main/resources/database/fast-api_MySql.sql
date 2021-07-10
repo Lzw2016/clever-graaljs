@@ -129,13 +129,35 @@ create index idx_http_api_debug_update_at on http_api_debug (update_at);
 
 
 /* ====================================================================================================================
+    http_global_request_data -- HTTP全局请求数据
+==================================================================================================================== */
+create table http_global_request_data
+(
+    id           bigint       not null auto_increment comment '主键id',
+    namespace    varchar(63)  not null comment '命名空间',
+    title        varchar(127) not null comment '标题',
+    request_data mediumtext   not null comment '请求数据json格式',
+    create_at    datetime(3)  not null default current_timestamp(3) comment '创建时间',
+    update_at    datetime(3) on update current_timestamp(3) comment '更新时间',
+    primary key (id)
+) comment = 'HTTP全局请求数据';
+create index idx_http_global_request_data_namespace on http_global_request_data (namespace);
+create index idx_http_global_request_data_title on http_global_request_data (title);
+create index idx_http_global_request_data_create_at on http_global_request_data (create_at);
+create index idx_http_global_request_data_update_at on http_global_request_data (update_at);
+/*------------------------------------------------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------------------------------------------------*/
+
+
+/* ====================================================================================================================
     TODO timed_task -- 定时任务
 ==================================================================================================================== */
 create table timed_task
 (
-    id                  bigint          not null        auto_increment                          comment '主键id',
-    namespace           varchar(63)     not null                                                comment '命名空间',
-    file_resource_id    bigint          not null                                                comment '资源文件id',
+    id                  bigint          not null auto_increment comment '主键id',
+    namespace           varchar(63)     not null comment '命名空间',
+    file_resource_id    bigint          not null comment '资源文件id',
     start_time          datetime(3)                                                             comment '开始时间',
     end_time            datetime(3)                                                             comment '结束时间',
     cron                varchar(255)    not null                                                comment '触发cron表达式',
