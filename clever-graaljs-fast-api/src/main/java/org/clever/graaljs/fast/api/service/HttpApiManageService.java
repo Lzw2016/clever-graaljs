@@ -8,6 +8,7 @@ import org.clever.graaljs.fast.api.config.FastApiConfig;
 import org.clever.graaljs.fast.api.dto.request.AddDirReq;
 import org.clever.graaljs.fast.api.dto.request.AddHttpApiDebugReq;
 import org.clever.graaljs.fast.api.dto.request.AddHttpApiReq;
+import org.clever.graaljs.fast.api.dto.request.UpdateHttpApiReq;
 import org.clever.graaljs.fast.api.dto.response.AddHttpApiRes;
 import org.clever.graaljs.fast.api.dto.response.ApiFileResourceRes;
 import org.clever.graaljs.fast.api.dto.response.DelHttpApiRes;
@@ -70,6 +71,7 @@ public class HttpApiManageService {
             "(:namespace, :fileResourceId, :requestMapping, :requestMethod, :disableRequest)";
     private static final String DEL_HTTP_API = "delete from http_api where namespace=? and file_resource_id in (%s)";
     private static final String QUERY_HTTP_API = "select * from http_api where namespace=? and file_resource_id in (%s)";
+    private static final String UPDATE_HTTP_API = "update http_api set request_method=?, request_mapping=?, disable_request=? where namespace=? and id=?";
 
     /**
      * FileResource 命名空间
@@ -218,5 +220,20 @@ public class HttpApiManageService {
         // 删除缓存
         httpApiList.forEach(httpApi -> httpApiFileResourceCacheService.delCache(httpApi.getRequestMapping()));
         return res;
+    }
+
+    @Transactional
+    public HttpApi updateHttpApi(UpdateHttpApiReq req) {
+        // 校验接口是否存在
+        Integer count = jdbcTemplate.queryForObject(HTTP_API_EXISTS, Integer.class, namespace, req.getRequestMethod(), req.getRequestMapping());
+        if (count != null && count > 0) {
+            throw new BusinessException("接口路径冲突");
+        }
+        // 更新数据
+        count = jdbcTemplate.update(UPDATE_HTTP_API, req.getRequestMethod(), req.getRequestMapping(), req.getDisableRequest(), namespace, req.getId());
+        if (count <= 0) {
+            throw new BusinessException("数据不存在");
+        }
+        return getHttpApi(req.getId());
     }
 }

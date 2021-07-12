@@ -8,11 +8,11 @@ public interface EnumConstant {
     /**
      * 禁用http请求：0-启用，1-禁用
      */
-    Integer DISABLE_REQUEST_0 = 0;
+    int DISABLE_REQUEST_0 = 0;
     /**
      * 禁用http请求：0-启用，1-禁用
      */
-    Integer DISABLE_REQUEST_1 = 1;
+    int DISABLE_REQUEST_1 = 1;
 
     /**
      * 数据类型：0-文件夹，1-文件
