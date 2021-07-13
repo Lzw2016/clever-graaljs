@@ -27,6 +27,7 @@ public class GlobalController {
 
     @GetMapping
     public String indexPage() {
+        // noinspection SpringMVCViewInspection
         return "/webjars/fast-api/index.html";
     }
 

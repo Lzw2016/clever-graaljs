@@ -30,4 +30,3 @@ target
 pom.xml.versionsBackup
 httpCache
 logs
-/clever-graaljs-fast-api/src/main/resources/META-INF/resources/webjars/fast-api/index.html
