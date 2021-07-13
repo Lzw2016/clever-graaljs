@@ -51,7 +51,11 @@ spring:
     time-zone: GMT+8
   web:
     resources:
-      static-locations: [ 'classpath:/static/', 'classpath:/resources/' ]
+      static-locations:
+        - 'classpath:/META-INF/resources/'
+        - 'classpath:/resources/'
+        - 'classpath:/static/'
+        - 'classpath:/public/'
       chain:
         cache: false
         compressed: true
