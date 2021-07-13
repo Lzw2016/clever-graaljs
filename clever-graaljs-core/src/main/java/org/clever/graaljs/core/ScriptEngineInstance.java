@@ -142,8 +142,11 @@ public class ScriptEngineInstance implements Closeable {
      * 将引擎对象返还到池中。对象必须是从 borrowObject 方法获取到的
      */
     private void returnObject(ScriptContextInstance obj) {
-        obj.getContext().resetLimits();
-        pool.returnObject(obj);
+        try {
+            obj.getContext().resetLimits();
+        } finally {
+            pool.returnObject(obj);
+        }
     }
 
     /**
