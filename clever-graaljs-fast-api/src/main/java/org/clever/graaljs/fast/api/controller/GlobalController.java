@@ -4,9 +4,10 @@ import org.clever.graaljs.core.ScriptEngineInstance;
 import org.clever.graaljs.core.ScriptEngineInstanceStatus;
 import org.clever.graaljs.fast.api.config.FastApiConfig;
 import org.clever.graaljs.fast.api.model.FastApiGlobalEnv;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
 
@@ -15,7 +16,7 @@ import javax.annotation.Resource;
  * 创建时间：2021/07/05 13:37 <br/>
  */
 @RequestMapping("/fast_api")
-@RestController
+@Controller
 public class GlobalController {
     private static final String VERSION = "0.0.1-SNAPSHOT";
 
@@ -24,6 +25,12 @@ public class GlobalController {
     @Resource
     private ScriptEngineInstance scriptEngineInstance;
 
+    @GetMapping
+    public String indexPage() {
+        return "/webjars/fast-api/index.html";
+    }
+
+    @ResponseBody
     @GetMapping("/global_env")
     public FastApiGlobalEnv getGlobalEnv() {
         FastApiGlobalEnv env = new FastApiGlobalEnv();
@@ -33,6 +40,7 @@ public class GlobalController {
         return env;
     }
 
+    @ResponseBody
     @GetMapping("/script_engine_status")
     public ScriptEngineInstanceStatus getStatus() {
         return scriptEngineInstance.getStatus();
