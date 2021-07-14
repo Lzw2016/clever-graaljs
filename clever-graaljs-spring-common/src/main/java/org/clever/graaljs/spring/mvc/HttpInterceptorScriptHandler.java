@@ -203,8 +203,18 @@ public abstract class HttpInterceptorScriptHandler implements HandlerInterceptor
     /**
      * 序列化返回对象
      */
-    protected String serializeRes(Object res) {
+    protected String serializeRes(Object res, boolean pretty) {
+        if (pretty) {
+            return JacksonMapperSupport.getHttpApiJacksonMapper().toPrettyJson(res);
+        }
         return JacksonMapperSupport.getHttpApiJacksonMapper().toJson(res);
+    }
+
+    /**
+     * 序列化返回对象
+     */
+    protected String serializeRes(Object res) {
+        return serializeRes(res, false);
     }
 
     /**
@@ -257,16 +267,16 @@ public abstract class HttpInterceptorScriptHandler implements HandlerInterceptor
             response.setHeader(USE_SCRIPT_HANDLER_HEAD, scriptInfo.getValue1());
             String resJson = scriptEngineInstance.wrapFunctionAndEval(scriptInfo.getValue2(), scriptObject -> {
                 Object res = doHandle(request, response, scriptObject);
-                if (apiDebugReq.isDebug()) {
-                    apiDebugRes.setData(res);
-                }
                 // 3.序列化返回数据
                 startTime3.setValue1(System.currentTimeMillis());
                 if (!resIsEmpty(res) && !response.isCommitted()) {
-                    return serializeRes(res);
+                    return serializeRes(res, apiDebugReq.isDebug());
                 }
                 return null;
             });
+            if (apiDebugReq.isDebug()) {
+                apiDebugRes.setData(resJson);
+            }
             if (resJson != null && !response.isCommitted() && !apiDebugReq.isDebug()) {
                 response.setContentType(CONTENT_TYPE);
                 response.getWriter().print(resJson);

@@ -71,6 +71,20 @@ public class JacksonMapper {
     }
 
     /**
+     * Object可以是POJO，也可以是Collection或数组。 如果对象为Null, 返回"null". 如果集合为空集合, 返回"[]".<br/>
+     *
+     * @param object 需要序列化的对象
+     * @return 序列化后的Json字符串
+     */
+    public String toPrettyJson(Object object) {
+        try {
+            return mapper.writerWithDefaultPrettyPrinter().writeValueAsString(object);
+        } catch (IOException e) {
+            throw ExceptionUtils.unchecked(e);
+        }
+    }
+
+    /**
      * 输出JSON格式数据.
      */
     public String toJsonP(String functionName, Object object) {
