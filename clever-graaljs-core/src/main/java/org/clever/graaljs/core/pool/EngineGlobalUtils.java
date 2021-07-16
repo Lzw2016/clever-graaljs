@@ -5,6 +5,7 @@ import org.clever.graaljs.core.builtin.wrap.HttpUtils;
 import org.clever.graaljs.core.builtin.wrap.PinyinUtils;
 import org.clever.graaljs.core.builtin.wrap.TreeUtils;
 import org.clever.graaljs.core.builtin.wrap.ZxingUtils;
+import org.clever.graaljs.core.constant.*;
 import org.clever.graaljs.core.internal.GraalInterop;
 import org.clever.graaljs.core.internal.GraalLoggerFactory;
 import org.clever.graaljs.core.internal.LoggerConsole;
@@ -23,6 +24,14 @@ public class EngineGlobalUtils {
         contextMap.put("print", LoggerConsole.Instance);
         contextMap.put("LoggerFactory", GraalLoggerFactory.Instance);
         contextMap.put("Interop", GraalInterop.Instance);
+        // 枚举值
+        contextMap.put("HttpMethod", HttpEnum.HttpMethod.Instance);
+        contextMap.put("Charsets", CharsetsEnum.Charsets.Instance);
+        contextMap.put("RoundingMode", RoundingModeEnum.RoundingMode.Instance);
+        contextMap.put("HanyuPinyinCaseType", PinyinUtilsEnum.HanyuPinyinCaseType.Instance);
+        contextMap.put("HanyuPinyinToneType", PinyinUtilsEnum.HanyuPinyinToneType.Instance);
+        contextMap.put("HanyuPinyinVCharType", PinyinUtilsEnum.HanyuPinyinVCharType.Instance);
+        contextMap.put("BarcodeFormat", BarcodeFormatEnum.BarcodeFormat.Instance);
         // 通用
         contextMap.put("AssertUtils", AssertUtils.Instance);
         contextMap.put("CommonUtils", CommonUtils.Instance);

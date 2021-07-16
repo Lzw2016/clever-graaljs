@@ -1,5 +1,7 @@
 const log = LoggerFactory.getLogger("logger");
 
+log.info("HttpMethod --> {}", HttpMethod.POST);
+
 const url1 = "https://3xsw4ap8wah59.cfc-execute.bj.baidubce.com/api/amis-mock/sample";
 const res1 = HttpUtils.getStr(url1, {keyWord: "轮椅"});
 log.info("res1  -> {}", res1);
