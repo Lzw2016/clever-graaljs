@@ -1,6 +1,8 @@
 package org.clever.graaljs.core.utils.mapper;
 
 import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.core.util.DefaultIndenter;
+import com.fasterxml.jackson.core.util.DefaultPrettyPrinter;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
@@ -27,10 +29,18 @@ import java.util.TimeZone;
  */
 @Slf4j
 public class JacksonMapper {
+    private static final String INDENT = "    ";
+    private static final DefaultPrettyPrinter PRETTY_PRINTER;
     private static final JacksonMapper Instance;
 
     static {
         Instance = new JacksonMapper();
+        DefaultPrettyPrinter.Indenter indenter = new DefaultIndenter(INDENT, DefaultIndenter.SYS_LF);
+        PRETTY_PRINTER = new DefaultPrettyPrinter();
+        PRETTY_PRINTER.indentObjectsWith(indenter);
+        PRETTY_PRINTER.indentArraysWith(indenter);
+        PRETTY_PRINTER.withObjectIndenter(indenter);
+        PRETTY_PRINTER.withArrayIndenter(indenter);
     }
 
     /**
@@ -78,7 +88,7 @@ public class JacksonMapper {
      */
     public String toPrettyJson(Object object) {
         try {
-            return mapper.writerWithDefaultPrettyPrinter().writeValueAsString(object);
+            return mapper.writer(PRETTY_PRINTER).writeValueAsString(object);
         } catch (IOException e) {
             throw ExceptionUtils.unchecked(e);
         }
