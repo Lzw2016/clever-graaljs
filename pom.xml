@@ -31,6 +31,10 @@
             <url>http://maven.aliyun.com/nexus/content/groups/public/</url>
         </repository>
         <repository>
+            <id>nexus-central-1</id>
+            <url>https://repo1.maven.org/maven2/</url>
+        </repository>
+        <repository>
             <id>nexus-central-2</id>
             <url>http://central.maven.org/maven2/</url>
         </repository>
@@ -71,7 +75,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <clever-dynamic-sql.version>1.0.0-SNAPSHOT</clever-dynamic-sql.version>
-        <graalvm.version>21.1.0</graalvm.version>
+        <graalvm.version>21.2.0</graalvm.version>
         <schemacrawler.version>16.14.6</schemacrawler.version>
     </properties>
 

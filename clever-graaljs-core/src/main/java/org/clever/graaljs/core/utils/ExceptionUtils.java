@@ -3,7 +3,6 @@ package org.clever.graaljs.core.utils;
 import org.apache.commons.lang3.StringUtils;
 import org.graalvm.polyglot.PolyglotException;
 import org.graalvm.polyglot.SourceSection;
-import org.graalvm.polyglot.impl.AbstractPolyglotImpl;
 
 /**
  * 作者：lizw <br/>
@@ -41,34 +40,30 @@ public class ExceptionUtils {
         if (ex == null) {
             return StringUtils.EMPTY;
         }
-        Object obj = ReflectionsUtils.getFieldValue(ex, "impl");
-        if (obj instanceof AbstractPolyglotImpl.AbstractExceptionImpl) {
-            AbstractPolyglotImpl.AbstractExceptionImpl impl = (AbstractPolyglotImpl.AbstractExceptionImpl) obj;
-            SourceSection section = impl.getSourceLocation();
-            if (section != null && section.isAvailable() && section.getSource() != null && section.getSource().getCharacters() != null) {
-                final String code = section.getSource().getCharacters().toString();
-                final String[] codeLines = code.split("\n");
-                final int startLine = section.getStartLine();
-                final int endLine = section.getEndLine();
-                final int width = String.valueOf(endLine).length();
-                final StringBuilder sb = new StringBuilder();
-                sb.append(ex.getMessage()).append("\n");
-                if (startLine == endLine) {
-                    sb.append("错误位置: 第").append(startLine).append("行 --->\n");
-                } else {
-                    sb.append("错误位置: ").append(startLine).append("行 ~ ").append(endLine).append("行 --->\n");
-                }
-                for (int i = startLine - 2; i < endLine + 1; i++) {
-                    if (i >= 0 && codeLines.length > i) {
-                        sb.append(StringUtils.rightPad(String.valueOf(i + 1), width)).append("|").append(codeLines[i]).append("\n");
-                    }
-                }
-                if (StringUtils.isNotBlank(section.getCharacters())) {
-
-                    sb.append("<--- 调用代码: ").append(section.getCharacters());
-                }
-                return sb.toString();
+        SourceSection section = ex.getSourceLocation();
+        if (section != null && section.isAvailable() && section.getSource() != null && section.getSource().getCharacters() != null) {
+            final String code = section.getSource().getCharacters().toString();
+            final String[] codeLines = code.split("\n");
+            final int startLine = section.getStartLine();
+            final int endLine = section.getEndLine();
+            final int width = String.valueOf(endLine).length();
+            final StringBuilder sb = new StringBuilder();
+            sb.append(ex.getMessage()).append("\n");
+            if (startLine == endLine) {
+                sb.append("错误位置: 第").append(startLine).append("行 --->\n");
+            } else {
+                sb.append("错误位置: ").append(startLine).append("行 ~ ").append(endLine).append("行 --->\n");
             }
+            for (int i = startLine - 2; i < endLine + 1; i++) {
+                if (i >= 0 && codeLines.length > i) {
+                    sb.append(StringUtils.rightPad(String.valueOf(i + 1), width)).append("|").append(codeLines[i]).append("\n");
+                }
+            }
+            if (StringUtils.isNotBlank(section.getCharacters())) {
+
+                sb.append("<--- 调用代码: ").append(section.getCharacters());
+            }
+            return sb.toString();
         }
         return StringUtils.EMPTY;
     }
