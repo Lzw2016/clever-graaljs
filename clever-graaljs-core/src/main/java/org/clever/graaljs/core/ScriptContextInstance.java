@@ -92,6 +92,8 @@ public class ScriptContextInstance implements Closeable {
         return context.getBindings(GraalConstant.Js_Language_Id).getMember(identifier);
     }
 
+    // TODO context.parse()
+
     /**
      * 把脚本代码包装成函数对象
      *

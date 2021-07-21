@@ -6,6 +6,7 @@ import org.apache.commons.pool2.impl.GenericObjectPoolConfig;
 import org.clever.graaljs.core.pool.GraalSingleEngineFactory;
 import org.clever.graaljs.core.utils.Assert;
 import org.clever.graaljs.core.utils.ExceptionUtils;
+import org.clever.graaljs.core.utils.ScriptEngineUtils;
 import org.graalvm.polyglot.Engine;
 
 import java.io.Closeable;
@@ -36,9 +37,7 @@ public class ScriptEngineInstance implements Closeable {
      * @param global          脚本引擎共享的全局遍历global
      */
     public ScriptEngineInstance(final ScriptEngineConfig config, Set<Class<?>> denyAccessClass, Map<String, Object> contextMap, Map<String, Object> global) {
-        Engine engine = Engine.newBuilder()
-                .useSystemProperties(true)
-                .build();
+        Engine engine = ScriptEngineUtils.creatEngine();
         this.engineFactory = new GraalSingleEngineFactory(engine, denyAccessClass, contextMap, global);
         this.pool = new GenericObjectPool<>(engineFactory, config.toGenericObjectPoolConfig());
     }
@@ -49,9 +48,7 @@ public class ScriptEngineInstance implements Closeable {
      * @param contextMap      脚本引擎共有的全局变量
      */
     public ScriptEngineInstance(final ScriptEngineConfig config, Set<Class<?>> denyAccessClass, Map<String, Object> contextMap) {
-        Engine engine = Engine.newBuilder()
-                .useSystemProperties(true)
-                .build();
+        Engine engine = ScriptEngineUtils.creatEngine();
         this.engineFactory = new GraalSingleEngineFactory(engine, denyAccessClass, contextMap);
         this.pool = new GenericObjectPool<>(engineFactory, config.toGenericObjectPoolConfig());
     }
@@ -61,9 +58,7 @@ public class ScriptEngineInstance implements Closeable {
      * @param denyAccessClass 不允许脚本访问的Class
      */
     public ScriptEngineInstance(final ScriptEngineConfig config, Set<Class<?>> denyAccessClass) {
-        Engine engine = Engine.newBuilder()
-                .useSystemProperties(true)
-                .build();
+        Engine engine = ScriptEngineUtils.creatEngine();
         this.engineFactory = new GraalSingleEngineFactory(engine, denyAccessClass);
         this.pool = new GenericObjectPool<>(engineFactory, config.toGenericObjectPoolConfig());
     }
@@ -72,9 +67,7 @@ public class ScriptEngineInstance implements Closeable {
      * @param config ScriptContext对象池配置
      */
     public ScriptEngineInstance(final ScriptEngineConfig config) {
-        Engine engine = Engine.newBuilder()
-                .useSystemProperties(true)
-                .build();
+        Engine engine = ScriptEngineUtils.creatEngine();
         this.engineFactory = new GraalSingleEngineFactory(engine);
         this.pool = new GenericObjectPool<>(engineFactory, config.toGenericObjectPoolConfig());
     }
@@ -86,9 +79,7 @@ public class ScriptEngineInstance implements Closeable {
      * @param global          脚本引擎共享的全局遍历global
      */
     public ScriptEngineInstance(final GenericObjectPoolConfig<ScriptContextInstance> config, Set<Class<?>> denyAccessClass, Map<String, Object> contextMap, Map<String, Object> global) {
-        Engine engine = Engine.newBuilder()
-                .useSystemProperties(true)
-                .build();
+        Engine engine = ScriptEngineUtils.creatEngine();
         this.engineFactory = new GraalSingleEngineFactory(engine, denyAccessClass, contextMap, global);
         this.pool = new GenericObjectPool<>(engineFactory, config);
     }
@@ -99,9 +90,7 @@ public class ScriptEngineInstance implements Closeable {
      * @param contextMap      脚本引擎共有的全局变量
      */
     public ScriptEngineInstance(final GenericObjectPoolConfig<ScriptContextInstance> config, Set<Class<?>> denyAccessClass, Map<String, Object> contextMap) {
-        Engine engine = Engine.newBuilder()
-                .useSystemProperties(true)
-                .build();
+        Engine engine = ScriptEngineUtils.creatEngine();
         this.engineFactory = new GraalSingleEngineFactory(engine, denyAccessClass, contextMap);
         this.pool = new GenericObjectPool<>(engineFactory, config);
     }
@@ -111,9 +100,7 @@ public class ScriptEngineInstance implements Closeable {
      * @param denyAccessClass 不允许脚本访问的Class
      */
     public ScriptEngineInstance(final GenericObjectPoolConfig<ScriptContextInstance> config, Set<Class<?>> denyAccessClass) {
-        Engine engine = Engine.newBuilder()
-                .useSystemProperties(true)
-                .build();
+        Engine engine = ScriptEngineUtils.creatEngine();
         this.engineFactory = new GraalSingleEngineFactory(engine, denyAccessClass);
         this.pool = new GenericObjectPool<>(engineFactory, config);
     }
@@ -122,9 +109,7 @@ public class ScriptEngineInstance implements Closeable {
      * @param config ScriptContext对象池配置
      */
     public ScriptEngineInstance(final GenericObjectPoolConfig<ScriptContextInstance> config) {
-        Engine engine = Engine.newBuilder()
-                .useSystemProperties(true)
-                .build();
+        Engine engine = ScriptEngineUtils.creatEngine();
         this.engineFactory = new GraalSingleEngineFactory(engine);
         this.pool = new GenericObjectPool<>(engineFactory, config);
     }
@@ -243,6 +228,7 @@ public class ScriptEngineInstance implements Closeable {
     }
 
     // --------------------------------------------------------------------------------------------------- Script
+    // TODO context.parse()
 
     /**
      * 把脚本代码包装成函数对象(预加载脚本代码)
