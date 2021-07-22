@@ -443,29 +443,13 @@ public class JdbcDataSource extends AbstractDataSource {
      * @param sql              sql脚本，参数格式[:param]
      * @param paginationMap    分页配置(支持排序)
      * @param paramMap         参数，参数格式[:param]
-     * @param countQuery       是否要执行count查询(可选)
      * @param underlineToCamel 下划线转驼峰
      */
-    public IPage<Map<String, Object>> queryByPage(String sql, Map<String, Object> paginationMap, Map<String, Object> paramMap, boolean countQuery, boolean underlineToCamel) {
+    public IPage<Map<String, Object>> queryByPage(String sql, Map<String, Object> paginationMap, Map<String, Object> paramMap, boolean underlineToCamel) {
         paginationMap = InteropScriptToJavaUtils.Instance.convertMap(paginationMap);
         QueryByPage pagination = getQueryByPage(paginationMap);
         paramMap = InteropScriptToJavaUtils.Instance.convertMap(paramMap);
-        return delegate.queryByPage(sql, pagination, paramMap, countQuery, underlineToCamel);
-    }
-
-    /**
-     * 分页查询(支持排序)，返回分页对象
-     *
-     * @param sql           sql脚本，参数格式[:param]
-     * @param paginationMap 分页配置(支持排序)
-     * @param paramMap      参数，参数格式[:param]
-     * @param countQuery    是否要执行count查询(可选)
-     */
-    public IPage<Map<String, Object>> queryByPage(String sql, Map<String, Object> paginationMap, Map<String, Object> paramMap, boolean countQuery) {
-        paginationMap = InteropScriptToJavaUtils.Instance.convertMap(paginationMap);
-        QueryByPage pagination = getQueryByPage(paginationMap);
-        paramMap = InteropScriptToJavaUtils.Instance.convertMap(paramMap);
-        return delegate.queryByPage(sql, pagination, paramMap, countQuery);
+        return delegate.queryByPage(sql, pagination, paramMap, underlineToCamel);
     }
 
     /**

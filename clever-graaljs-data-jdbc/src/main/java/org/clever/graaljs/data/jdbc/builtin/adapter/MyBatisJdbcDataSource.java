@@ -314,19 +314,6 @@ public class MyBatisJdbcDataSource extends AbstractDataSource {
      * @param sqlId      SqlID
      * @param pagination 分页配置(支持排序)
      * @param paramMap   查询参数
-     * @param countQuery 是否要执行count查询(可选)
-     */
-    public IPage<Map<String, Object>> queryByPage(String sqlId, QueryByPage pagination, Map<String, Object> paramMap, boolean countQuery) {
-        TupleTow<String, Map<String, Object>> sqlInfo = getSql(sqlId, paramMap);
-        return jdbcDataSource.queryByPage(sqlInfo.getValue1(), pagination, sqlInfo.getValue2(), countQuery, true);
-    }
-
-    /**
-     * 分页查询(支持排序)，返回分页对象
-     *
-     * @param sqlId      SqlID
-     * @param pagination 分页配置(支持排序)
-     * @param paramMap   查询参数
      */
     public IPage<Map<String, Object>> queryByPage(String sqlId, QueryByPage pagination, Map<String, Object> paramMap) {
         TupleTow<String, Map<String, Object>> sqlInfo = getSql(sqlId, paramMap);
@@ -341,7 +328,7 @@ public class MyBatisJdbcDataSource extends AbstractDataSource {
      * @param countQuery 是否要执行count查询(可选)
      */
     public IPage<Map<String, Object>> queryByPage(String sqlId, QueryByPage pagination, boolean countQuery) {
-        return jdbcDataSource.queryByPage(getSql(sqlId), pagination, Collections.emptyMap(), countQuery, true);
+        return jdbcDataSource.queryByPage(getSql(sqlId), pagination, Collections.emptyMap(), true);
     }
 
     /**
@@ -351,7 +338,7 @@ public class MyBatisJdbcDataSource extends AbstractDataSource {
      * @param pagination 分页配置(支持排序)
      */
     public IPage<Map<String, Object>> queryByPage(String sqlId, QueryByPage pagination) {
-        return jdbcDataSource.queryByPage(getSql(sqlId), pagination, Collections.emptyMap(), true, true);
+        return jdbcDataSource.queryByPage(getSql(sqlId), pagination, Collections.emptyMap(), true);
     }
 
     /**

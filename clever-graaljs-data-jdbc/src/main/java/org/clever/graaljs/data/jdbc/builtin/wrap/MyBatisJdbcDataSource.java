@@ -316,22 +316,6 @@ public class MyBatisJdbcDataSource extends AbstractDataSource {
      * 分页查询(支持排序)，返回分页对象
      *
      * @param sqlId         SqlID
-     * @param paramMap      查询参数
-     * @param paginationMap 分页配置(支持排序)
-     * @param countQuery    是否要执行count查询(可选)
-     */
-    public IPage<Map<String, Object>> queryByPage(String sqlId, Map<String, Object> paginationMap, Map<String, Object> paramMap, boolean countQuery) {
-        paginationMap = InteropScriptToJavaUtils.Instance.convertMap(paginationMap);
-        QueryByPage pagination = getQueryByPage(paginationMap);
-        paramMap = InteropScriptToJavaUtils.Instance.convertMap(paramMap);
-        IPage<Map<String, Object>> page = delegate.queryByPage(sqlId, pagination, paramMap, countQuery);
-        return getProxyObjectPage(page);
-    }
-
-    /**
-     * 分页查询(支持排序)，返回分页对象
-     *
-     * @param sqlId         SqlID
      * @param paginationMap 分页配置(支持排序)
      * @param paramMap      查询参数
      */

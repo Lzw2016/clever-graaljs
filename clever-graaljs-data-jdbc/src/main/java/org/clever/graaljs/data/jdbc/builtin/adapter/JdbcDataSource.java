@@ -650,16 +650,15 @@ public class JdbcDataSource extends AbstractDataSource {
      * @param sql              sql脚本，参数格式[:param]
      * @param pagination       分页配置(支持排序)
      * @param paramMap         参数，参数格式[:param]
-     * @param countQuery       是否要执行count查询(可选)
      * @param underlineToCamel 下划线转驼峰
      */
-    public IPage<Map<String, Object>> queryByPage(String sql, QueryByPage pagination, Map<String, Object> paramMap, boolean countQuery, boolean underlineToCamel) {
+    public IPage<Map<String, Object>> queryByPage(String sql, QueryByPage pagination, Map<String, Object> paramMap, boolean underlineToCamel) {
         Assert.hasText(sql, "sql不能为空");
         Assert.notNull(pagination, "分页配置不能为空");
         sql = StringUtils.trim(sql);
         Page<Map<String, Object>> page = new Page<>(pagination.getPageNo(), Math.min(pagination.getPageSize(), Max_Page_Size));
         // 执行 count 查询
-        if (countQuery) {
+        if (pagination.isSearchCount()) {
             long total = queryCount(sql, paramMap);
             page.setTotal(total);
             // 溢出总页数，设置最后一页
@@ -703,21 +702,9 @@ public class JdbcDataSource extends AbstractDataSource {
      * @param sql        sql脚本，参数格式[:param]
      * @param pagination 分页配置(支持排序)
      * @param paramMap   参数，参数格式[:param]
-     * @param countQuery 是否要执行count查询(可选)
-     */
-    public IPage<Map<String, Object>> queryByPage(String sql, QueryByPage pagination, Map<String, Object> paramMap, boolean countQuery) {
-        return queryByPage(sql, pagination, paramMap, countQuery, Default_UnderlineToCamel);
-    }
-
-    /**
-     * 分页查询(支持排序)，返回分页对象
-     *
-     * @param sql        sql脚本，参数格式[:param]
-     * @param pagination 分页配置(支持排序)
-     * @param paramMap   参数，参数格式[:param]
      */
     public IPage<Map<String, Object>> queryByPage(String sql, QueryByPage pagination, Map<String, Object> paramMap) {
-        return queryByPage(sql, pagination, paramMap, true, Default_UnderlineToCamel);
+        return queryByPage(sql, pagination, paramMap, Default_UnderlineToCamel);
     }
 
     /**
