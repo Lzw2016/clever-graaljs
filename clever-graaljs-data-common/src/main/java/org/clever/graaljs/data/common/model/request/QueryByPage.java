@@ -19,9 +19,9 @@ public class QueryByPage extends QueryBySort {
     /**
      * 每页的数据量 - 最大值
      */
-    private static final int PAGE_SIZE_MAX = 1000;
+    public static final int PAGE_SIZE_MAX = 1000;
     /**
-     * 每页的数据量(1 <= pageSize <= 100)
+     * 每页的数据量(1 <= pageSize <= 1000)
      */
     private int pageSize = 10;
 

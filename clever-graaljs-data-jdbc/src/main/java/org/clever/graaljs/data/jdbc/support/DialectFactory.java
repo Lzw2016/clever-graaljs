@@ -53,7 +53,7 @@ public class DialectFactory {
      * @param dialectClazz 自定义方言实现类
      * @return ignore
      */
-    private static IDialect getDialect(DbType dbType, String dialectClazz) {
+    public static IDialect getDialect(DbType dbType, String dialectClazz) {
         IDialect dialect = DIALECT_CACHE.get(dbType.getDb());
         if (null == dialect) {
             // 自定义方言
