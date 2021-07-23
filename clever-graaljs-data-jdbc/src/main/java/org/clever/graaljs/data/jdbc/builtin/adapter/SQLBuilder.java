@@ -1,6 +1,8 @@
 package org.clever.graaljs.data.jdbc.builtin.adapter;
 
 import org.apache.commons.lang3.StringUtils;
+import org.clever.graaljs.core.utils.StrFormatter;
+import org.clever.graaljs.core.utils.TupleTow;
 import org.clever.graaljs.data.common.model.request.QueryByPage;
 import org.clever.graaljs.data.jdbc.dialects.IDialect;
 import org.clever.graaljs.data.jdbc.support.DialectFactory;
@@ -22,24 +24,31 @@ public class SQLBuilder {
     public static final String DESC = "DESC";
 
     /**
-     * 创建一个Select构建器
+     * 创建一个Select SQL构建器
      */
     public static SelectBuilder newSelectBuilder() {
         return new SelectBuilder();
     }
 
     /**
-     * 创建一个Update构建器
+     * 创建一个Update SQL构建器
      */
     public static UpdateBuilder newUpdateBuilder() {
         return new UpdateBuilder();
     }
 
     /**
-     * 创建一个Insert构建器
+     * 创建一个Insert SQL构建器
      */
     public static InsertBuilder newInsertBuilder() {
         return new InsertBuilder();
+    }
+
+    /**
+     * 创建一个Delete SQL构建器
+     */
+    public static DeleteBuilder newDeleteBuilder() {
+        return new DeleteBuilder();
     }
 
     /**
@@ -59,6 +68,35 @@ public class SQLBuilder {
         }
     }
 
+    /**
+     * 获取Update Sql中set段
+     *
+     * @param fields            字段值
+     * @param camelToUnderscore 是否使用驼峰转下划线
+     */
+    private static TupleTow<String, Map<String, Object>> getUpdateSql(Map<String, Object> fields, boolean camelToUnderscore) {
+        Map<String, Object> paramMap = new HashMap<>(fields.size());
+        StringBuilder sb = new StringBuilder();
+        for (Map.Entry<String, ?> field : fields.entrySet()) {
+            String fieldName = field.getKey();
+            Object value = field.getValue();
+            String fieldParam = "set_" + fieldName;
+            if (sb.length() > 0) {
+                sb.append(SPACE);
+            }
+            sb.append(getFieldName(fieldName, camelToUnderscore)).append("=:").append(fieldParam).append(COMMA);
+            paramMap.put(fieldParam, value);
+        }
+        return TupleTow.creat(sb.toString(), paramMap);
+    }
+
+    private static String getFieldName(String fieldName, boolean camelToUnderscore) {
+        if (!camelToUnderscore) {
+            return fieldName;
+        }
+        return StrFormatter.camelToUnderline(fieldName);
+    }
+
     public static class SelectBuilder {
         /**
          * 数据库类型(跟分页有关系)
@@ -73,7 +111,7 @@ public class SQLBuilder {
          */
         private Integer offset;
         /**
-         * 查询参数
+         * sql参数
          */
         private final Map<String, Object> paramMap = new HashMap<>();
         /**
@@ -112,7 +150,7 @@ public class SQLBuilder {
          * 获取 sql
          */
         public String buildSql() {
-            // select <select> from <from> where <where> group by <groupBy> having <having> order by <orderBy>
+            // SELECT <select> FROM <from> WHERE <where> GROUP BY <groupBy> HAVING <having> ORDER BY <orderBy>
             StringBuilder sql = new StringBuilder();
             delLast(this.select, COMMA);
             delLast(this.from, COMMA);
@@ -799,12 +837,287 @@ public class SQLBuilder {
     }
 
     public static class UpdateBuilder {
+        /**
+         * sql参数
+         */
+        private final Map<String, Object> paramMap = new HashMap<>();
+        /**
+         * 更新表
+         */
+        private String table = "";
+        /**
+         * 更新字段
+         */
+        private final StringBuilder fields = new StringBuilder();
+        /**
+         * 更新条件
+         */
+        private final StringBuilder where = new StringBuilder();
+
         private UpdateBuilder() {
+        }
+
+        /**
+         * 获取 sql
+         */
+        public String buildSql() {
+            // UPDATE <table> SET <fields> WHERE <where>
+            StringBuilder sql = new StringBuilder();
+            delLast(this.fields, COMMA);
+            delLast(this.where, WHERE_AND);
+            final String fields = StringUtils.trimToEmpty(this.fields.toString());
+            final String where = StringUtils.trimToEmpty(this.where.toString());
+            sql.append("UPDATE ").append(this.table).append(SPACE);
+            if (StringUtils.isNotBlank(fields)) {
+                sql.append("SET ").append(fields).append(SPACE);
+            }
+            if (StringUtils.isNotBlank(where)) {
+                sql.append("WHERE ").append(where).append(SPACE);
+            }
+            return StringUtils.trimToEmpty(sql.toString());
+        }
+
+        /**
+         * 获取参数
+         */
+        public Map<String, Object> getParams() {
+            return paramMap;
+        }
+
+        /**
+         * 设置更新的表
+         */
+        public UpdateBuilder setTable(String table, boolean bool) {
+            if (bool) {
+                this.table = table;
+            }
+            return this;
+        }
+
+        /**
+         * 设置更新的表
+         */
+        public UpdateBuilder setTable(String table) {
+            return setTable(table, true);
+        }
+
+        /**
+         * 重新设置更新的字段
+         *
+         * @param fields 需要更新的字段值 field=:fieldValue
+         */
+        public UpdateBuilder setFields(String fields, boolean bool) {
+            if (bool) {
+                this.fields.delete(0, this.fields.length());
+                this.fields.append(fields);
+                delLast(this.fields, COMMA);
+                this.fields.append(COMMA);
+            }
+            return this;
+        }
+
+        /**
+         * 重新设置更新的字段
+         *
+         * @param fields 需要更新的字段值 field=:fieldValue
+         */
+        public UpdateBuilder setFields(String fields) {
+            return setFields(fields, true);
+        }
+
+        /**
+         * 重新设置更新的字段以及字段值
+         *
+         * @param fields            需要更新的字段值
+         * @param camelToUnderscore 是否使用驼峰转下划线
+         */
+        public UpdateBuilder setFieldsAndValues(Map<String, Object> fields, boolean camelToUnderscore, boolean bool) {
+            if (bool && fields != null && !fields.isEmpty()) {
+                TupleTow<String, Map<String, Object>> tupleTow = getUpdateSql(fields, camelToUnderscore);
+                this.fields.delete(0, this.fields.length());
+                this.fields.append(tupleTow.getValue1());
+                delLast(this.fields, COMMA);
+                this.fields.append(COMMA);
+                this.paramMap.putAll(tupleTow.getValue2());
+            }
+            return this;
+        }
+
+        /**
+         * 重新设置更新的字段以及字段值
+         *
+         * @param fields            需要更新的字段值
+         * @param camelToUnderscore 是否使用驼峰转下划线
+         */
+        public UpdateBuilder setFieldsAndValues(Map<String, Object> fields, boolean camelToUnderscore) {
+            return setFieldsAndValues(fields, camelToUnderscore, true);
+        }
+
+        /**
+         * 重新设置更新的字段以及字段值
+         *
+         * @param fields 需要更新的字段值
+         */
+        public UpdateBuilder setFieldsAndValues(Map<String, Object> fields) {
+            return setFieldsAndValues(fields, true, true);
+        }
+
+        /**
+         * 重新设置更新的字段
+         *
+         * @param field  字段 field=:fieldValue
+         * @param params 参数
+         */
+        public UpdateBuilder addField(String field, Map<String, Object> params, boolean bool) {
+            if (bool) {
+                if (params != null && !params.isEmpty()) {
+                    paramMap.putAll(params);
+                }
+                this.fields.append(SPACE).append(field);
+                delLast(this.fields, COMMA);
+                this.fields.append(COMMA);
+            }
+            return this;
+        }
+
+        /**
+         * 重新设置更新的字段
+         *
+         * @param field  字段 field=:fieldValue
+         * @param params 参数
+         */
+        public UpdateBuilder addField(String field, Map<String, Object> params) {
+            return addField(field, params, true);
+        }
+
+        /**
+         * 重新设置更新的字段
+         *
+         * @param field 字段 field=:fieldValue
+         */
+        public UpdateBuilder addField(String field) {
+            return addField(field, null, true);
+        }
+
+        /**
+         * 重新设置更新的字段以及字段值
+         *
+         * @param fields            需要更新的字段值
+         * @param camelToUnderscore 是否使用驼峰转下划线
+         */
+        public UpdateBuilder addFieldsAndValues(Map<String, Object> fields, boolean camelToUnderscore, boolean bool) {
+            if (bool && fields != null && !fields.isEmpty()) {
+                TupleTow<String, Map<String, Object>> tupleTow = getUpdateSql(fields, camelToUnderscore);
+                this.fields.append(SPACE).append(tupleTow.getValue1());
+                delLast(this.fields, COMMA);
+                this.fields.append(COMMA);
+                this.paramMap.putAll(tupleTow.getValue2());
+            }
+            return this;
+        }
+
+        /**
+         * 重新设置更新的字段以及字段值
+         *
+         * @param fields            需要更新的字段值
+         * @param camelToUnderscore 是否使用驼峰转下划线
+         */
+        public UpdateBuilder addFieldsAndValues(Map<String, Object> fields, boolean camelToUnderscore) {
+            return addFieldsAndValues(fields, camelToUnderscore, true);
+        }
+
+        /**
+         * 重新设置更新的字段以及字段值
+         *
+         * @param fields 需要更新的字段值
+         */
+        public UpdateBuilder addFieldsAndValues(Map<String, Object> fields) {
+            return addFieldsAndValues(fields, true, true);
+        }
+
+        /**
+         * 重新设置更新条件
+         *
+         * @param condition 更新条件
+         * @param params    更新参数
+         */
+        public UpdateBuilder setWhere(String condition, Map<String, Object> params, boolean bool) {
+            if (bool) {
+                if (params != null && !params.isEmpty()) {
+                    paramMap.putAll(params);
+                }
+                where.delete(0, where.length());
+                where.append(condition);
+                delLast(where, WHERE_AND);
+                where.append(SPACE).append(WHERE_AND);
+            }
+            return this;
+        }
+
+        /**
+         * 重新设置更新条件
+         *
+         * @param condition 更新条件
+         * @param params    更新参数
+         */
+        public UpdateBuilder setWhere(String condition, Map<String, Object> params) {
+            return setWhere(condition, params, true);
+        }
+
+        /**
+         * 重新设置更新条件
+         *
+         * @param condition 更新条件
+         */
+        public UpdateBuilder setWhere(String condition) {
+            return setWhere(condition, null, true);
+        }
+
+        /**
+         * 增加更新条件
+         *
+         * @param condition 更新条件
+         * @param params    更新参数
+         */
+        public UpdateBuilder addWhere(String condition, Map<String, Object> params, boolean bool) {
+            if (bool) {
+                if (params != null && !params.isEmpty()) {
+                    paramMap.putAll(params);
+                }
+                where.append(SPACE).append(condition);
+                delLast(where, WHERE_AND);
+                where.append(SPACE).append(WHERE_AND);
+            }
+            return this;
+        }
+
+        /**
+         * 增加更新条件
+         *
+         * @param condition 更新条件
+         * @param params    更新参数
+         */
+        public UpdateBuilder addWhere(String condition, Map<String, Object> params) {
+            return addWhere(condition, params, true);
+        }
+
+        /**
+         * 增加更新条件
+         *
+         * @param condition 更新条件
+         */
+        public UpdateBuilder addWhere(String condition) {
+            return addWhere(condition, null, true);
         }
     }
 
     public static class InsertBuilder {
         private InsertBuilder() {
+        }
+    }
+
+    public static class DeleteBuilder {
+        private DeleteBuilder() {
         }
     }
 }

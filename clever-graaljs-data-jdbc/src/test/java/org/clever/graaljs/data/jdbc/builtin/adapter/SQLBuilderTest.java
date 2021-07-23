@@ -90,4 +90,17 @@ public class SQLBuilderTest {
         log.info("--> {}", selectBuilder.buildSql());
         log.info("--> {}", selectBuilder.buildCountSql());
     }
+
+    @Test
+    public void t04() {
+        SQLBuilder.UpdateBuilder updateBuilder = SQLBuilder.newUpdateBuilder()
+                .setTable("ta")
+                .setFields("a=:a, b=:b")
+                .addField("c=:c")
+                .addField("d=:d")
+                .setWhere("a=1 AND b=1")
+                .addWhere("c=1")
+                .addWhere("d=1");
+        log.info("--> {}", updateBuilder.buildSql());
+    }
 }
