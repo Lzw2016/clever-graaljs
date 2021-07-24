@@ -2,6 +2,7 @@ package org.clever.graaljs.data.jdbc;
 
 import org.clever.graaljs.data.jdbc.builtin.wrap.JdbcDatabase;
 import org.clever.graaljs.data.jdbc.builtin.wrap.MyBatisJdbcDatabase;
+import org.clever.graaljs.data.jdbc.builtin.wrap.SQLBuilder;
 import org.clever.graaljs.data.jdbc.constant.JdbcEnum;
 
 import java.util.Map;
@@ -20,6 +21,8 @@ public class DataJdbcEngineGlobalUtils {
         contextMap.put("SortType", JdbcEnum.SortType.Instance);
         contextMap.put("IsolationLevel", JdbcEnum.IsolationLevel.Instance);
         contextMap.put("Propagation", JdbcEnum.Propagation.Instance);
+        // 基础
+        contextMap.put("SQLBuilder", SQLBuilder.Instance);
         // jdbc
         contextMap.put("JdbcDatabase", JdbcDatabase.Instance);
         // mybatis
