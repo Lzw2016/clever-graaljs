@@ -3,6 +3,8 @@ package org.clever.graaljs.data.jdbc.builtin.adapter;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 
+import java.util.LinkedHashMap;
+
 /**
  * 作者：lizw <br/>
  * 创建时间：2021/07/23 16:33 <br/>
@@ -102,5 +104,36 @@ public class SQLBuilderTest {
                 .addWhere("c=1")
                 .addWhere("d=1");
         log.info("--> {}", updateBuilder.buildSql());
+    }
+
+    @Test
+    public void t05() {
+        SQLBuilder.InsertBuilder insertBuilder = SQLBuilder.newInsertBuilder()
+                .setTable("ta")
+                .setFieldsAndValues(new LinkedHashMap<String, Object>() {{
+                    put("a", "1");
+                    put("b", "2");
+                    put("c", "3");
+                }})
+                .addFieldsAndValues(new LinkedHashMap<String, Object>() {{
+                    put("d", "4");
+                    put("e", "5");
+                    put("f", "6");
+                }})
+                .addFieldAndValue("g", "7")
+                .addFieldAndValue("h", "8");
+        log.info("--> {}", insertBuilder.buildSql());
+    }
+
+    @Test
+    public void t06() {
+      SQLBuilder.DeleteBuilder deleteBuilder = SQLBuilder.newDeleteBuilder()
+              .setTable("ta")
+              .setWhere("a=1 AND b=2")
+              .addWhere("c=3")
+              .addWhere("d=:d")
+              .addWhere("e=5")
+              ;
+        log.info("--> {}", deleteBuilder.buildSql());
     }
 }

@@ -10,6 +10,7 @@ import org.clever.graaljs.data.jdbc.support.SqlUtils;
 import org.clever.graaljs.data.jdbc.support.mybatisplus.DbType;
 
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
@@ -441,6 +442,7 @@ public class SQLBuilder {
          * @param condition 查询条件
          * @param params    查询参数
          */
+        @SuppressWarnings("DuplicatedCode")
         public SelectBuilder setWhere(String condition, Map<String, Object> params, boolean bool) {
             if (bool) {
                 if (params != null && !params.isEmpty()) {
@@ -479,6 +481,7 @@ public class SQLBuilder {
          * @param condition 查询条件
          * @param params    查询参数
          */
+        @SuppressWarnings("DuplicatedCode")
         public SelectBuilder addWhere(String condition, Map<String, Object> params, boolean bool) {
             if (bool) {
                 if (params != null && !params.isEmpty()) {
@@ -885,6 +888,46 @@ public class SQLBuilder {
         }
 
         /**
+         * 增加参数
+         *
+         * @param name  参数名
+         * @param value 参数值
+         */
+        public UpdateBuilder addParam(String name, Object value, boolean bool) {
+            if (bool) {
+                paramMap.put(name, value);
+            }
+            return this;
+        }
+
+        /**
+         * 增加参数
+         *
+         * @param name  参数名
+         * @param value 参数值
+         */
+        public UpdateBuilder addParam(String name, Object value) {
+            return addParam(name, name, true);
+        }
+
+        /**
+         * 增加参数
+         */
+        public UpdateBuilder addParams(Map<String, Object> params, boolean bool) {
+            if (bool && params != null && !params.isEmpty()) {
+                paramMap.putAll(params);
+            }
+            return this;
+        }
+
+        /**
+         * 增加参数
+         */
+        public UpdateBuilder addParams(Map<String, Object> params) {
+            return addParams(params, true);
+        }
+
+        /**
          * 设置更新的表
          */
         public UpdateBuilder setTable(String table, boolean bool) {
@@ -1041,6 +1084,7 @@ public class SQLBuilder {
          * @param condition 更新条件
          * @param params    更新参数
          */
+        @SuppressWarnings("DuplicatedCode")
         public UpdateBuilder setWhere(String condition, Map<String, Object> params, boolean bool) {
             if (bool) {
                 if (params != null && !params.isEmpty()) {
@@ -1079,6 +1123,7 @@ public class SQLBuilder {
          * @param condition 更新条件
          * @param params    更新参数
          */
+        @SuppressWarnings("DuplicatedCode")
         public UpdateBuilder addWhere(String condition, Map<String, Object> params, boolean bool) {
             if (bool) {
                 if (params != null && !params.isEmpty()) {
@@ -1112,12 +1157,376 @@ public class SQLBuilder {
     }
 
     public static class InsertBuilder {
+        /**
+         * 插入语句
+         */
+        private String insertSql = "INSERT INTO";
+        /**
+         * 更新表
+         */
+        private String table = "";
+        /**
+         * 新增字段以及参数
+         */
+        private final Map<String, Object> fields = new LinkedHashMap<>();
+
         private InsertBuilder() {
+        }
+
+        /**
+         * 获取 sql
+         */
+        public String buildSql() {
+            // INSERT INTO <table> (<fields.keys>) VALUES (<fields.values>)
+            StringBuilder sql = new StringBuilder();
+            final String insertSql = StringUtils.trimToEmpty(this.insertSql);
+            if (StringUtils.isNotBlank(insertSql)) {
+                sql.append(insertSql).append(SPACE);
+            }
+            final String table = StringUtils.trimToEmpty(this.table);
+            if (StringUtils.isNotBlank(table)) {
+                sql.append(table).append(SPACE);
+            }
+            if (!fields.isEmpty()) {
+                sql.append("(");
+                int index = 0;
+                for (Map.Entry<String, ?> field : fields.entrySet()) {
+                    String fieldName = field.getKey();
+                    if (index != 0) {
+                        sql.append(COMMA).append(SPACE);
+                    }
+                    sql.append(fieldName);
+                    index++;
+                }
+                sql.append(") VALUES (");
+                index = 0;
+                for (Map.Entry<String, ?> field : fields.entrySet()) {
+                    String fieldName = field.getKey();
+                    if (index != 0) {
+                        sql.append(COMMA).append(SPACE);
+                    }
+                    sql.append(":").append(fieldName);
+                    index++;
+                }
+                sql.append(")");
+            }
+            return StringUtils.trimToEmpty(sql.toString());
+        }
+
+        /**
+         * 获取参数
+         */
+        public Map<String, Object> getParams() {
+            return fields;
+        }
+
+        /**
+         * 设置插入语句，默认是"INSERT INTO"，可改为"REPLACE INTO"
+         */
+        public InsertBuilder setInsertSql(String insertSql, boolean bool) {
+            if (bool) {
+                this.insertSql = insertSql;
+            }
+            return this;
+        }
+
+        /**
+         * 设置插入语句
+         */
+        public InsertBuilder setInsertSql(String insertSql) {
+            return setInsertSql(insertSql, true);
+        }
+
+        /**
+         * 设置插入的表
+         */
+        public InsertBuilder setTable(String table, boolean bool) {
+            if (bool) {
+                this.table = table;
+            }
+            return this;
+        }
+
+        /**
+         * 设置插入的表
+         */
+        public InsertBuilder setTable(String table) {
+            return setTable(table, true);
+        }
+
+        /**
+         * 重新设置插入的字段以及字段值
+         *
+         * @param fields            需要插入的字段值
+         * @param camelToUnderscore 是否使用驼峰转下划线
+         */
+        public InsertBuilder setFieldsAndValues(Map<String, Object> fields, boolean camelToUnderscore, boolean bool) {
+            if (bool && fields != null && !fields.isEmpty()) {
+                this.fields.clear();
+                fields.forEach((key, value) -> this.fields.put(getFieldName(key, camelToUnderscore), value));
+            }
+            return this;
+        }
+
+        /**
+         * 重新设置插入的字段以及字段值
+         *
+         * @param fields            需要插入的字段值
+         * @param camelToUnderscore 是否使用驼峰转下划线
+         */
+        public InsertBuilder setFieldsAndValues(Map<String, Object> fields, boolean camelToUnderscore) {
+            return setFieldsAndValues(fields, camelToUnderscore, true);
+        }
+
+        /**
+         * 重新设置插入的字段以及字段值
+         *
+         * @param fields 需要插入的字段值
+         */
+        public InsertBuilder setFieldsAndValues(Map<String, Object> fields) {
+            return setFieldsAndValues(fields, true, true);
+        }
+
+        /**
+         * 增加插入的字段以及字段值
+         *
+         * @param fields            需要插入的字段值
+         * @param camelToUnderscore 是否使用驼峰转下划线
+         */
+        public InsertBuilder addFieldsAndValues(Map<String, Object> fields, boolean camelToUnderscore, boolean bool) {
+            if (bool && fields != null && !fields.isEmpty()) {
+                fields.forEach((key, value) -> this.fields.put(getFieldName(key, camelToUnderscore), value));
+            }
+            return this;
+        }
+
+        /**
+         * 增加插入的字段以及字段值
+         *
+         * @param fields            需要插入的字段值
+         * @param camelToUnderscore 是否使用驼峰转下划线
+         */
+        public InsertBuilder addFieldsAndValues(Map<String, Object> fields, boolean camelToUnderscore) {
+            return addFieldsAndValues(fields, camelToUnderscore, true);
+        }
+
+        /**
+         * 增加插入的字段以及字段值
+         *
+         * @param fields 需要插入的字段值
+         */
+        public InsertBuilder addFieldsAndValues(Map<String, Object> fields) {
+            return addFieldsAndValues(fields, true, true);
+        }
+
+        /**
+         * 增加插入的字段以及字段值
+         *
+         * @param name  字段名
+         * @param value 字段值
+         */
+        public InsertBuilder addFieldAndValue(String name, Object value, boolean camelToUnderscore, boolean bool) {
+            if (bool) {
+                this.fields.put(getFieldName(name, camelToUnderscore), value);
+            }
+            return this;
+        }
+
+        /**
+         * 增加插入的字段以及字段值
+         *
+         * @param name  字段名
+         * @param value 字段值
+         */
+        public InsertBuilder addFieldAndValue(String name, Object value, boolean camelToUnderscore) {
+            return addFieldAndValue(name, value, camelToUnderscore, true);
+        }
+
+        /**
+         * 增加插入的字段以及字段值
+         *
+         * @param name  字段名
+         * @param value 字段值
+         */
+        public InsertBuilder addFieldAndValue(String name, Object value) {
+            return addFieldAndValue(name, value, true, true);
         }
     }
 
     public static class DeleteBuilder {
+        /**
+         * sql参数
+         */
+        private final Map<String, Object> paramMap = new HashMap<>();
+        /**
+         * 删除表
+         */
+        private String table = "";
+        /**
+         * 更新条件
+         */
+        private final StringBuilder where = new StringBuilder();
+
         private DeleteBuilder() {
+        }
+
+        /**
+         * 获取 sql
+         */
+        public String buildSql() {
+            // DELETE FROM <table> WHERE <where>
+            StringBuilder sql = new StringBuilder();
+            delLast(this.where, WHERE_AND);
+            final String table = StringUtils.trimToEmpty(this.table);
+            final String where = StringUtils.trimToEmpty(this.where.toString());
+            if (StringUtils.isNotBlank(table)) {
+                sql.append("DELETE FROM ").append(table).append(SPACE);
+            }
+            if (StringUtils.isNotBlank(where)) {
+                sql.append("WHERE ").append(where).append(SPACE);
+            }
+            return StringUtils.trimToEmpty(sql.toString());
+        }
+
+        /**
+         * 获取参数
+         */
+        public Map<String, Object> getParams() {
+            return paramMap;
+        }
+
+        /**
+         * 增加参数
+         *
+         * @param name  参数名
+         * @param value 参数值
+         */
+        public DeleteBuilder addParam(String name, Object value, boolean bool) {
+            if (bool) {
+                paramMap.put(name, value);
+            }
+            return this;
+        }
+
+        /**
+         * 增加参数
+         *
+         * @param name  参数名
+         * @param value 参数值
+         */
+        public DeleteBuilder addParam(String name, Object value) {
+            return addParam(name, name, true);
+        }
+
+        /**
+         * 增加参数
+         */
+        public DeleteBuilder addParams(Map<String, Object> params, boolean bool) {
+            if (bool && params != null && !params.isEmpty()) {
+                paramMap.putAll(params);
+            }
+            return this;
+        }
+
+        /**
+         * 增加参数
+         */
+        public DeleteBuilder addParams(Map<String, Object> params) {
+            return addParams(params, true);
+        }
+
+        /**
+         * 设置删除的表
+         */
+        public DeleteBuilder setTable(String table, boolean bool) {
+            if (bool) {
+                this.table = table;
+            }
+            return this;
+        }
+
+        /**
+         * 设置删除的表
+         */
+        public DeleteBuilder setTable(String table) {
+            return setTable(table, true);
+        }
+
+        /**
+         * 重新设置删除条件
+         *
+         * @param condition 删除条件
+         * @param params    删除参数
+         */
+        @SuppressWarnings("DuplicatedCode")
+        public DeleteBuilder setWhere(String condition, Map<String, Object> params, boolean bool) {
+            if (bool) {
+                if (params != null && !params.isEmpty()) {
+                    paramMap.putAll(params);
+                }
+                where.delete(0, where.length());
+                where.append(condition);
+                delLast(where, WHERE_AND);
+                where.append(SPACE).append(WHERE_AND);
+            }
+            return this;
+        }
+
+        /**
+         * 重新设置删除条件
+         *
+         * @param condition 删除条件
+         * @param params    删除参数
+         */
+        public DeleteBuilder setWhere(String condition, Map<String, Object> params) {
+            return setWhere(condition, params, true);
+        }
+
+        /**
+         * 重新设置删除条件
+         *
+         * @param condition 删除条件
+         */
+        public DeleteBuilder setWhere(String condition) {
+            return setWhere(condition, null, true);
+        }
+
+        /**
+         * 增加删除条件
+         *
+         * @param condition 删除条件
+         * @param params    删除参数
+         */
+        @SuppressWarnings("DuplicatedCode")
+        public DeleteBuilder addWhere(String condition, Map<String, Object> params, boolean bool) {
+            if (bool) {
+                if (params != null && !params.isEmpty()) {
+                    paramMap.putAll(params);
+                }
+                where.append(SPACE).append(condition);
+                delLast(where, WHERE_AND);
+                where.append(SPACE).append(WHERE_AND);
+            }
+            return this;
+        }
+
+        /**
+         * 增加删除条件
+         *
+         * @param condition 删除条件
+         * @param params    删除参数
+         */
+        public DeleteBuilder addWhere(String condition, Map<String, Object> params) {
+            return addWhere(condition, params, true);
+        }
+
+        /**
+         * 增加删除条件
+         *
+         * @param condition 删除条件
+         */
+        public DeleteBuilder addWhere(String condition) {
+            return addWhere(condition, null, true);
         }
     }
 }
