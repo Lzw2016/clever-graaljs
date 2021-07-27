@@ -30,3 +30,4 @@ target
 pom.xml.versionsBackup
 httpCache
 logs
+clever-graaljs-types/node_modules
