@@ -1,0 +1,33 @@
+{
+  "name": "clever-graaljs-types",
+  "version": "0.0.1",
+  "main": "",
+  "types": "",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Lzw2016/clever-graaljs.git"
+  },
+  "keywords": [
+    "fast-api",
+    "graaljs",
+    "serverjs",
+    "hinny",
+    "clever-graaljs",
+    "java",
+    "js",
+    "javascript",
+    "typescript"
+  ],
+  "author": "lizw",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Lzw2016/clever-graaljs/issues"
+  },
+  "homepage": "https://github.com/Lzw2016/clever-graaljs#readme",
+  "scripts": {
+    "init": "yarn install"
+  },
+  "devDependencies": {
+    "typescript": "^4.3.5"
+  }
+}

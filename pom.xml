@@ -21,7 +21,7 @@
     <parent>
         <groupId>org.clever</groupId>
         <artifactId>clever-parent</artifactId>
-        <version>2.4.7.0</version>
+        <version>2.4.9.0</version>
         <relativePath/>
     </parent>
 
@@ -62,6 +62,7 @@
         <module>clever-graaljs-spring-common</module>
         <module>clever-graaljs-fast-api</module>
         <module>clever-graaljs-fast-api-demo</module>
+        <module>clever-graaljs-tools</module>
     </modules>
 
     <properties>
@@ -77,6 +78,7 @@
         <clever-dynamic-sql.version>1.0.0-SNAPSHOT</clever-dynamic-sql.version>
         <graalvm.version>21.2.0</graalvm.version>
         <schemacrawler.version>16.14.6</schemacrawler.version>
+        <antlr4.version>4.9.2</antlr4.version>
     </properties>
 
     <dependencyManagement>
@@ -205,6 +207,17 @@
                 <groupId>us.fatehi</groupId>
                 <artifactId>schemacrawler-sqlserver</artifactId>
                 <version>${schemacrawler.version}</version>
+            </dependency>
+            <!--antlr4-->
+            <dependency>
+                <groupId>org.antlr</groupId>
+                <artifactId>antlr4</artifactId>
+                <version>${antlr4.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.antlr</groupId>
+                <artifactId>antlr4-runtime</artifactId>
+                <version>${antlr4.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
