@@ -3,6 +3,7 @@ package org.clever.graaljs.tools;
 import com.zaxxer.hikari.HikariConfig;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.FilenameUtils;
 import org.clever.graaljs.core.builtin.CommonUtils;
 import org.clever.graaljs.core.utils.HttpUtils;
 import org.clever.graaljs.core.utils.mapper.JacksonMapper;
@@ -35,6 +36,7 @@ public class SyncDTSTest {
     }
 
     public void db2File(final String basePath) {
+        // 先删除 delete from file_resource where module=0 and namespace='default';
         JdbcDataSource jdbc = new JdbcDataSource(newHikariConfig());
         jdbc.queryList(
                 "select path, name, content, is_file from file_resource where module=0 and namespace='default'",
@@ -60,21 +62,26 @@ public class SyncDTSTest {
     }
 
     public void file2db(final String basePath) {
+        final String baseAbsolutePath = FilenameUtils.normalize(new File(basePath).getAbsolutePath());
         Collection<File> files = FileUtils.listFiles(new File(basePath), new String[]{"d.ts"}, true);
         files.forEach(file -> {
             try {
+                final String absolutePath = FilenameUtils.normalize(file.getAbsolutePath());
+                final String fullPath = FilenameUtils.separatorsToUnix(absolutePath.substring(baseAbsolutePath.length()));
+                log.info("fullPath -> {}", fullPath);
                 String url = "http://127.0.0.1:18081/fast_api/file_resource_manage/add_dir";
                 Map<String, Object> body = new HashMap<>();
                 body.put("module", "0");
                 if (file.isFile()) {
                     url = "http://127.0.0.1:18081/fast_api/file_resource_manage/add_file";
-                    body.put("path", "0");
-                    body.put("name", "0");
-                    body.put("content", "0");
+                    body.put("path", "/" + FilenameUtils.getPath(fullPath));
+                    body.put("name", FilenameUtils.getName(fullPath));
+                    body.put("content", FileUtils.readFileToString(file, StandardCharsets.UTF_8));
                 } else {
-                    body.put("fullPath", "0");
+                    body.put("fullPath", fullPath);
                 }
-                HttpUtils.getInner().postStr(url, JacksonMapper.getInstance().toJson(body));
+                String res = HttpUtils.getInner().postStr(url, JacksonMapper.getInstance().toJson(body));
+                log.info("res -> {}", res);
             } catch (Exception e) {
                 log.error("", e);
             }
@@ -83,8 +90,8 @@ public class SyncDTSTest {
 
     @Test
     public void t01() {
-        final String basePath = "../clever-graaljs-types/src";
-        db2File(basePath);
+//        final String basePath = "../clever-graaljs-types/src";
+//        db2File(basePath);
 //        file2db(basePath);
     }
 }

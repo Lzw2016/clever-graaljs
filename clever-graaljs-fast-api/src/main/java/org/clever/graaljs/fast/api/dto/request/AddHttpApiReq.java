@@ -18,7 +18,7 @@ public class AddHttpApiReq implements Serializable {
     @NotBlank
     private String path;
 
-    @Pattern(regexp = "^[a-zA-Z0-9\\u4e00-\\u9fa5_-]+(\\.[Jj][Ss])?$")
+    @Pattern(regexp = "^[a-zA-Z0-9\\u4e00-\\u9fa5_-]+(.js)?$")
     @NotBlank
     private String name;
 
