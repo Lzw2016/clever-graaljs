@@ -5,7 +5,7 @@
 [OK]  4.前端debug-id使用uuid
 [  ]  5.clever-graaljs-fast-api-demo 全局异常处理
 [OK]  6.支持SQLBuilder创建动态sql语句
-[  ]  7.
+[  ]  7.clever-graaljs-types 基础类型需要重新设计
 [  ]  8.
 [  ]  9.
 [  ] 10.
