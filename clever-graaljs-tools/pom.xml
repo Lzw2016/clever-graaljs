@@ -19,6 +19,10 @@
             <artifactId>antlr4-runtime</artifactId>
         </dependency>
         <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+        </dependency>
+        <dependency>
             <groupId>org.clever</groupId>
             <artifactId>clever-graaljs-core</artifactId>
         </dependency>

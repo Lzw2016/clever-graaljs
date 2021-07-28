@@ -43,6 +43,9 @@ public class SQLBuilder {
         return new DeleteBuilder();
     }
 
+    /**
+     * Select SQL构建器
+     */
     public static class SelectBuilder {
         private final org.clever.graaljs.data.jdbc.builtin.adapter.SQLBuilder.SelectBuilder delegate = org.clever.graaljs.data.jdbc.builtin.adapter.SQLBuilder.newSelectBuilder();
 
@@ -620,6 +623,9 @@ public class SQLBuilder {
         }
     }
 
+    /**
+     * Update SQL构建器
+     */
     public static class UpdateBuilder {
         private final org.clever.graaljs.data.jdbc.builtin.adapter.SQLBuilder.UpdateBuilder delegate = org.clever.graaljs.data.jdbc.builtin.adapter.SQLBuilder.newUpdateBuilder();
 
@@ -891,6 +897,9 @@ public class SQLBuilder {
         }
     }
 
+    /**
+     * Insert SQL构建器
+     */
     public static class InsertBuilder {
         private final org.clever.graaljs.data.jdbc.builtin.adapter.SQLBuilder.InsertBuilder delegate = org.clever.graaljs.data.jdbc.builtin.adapter.SQLBuilder.newInsertBuilder();
 
@@ -1050,6 +1059,9 @@ public class SQLBuilder {
         }
     }
 
+    /**
+     * Delete SQL构建器
+     */
     public static class DeleteBuilder {
         private final org.clever.graaljs.data.jdbc.builtin.adapter.SQLBuilder.DeleteBuilder delegate = org.clever.graaljs.data.jdbc.builtin.adapter.SQLBuilder.newDeleteBuilder();
 

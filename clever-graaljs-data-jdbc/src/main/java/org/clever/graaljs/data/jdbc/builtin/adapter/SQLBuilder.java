@@ -98,6 +98,9 @@ public class SQLBuilder {
         return StrFormatter.camelToUnderline(fieldName);
     }
 
+    /**
+     * Select SQL构建器
+     */
     @SuppressWarnings("UnusedReturnValue")
     public static class SelectBuilder {
         /**
@@ -840,6 +843,9 @@ public class SQLBuilder {
         }
     }
 
+    /**
+     * Update SQL构建器
+     */
     @SuppressWarnings("UnusedReturnValue")
     public static class UpdateBuilder {
         /**
@@ -1158,6 +1164,9 @@ public class SQLBuilder {
         }
     }
 
+    /**
+     * Insert SQL构建器
+     */
     @SuppressWarnings("UnusedReturnValue")
     public static class InsertBuilder {
         /**
@@ -1356,6 +1365,9 @@ public class SQLBuilder {
         }
     }
 
+    /**
+     * Delete SQL构建器
+     */
     @SuppressWarnings("UnusedReturnValue")
     public static class DeleteBuilder {
         /**
