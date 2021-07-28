@@ -21,11 +21,3 @@ interface JOutputStream extends JCloseable {
      */
     write(b: JInt): void;
 }
-
-interface JFileOutputStream extends JOutputStream {
-    java_io_FileOutputStream: "java.io.FileOutputStream";
-}
-
-interface JByteArrayOutputStream extends JOutputStream {
-    java_io_ByteArrayOutputStream: "java.io.ByteArrayOutputStream";
-}

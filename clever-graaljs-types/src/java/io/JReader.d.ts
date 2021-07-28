@@ -19,12 +19,12 @@ interface JReader extends JCloseable {
     /**
      * 将字符读入数组
      */
-    read(cbuf: JChar[]): JInt;
+    read(cBuf: JChar[]): JInt;
 
     /**
      * 将字符读入数组的某一部分
      */
-    read(cbuf: JChar[], off: JInt, len: JInt): JInt;
+    read(cBuf: JChar[], off: JInt, len: JInt): JInt;
 
     /**
      * 判断是否准备读取此流
@@ -40,13 +40,4 @@ interface JReader extends JCloseable {
      * 跳过字符
      */
     skip(n: JLong): JLong;
-}
-
-interface JInputStreamReader extends JReader {
-    java_io_InputStreamReader: "java.io.InputStreamReader";
-
-    /**
-     * 返回此流使用的字符编码的名称
-     */
-    getEncoding(): JString;
 }

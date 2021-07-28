@@ -9,7 +9,7 @@ interface JInputStream extends JCloseable {
     /**
      * 在此输入流中标记当前的位置
      */
-    mark(readlimit: JInt): void;
+    mark(readLimit: JInt): void;
 
     /**
      * 测试此输入流是否支持 mark 和 reset 方法
@@ -40,12 +40,4 @@ interface JInputStream extends JCloseable {
      * 跳过和放弃此输入流中的 n 个数据字节
      */
     skip(n: JLong): JLong;
-}
-
-interface JFileInputStream extends JInputStream {
-    java_io_FileInputStream: "java.io.FileInputStream";
-}
-
-interface JByteArrayInputStream extends JInputStream {
-    java_io_ByteArrayInputStream: "java.io.ByteArrayInputStream";
 }
