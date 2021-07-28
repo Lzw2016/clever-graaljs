@@ -2,7 +2,7 @@
  * 一个可变的字符序列
  */
 interface JStringBuilder extends JObject {
-    java_lang_StringBuilder: java.lang.StringBuilder;
+    java_lang_StringBuilder: "java.lang.StringBuilder";
 
     compareTo(another: JStringBuilder): JInt;
 

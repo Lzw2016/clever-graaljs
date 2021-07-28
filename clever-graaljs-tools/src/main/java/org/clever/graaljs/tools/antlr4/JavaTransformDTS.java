@@ -37,6 +37,10 @@ public class JavaTransformDTS extends JavaParserBaseListener {
      */
     private final Map<String, StringBuilder> classCodeMap = new LinkedHashMap<>();
     /**
+     * class代码栈
+     */
+    private final Stack<StringBuilder> classCodeStack = new Stack<>();
+    /**
      * 生成的代码
      */
     private StringBuilder code;
@@ -48,6 +52,10 @@ public class JavaTransformDTS extends JavaParserBaseListener {
      * 是否是构造函数
      */
     private boolean isConstructorMethod = false;
+    /**
+     * 是否是对象public方法
+     */
+    private boolean isInstancePublicMethod = false;
 
     public JavaTransformDTS(JavaLexer lexer, CommonTokenStream tokenStream, JavaParser parser) {
         this.lexer = lexer;
@@ -115,6 +123,7 @@ public class JavaTransformDTS extends JavaParserBaseListener {
     public void enterClassDeclaration(JavaParser.ClassDeclarationContext ctx) {
         final String className = ctx.IDENTIFIER().getSymbol().getText();
         code = classCodeMap.computeIfAbsent(className, clsName -> new StringBuilder());
+        classCodeStack.push(code);
         appendComments();
         appendIndent();
         // indentLevel++;
@@ -123,7 +132,7 @@ public class JavaTransformDTS extends JavaParserBaseListener {
             indentLevel++;
             appendIndent();
             String fullClassName = packageName + "." + className;
-            code.append(fullClassName.replace(".", "_")).append(": ").append(fullClassName).append(";\n");
+            code.append(fullClassName.replace(".", "_")).append(": \"").append(fullClassName).append("\";\n");
         }
     }
 
@@ -134,7 +143,12 @@ public class JavaTransformDTS extends JavaParserBaseListener {
         // indentLevel--;
         appendIndent();
         code.append("}\n");
-        code = null;
+        classCodeStack.pop();
+        if (classCodeStack.empty()) {
+            code = null;
+        } else {
+            code = classCodeStack.peek();
+        }
     }
 
     @Override
@@ -169,6 +183,20 @@ public class JavaTransformDTS extends JavaParserBaseListener {
 
     @Override
     public void enterMethodDeclaration(JavaParser.MethodDeclarationContext ctx) {
+        isInstancePublicMethod = false;
+        if (ctx.getParent() != null && ctx.getParent().getParent() != null && ctx.getParent().getParent().getChildCount() > 0) {
+            boolean isPublic = false;
+            boolean isStatic = false;
+            for (int i = 0; i < ctx.getParent().getParent().getChildCount(); i++) {
+                String modifier = ctx.getParent().getParent().getChild(i).getText();
+                isPublic = isPublic || Objects.equals(modifier, "public");
+                isStatic = isStatic || Objects.equals(modifier, "static");
+            }
+            isInstancePublicMethod = isPublic && !isStatic;
+        }
+        if (!isInstancePublicMethod) {
+            return;
+        }
         indentLevel = 1;
         appendComments();
         appendIndent();
@@ -178,6 +206,9 @@ public class JavaTransformDTS extends JavaParserBaseListener {
 
     @Override
     public void exitMethodDeclaration(JavaParser.MethodDeclarationContext ctx) {
+        if (!isInstancePublicMethod) {
+            return;
+        }
         indentLevel = 0;
         final TokenStream tokenStream = parser.getTokenStream();
         String returnType = "void";
@@ -189,7 +220,7 @@ public class JavaTransformDTS extends JavaParserBaseListener {
 
     @Override
     public void enterFormalParameters(JavaParser.FormalParametersContext ctx) {
-        if (isConstructorMethod) {
+        if (isConstructorMethod || !isInstancePublicMethod) {
             return;
         }
         code.append("(");
@@ -197,7 +228,7 @@ public class JavaTransformDTS extends JavaParserBaseListener {
 
     @Override
     public void exitFormalParameters(JavaParser.FormalParametersContext ctx) {
-        if (isConstructorMethod) {
+        if (isConstructorMethod || !isInstancePublicMethod) {
             return;
         }
         code.append(")");
@@ -205,7 +236,7 @@ public class JavaTransformDTS extends JavaParserBaseListener {
 
     @Override
     public void enterFormalParameter(JavaParser.FormalParameterContext ctx) {
-        if (isConstructorMethod) {
+        if (isConstructorMethod || !isInstancePublicMethod) {
             return;
         }
         final TokenStream tokenStream = parser.getTokenStream();
@@ -219,7 +250,7 @@ public class JavaTransformDTS extends JavaParserBaseListener {
 
     @Override
     public void enterLastFormalParameter(JavaParser.LastFormalParameterContext ctx) {
-        if (isConstructorMethod) {
+        if (isConstructorMethod || !isInstancePublicMethod) {
             return;
         }
         final TokenStream tokenStream = parser.getTokenStream();

@@ -49,13 +49,61 @@ public class JavaTransformDTSTest {
     @Test
     public void t02() throws IOException {
         String javaPath = "./src/test/resources/java/lang/StringBuilder.java";
-        String tsPath = "../clever-graaljs-types/src/java/lang/StringBuilder.d.ts";
+        String tsPath = "../clever-graaljs-types/src/java/lang/JStringBuilder.d.ts";
         TypeMappingUtils.addMapping("StringBuilder", "JStringBuilder");
-//        generateDTS(javaPath, tsPath);
+        generateDTS(javaPath, tsPath);
 
-        javaPath = "./src/test/resources/java/lang/AbstractStringBuilder.java";
-        tsPath = "../clever-graaljs-types/src/java/lang/AbstractStringBuilder.d.ts";
-        TypeMappingUtils.addMapping("AbstractStringBuilder", "JAbstractStringBuilder");
+        // javaPath = "./src/test/resources/java/lang/AbstractStringBuilder.java";
+        // tsPath = "../clever-graaljs-types/src/java/lang/JAbstractStringBuilder.d.ts";
+        // TypeMappingUtils.addMapping("AbstractStringBuilder", "JAbstractStringBuilder");
+        // generateDTS(javaPath, tsPath);
+    }
+
+    @Test
+    public void t03() throws IOException {
+        String javaPath = "./src/test/resources/java/time/Duration.java";
+        String tsPath = "../clever-graaljs-types/src/java/time/JDuration.d.ts";
+        TypeMappingUtils.addMapping("Duration", "JDuration");
+        generateDTS(javaPath, tsPath);
+    }
+
+    @Test
+    public void t04() throws IOException {
+        String javaPath = "./src/test/resources/java/time/Instant.java";
+        String tsPath = "../clever-graaljs-types/src/java/time/JInstant.d.ts";
+        TypeMappingUtils.addMapping("Instant", "JInstant");
+        generateDTS(javaPath, tsPath);
+    }
+
+    @Test
+    public void t05() throws IOException {
+        String javaPath = "./src/test/resources/java/time/LocalDate.java";
+        String tsPath = "../clever-graaljs-types/src/java/time/JLocalDate.d.ts";
+        TypeMappingUtils.addMapping("LocalDate", "JLocalDate");
+        generateDTS(javaPath, tsPath);
+    }
+
+    @Test
+    public void t06() throws IOException {
+        String javaPath = "./src/test/resources/java/time/LocalTime.java";
+        String tsPath = "../clever-graaljs-types/src/java/time/JLocalTime.d.ts";
+        TypeMappingUtils.addMapping("LocalTime", "JLocalTime");
+        generateDTS(javaPath, tsPath);
+    }
+
+    @Test
+    public void t07() throws IOException {
+        String javaPath = "./src/test/resources/java/time/ZoneId.java";
+        String tsPath = "../clever-graaljs-types/src/java/time/JZoneId.d.ts";
+        TypeMappingUtils.addMapping("ZoneId", "JZoneId");
+        generateDTS(javaPath, tsPath);
+    }
+
+    @Test
+    public void t08() throws IOException {
+        String javaPath = "./src/test/resources/java/lang/Thread.java";
+        String tsPath = "../clever-graaljs-types/src/java/lang/JThread.d.ts";
+        TypeMappingUtils.addMapping("Thread", "JThread");
         generateDTS(javaPath, tsPath);
     }
 }

@@ -1,4 +1,6 @@
 interface JThrowable extends JObject {
+    java_lang_Throwable: "java.lang.Throwable";
+
     /**
      * 返回此 throwable 的 cause；如果 cause 不存在或未知，则返回 null
      */
