@@ -31,6 +31,7 @@ public class TypeMappingUtils {
         TYPE_MAPPING.put("float", "JFloat");
         TYPE_MAPPING.put("Double", "JDouble");
         TYPE_MAPPING.put("double", "JDouble");
+        TYPE_MAPPING.put("Object", "any");
     }
 
     public static void addMapping(String javaType, String tsType) {

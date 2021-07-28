@@ -1,5 +1,6 @@
 /**
- * SQL语句动态构造器
+ * 作者：lizw <br/>
+ * 创建时间：2021/07/24 14:43 <br/>
  */
 interface SQLBuilder extends JObject {
     /**
@@ -52,7 +53,7 @@ interface SelectBuilder extends JObject {
      * @param name  参数名
      * @param value 参数值
      */
-    addParam(name: JString, value: Object, bool: JBoolean): SelectBuilder;
+    addParam(name: JString, value: any, bool: JBoolean): SelectBuilder;
 
     /**
      * 增加参数
@@ -60,7 +61,7 @@ interface SelectBuilder extends JObject {
      * @param name  参数名
      * @param value 参数值
      */
-    addParam(name: JString, value: Object): SelectBuilder;
+    addParam(name: JString, value: any): SelectBuilder;
 
     /**
      * 增加参数
@@ -430,7 +431,7 @@ interface UpdateBuilder extends JObject {
      * @param name  参数名
      * @param value 参数值
      */
-    addParam(name: JString, value: Object, bool: JBoolean): UpdateBuilder;
+    addParam(name: JString, value: any, bool: JBoolean): UpdateBuilder;
 
     /**
      * 增加参数
@@ -438,7 +439,7 @@ interface UpdateBuilder extends JObject {
      * @param name  参数名
      * @param value 参数值
      */
-    addParam(name: JString, value: Object): UpdateBuilder;
+    addParam(name: JString, value: any): UpdateBuilder;
 
     /**
      * 增加参数
@@ -676,7 +677,7 @@ interface InsertBuilder extends JObject {
      * @param name  字段名
      * @param value 字段值
      */
-    addFieldAndValue(name: JString, value: Object, camelToUnderscore: JBoolean, bool: JBoolean): InsertBuilder;
+    addFieldAndValue(name: JString, value: any, camelToUnderscore: JBoolean, bool: JBoolean): InsertBuilder;
 
     /**
      * 增加插入的字段以及字段值
@@ -684,7 +685,7 @@ interface InsertBuilder extends JObject {
      * @param name  字段名
      * @param value 字段值
      */
-    addFieldAndValue(name: JString, value: Object, camelToUnderscore: JBoolean): InsertBuilder;
+    addFieldAndValue(name: JString, value: any, camelToUnderscore: JBoolean): InsertBuilder;
 
     /**
      * 增加插入的字段以及字段值
@@ -692,7 +693,7 @@ interface InsertBuilder extends JObject {
      * @param name  字段名
      * @param value 字段值
      */
-    addFieldAndValue(name: JString, value: Object): InsertBuilder;
+    addFieldAndValue(name: JString, value: any): InsertBuilder;
 }
 
 /**
@@ -715,7 +716,7 @@ interface DeleteBuilder extends JObject {
      * @param name  参数名
      * @param value 参数值
      */
-    addParam(name: JString, value: Object, bool: JBoolean): DeleteBuilder;
+    addParam(name: JString, value: any, bool: JBoolean): DeleteBuilder;
 
     /**
      * 增加参数
@@ -723,7 +724,7 @@ interface DeleteBuilder extends JObject {
      * @param name  参数名
      * @param value 参数值
      */
-    addParam(name: JString, value: Object): DeleteBuilder;
+    addParam(name: JString, value: any): DeleteBuilder;
 
     /**
      * 增加参数
