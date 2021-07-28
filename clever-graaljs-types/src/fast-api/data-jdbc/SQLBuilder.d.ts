@@ -680,3 +680,7 @@ interface DeleteBuilder extends JObject {
     addWhere(condition: JString): DeleteBuilder;
 }
 
+/**
+ * SQL语句动态构造器
+ */
+declare const SQLBuilder: SQLBuilder;
