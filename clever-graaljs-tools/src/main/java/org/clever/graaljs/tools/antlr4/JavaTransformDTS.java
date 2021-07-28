@@ -21,6 +21,10 @@ public class JavaTransformDTS extends JavaParserBaseListener {
     private final JavaParser parser;
     // private ParseTreeProperty<String>
     /**
+     * 代码包名
+     */
+    private String packageName;
+    /**
      * 代码注释
      */
     private final List<String> comments = new ArrayList<>();
@@ -93,6 +97,11 @@ public class JavaTransformDTS extends JavaParserBaseListener {
     }
 
     @Override
+    public void enterPackageDeclaration(JavaParser.PackageDeclarationContext ctx) {
+        packageName = tokenStream.getText(ctx.qualifiedName());
+    }
+
+    @Override
     public void enterClassOrInterfaceModifier(JavaParser.ClassOrInterfaceModifierContext ctx) {
         collectComments(ctx);
     }
@@ -109,7 +118,13 @@ public class JavaTransformDTS extends JavaParserBaseListener {
         appendComments();
         appendIndent();
         // indentLevel++;
-        code.append("interface ").append(className).append(" extends JObject {\n");
+        code.append("interface ").append(TypeMappingUtils.getType(className)).append(" extends JObject {\n");
+        if (StringUtils.isNotBlank(packageName)) {
+            indentLevel++;
+            appendIndent();
+            String fullClassName = packageName + "." + className;
+            code.append(fullClassName.replace(".", "_")).append(": ").append(fullClassName).append(";\n");
+        }
     }
 
     @Override
@@ -190,6 +205,9 @@ public class JavaTransformDTS extends JavaParserBaseListener {
 
     @Override
     public void enterFormalParameter(JavaParser.FormalParameterContext ctx) {
+        if (isConstructorMethod) {
+            return;
+        }
         final TokenStream tokenStream = parser.getTokenStream();
         final String type = TypeMappingUtils.getType(tokenStream.getText(ctx.typeType()));
         final String variable = tokenStream.getText(ctx.variableDeclaratorId());
@@ -201,6 +219,9 @@ public class JavaTransformDTS extends JavaParserBaseListener {
 
     @Override
     public void enterLastFormalParameter(JavaParser.LastFormalParameterContext ctx) {
+        if (isConstructorMethod) {
+            return;
+        }
         final TokenStream tokenStream = parser.getTokenStream();
         final String type = TypeMappingUtils.getType(tokenStream.getText(ctx.typeType()));
         final String variable = tokenStream.getText(ctx.variableDeclaratorId()) + "[]";

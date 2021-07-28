@@ -13,25 +13,45 @@ public class TypeMappingUtils {
     private static final Map<String, String> TYPE_MAPPING = new HashMap<>();
 
     static {
-        TYPE_MAPPING.put("String", "JString");
-        TYPE_MAPPING.put("CharSequence", "JString");
-        TYPE_MAPPING.put("Boolean", "JBoolean");
-        TYPE_MAPPING.put("boolean", "JBoolean");
-        TYPE_MAPPING.put("char", "JChar");
-        TYPE_MAPPING.put("Character", "JChar");
         TYPE_MAPPING.put("Byte", "JByte");
         TYPE_MAPPING.put("byte", "JByte");
         TYPE_MAPPING.put("Short", "JShort");
         TYPE_MAPPING.put("short", "JShort");
-        TYPE_MAPPING.put("int", "JInt");
         TYPE_MAPPING.put("Integer", "JInt");
+        TYPE_MAPPING.put("int", "JInt");
         TYPE_MAPPING.put("Long", "JLong");
         TYPE_MAPPING.put("long", "JLong");
         TYPE_MAPPING.put("Float", "JFloat");
         TYPE_MAPPING.put("float", "JFloat");
         TYPE_MAPPING.put("Double", "JDouble");
         TYPE_MAPPING.put("double", "JDouble");
+        TYPE_MAPPING.put("Boolean", "JBoolean");
+        TYPE_MAPPING.put("boolean", "JBoolean");
+        TYPE_MAPPING.put("Character", "JChar");
+        TYPE_MAPPING.put("char", "JChar");
+        TYPE_MAPPING.put("String", "JString");
+        TYPE_MAPPING.put("CharSequence", "JString");
         TYPE_MAPPING.put("Object", "any");
+
+        TYPE_MAPPING.put("Byte[]", "JByte[]");
+        TYPE_MAPPING.put("byte[]", "JByte[]");
+        TYPE_MAPPING.put("Short[]", "JShort[]");
+        TYPE_MAPPING.put("short[]", "JShort[]");
+        TYPE_MAPPING.put("Integer[]", "JInt[]");
+        TYPE_MAPPING.put("int[]", "JInt[]");
+        TYPE_MAPPING.put("Long[]", "JLong[]");
+        TYPE_MAPPING.put("long[]", "JLong[]");
+        TYPE_MAPPING.put("Float[]", "JFloat[]");
+        TYPE_MAPPING.put("float[]", "JFloat[]");
+        TYPE_MAPPING.put("Double[]", "JDouble[]");
+        TYPE_MAPPING.put("double[]", "JDouble[]");
+        TYPE_MAPPING.put("Boolean[]", "JBoolean[]");
+        TYPE_MAPPING.put("boolean[]", "JBoolean[]");
+        TYPE_MAPPING.put("Character[]", "JChar[]");
+        TYPE_MAPPING.put("char[]", "JChar[]");
+        TYPE_MAPPING.put("String[]", "JString[]");
+        TYPE_MAPPING.put("CharSequence[]", "JString[]");
+        TYPE_MAPPING.put("Object[]", "any[]");
     }
 
     public static void addMapping(String javaType, String tsType) {

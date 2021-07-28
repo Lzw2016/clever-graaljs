@@ -45,4 +45,17 @@ public class JavaTransformDTSTest {
         TypeMappingUtils.addMapping("Map<String, Object>", "SqlParamMap");
         generateDTS(javaPath, tsPath);
     }
+
+    @Test
+    public void t02() throws IOException {
+        String javaPath = "./src/test/resources/java/lang/StringBuilder.java";
+        String tsPath = "../clever-graaljs-types/src/java/lang/StringBuilder.d.ts";
+        TypeMappingUtils.addMapping("StringBuilder", "JStringBuilder");
+//        generateDTS(javaPath, tsPath);
+
+        javaPath = "./src/test/resources/java/lang/AbstractStringBuilder.java";
+        tsPath = "../clever-graaljs-types/src/java/lang/AbstractStringBuilder.d.ts";
+        TypeMappingUtils.addMapping("AbstractStringBuilder", "JAbstractStringBuilder");
+        generateDTS(javaPath, tsPath);
+    }
 }

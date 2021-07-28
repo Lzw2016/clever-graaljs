@@ -13,7 +13,7 @@ import java.util.*;
 
 /**
  * 方法命名规则 <br/>
- * 1. as***: 把对象转成Java对象 <br/>
+ * 1. asJ***: 把Script对象转成Java对象 <br/>
  * 2. from***: 把Java对象转成Script对象 <br/>
  * <p>
  * 作者：lizw <br/>
