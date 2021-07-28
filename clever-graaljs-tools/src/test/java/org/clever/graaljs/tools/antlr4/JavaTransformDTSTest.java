@@ -41,6 +41,8 @@ public class JavaTransformDTSTest {
     public void t01() throws IOException {
         String javaPath = "../clever-graaljs-data-jdbc/src/main/java/org/clever/graaljs/data/jdbc/builtin/wrap/SQLBuilder.java";
         String tsPath = "../clever-graaljs-types/src/fast-api/data-jdbc/SQLBuilder.d.ts";
+        // TypeMappingUtils.addMapping("Map<String, Object>", "JMap<JString, any>");
+        TypeMappingUtils.addMapping("Map<String, Object>", "SqlParamMap");
         generateDTS(javaPath, tsPath);
     }
 }

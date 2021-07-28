@@ -169,7 +169,7 @@ public class JavaTransformDTS extends JavaParserBaseListener {
         if (ctx.typeTypeOrVoid() != null) {
             returnType = tokenStream.getText(ctx.typeTypeOrVoid());
         }
-        code.append(": ").append(returnType).append(";\n");
+        code.append(": ").append(TypeMappingUtils.getType(returnType)).append(";\n");
     }
 
     @Override
