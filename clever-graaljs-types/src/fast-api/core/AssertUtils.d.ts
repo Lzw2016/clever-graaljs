@@ -3,8 +3,6 @@
  * 创建时间：2020/08/08 23:49 <br/>
  */
 interface AssertUtils extends JObject {
-    org_clever_graaljs_core_builtin_AssertUtils: "org.clever.graaljs.core.builtin.AssertUtils";
-
     /**
      * 断言表达式的值是 true
      */

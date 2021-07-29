@@ -114,4 +114,12 @@ public class JavaTransformDTSTest {
         TypeMappingUtils.addMapping("", "");
         generateDTS(javaPath, tsPath);
     }
+
+    @Test
+    public void t10() throws IOException {
+        String javaPath = "../clever-graaljs-core/src/main/java/org/clever/graaljs/core/builtin/CommonUtils.java";
+        String tsPath = "../clever-graaljs-types/src/fast-api/core/CommonUtils.d.ts";
+        TypeMappingUtils.addMapping("", "");
+        generateDTS(javaPath, tsPath);
+    }
 }

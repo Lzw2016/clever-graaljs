@@ -1,10 +1,19 @@
-interface CommonUtils {
+/**
+ * 作者：lizw <br/>
+ * 创建时间：2020/07/28 22:32 <br/>
+ */
+interface CommonUtils extends JObject {
     /**
      * 休眠一段时间
      *
      * @param millis 毫秒
      */
-    sleep(millis: JLong): void;
+    sleep(millis: number): void;
+
+    /**
+     * 放弃当前CPU使用权(当前线程放弃本次CPU时间)
+     */
+    yield(): void;
 
     /**
      * 获取对象的 hashcode
@@ -40,6 +49,19 @@ interface CommonUtils {
      * 获取对象的Java类型名称
      */
     getClassName(obj: any): JString;
+
+    /**
+     * 返回对象的字符串表形式
+     */
+    toString(obj: any): JString;
+
+    /**
+     * 返回对象的字符串表形式
+     *
+     * @param obj 指定对象
+     * @param def 默认字符串
+     */
+    toString(obj: any, def: JString): JString;
 }
 
 declare const CommonUtils: CommonUtils;
