@@ -1,4 +1,8 @@
-interface DataSizeUtils {
+/**
+ * 作者：lizw <br/>
+ * 创建时间：2020/07/28 22:34 <br/>
+ */
+interface DataSizeUtils extends JObject {
     /**
      * 返回容易读取的数据大小,如：15B、12.36KB、1.58MB、25.3GB
      *

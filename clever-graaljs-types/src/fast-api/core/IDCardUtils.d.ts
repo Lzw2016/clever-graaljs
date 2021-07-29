@@ -1,4 +1,8 @@
-interface IDCardUtils {
+/**
+ * 作者：lizw <br/>
+ * 创建时间：2020/07/28 22:34 <br/>
+ */
+interface IDCardUtils extends JObject {
     /**
      * 将15位身份证号码转换为18位
      *
@@ -123,4 +127,4 @@ interface IDCardUtils {
     getProvinceByIdCard(idCard: JString): JString;
 }
 
-const IDCardUtils: IDCardUtils;
+declare const IDCardUtils: IDCardUtils;

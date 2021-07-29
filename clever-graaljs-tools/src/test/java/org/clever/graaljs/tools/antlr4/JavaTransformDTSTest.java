@@ -122,4 +122,76 @@ public class JavaTransformDTSTest {
         TypeMappingUtils.addMapping("", "");
         generateDTS(javaPath, tsPath);
     }
+
+    @Test
+    public void t11() throws IOException {
+        String javaPath = "../clever-graaljs-core/src/main/java/org/clever/graaljs/core/builtin/CryptoUtils.java";
+        String tsPath = "../clever-graaljs-types/src/fast-api/core/CryptoUtils.d.ts";
+        TypeMappingUtils.addMapping("", "");
+        generateDTS(javaPath, tsPath);
+    }
+
+    @Test
+    public void t12() throws IOException {
+        String javaPath = "../clever-graaljs-core/src/main/java/org/clever/graaljs/core/builtin/DataSizeUtils.java";
+        String tsPath = "../clever-graaljs-types/src/fast-api/core/DataSizeUtils.d.ts";
+        TypeMappingUtils.addMapping("", "");
+        generateDTS(javaPath, tsPath);
+    }
+
+    @Test
+    public void t13() throws IOException {
+        String javaPath = "../clever-graaljs-core/src/main/java/org/clever/graaljs/core/builtin/DateUtils.java";
+        String tsPath = "../clever-graaljs-types/src/fast-api/core/DateUtils.d.ts";
+        TypeMappingUtils.addMapping("", "");
+        generateDTS(javaPath, tsPath);
+    }
+
+    @Test
+    public void t14() throws IOException {
+        String javaPath = "../clever-graaljs-core/src/main/java/org/clever/graaljs/core/builtin/DigestUtils.java";
+        String tsPath = "../clever-graaljs-types/src/fast-api/core/DigestUtils.d.ts";
+        TypeMappingUtils.addMapping("", "");
+        generateDTS(javaPath, tsPath);
+    }
+
+    @Test
+    public void t15() throws IOException {
+        String javaPath = "../clever-graaljs-core/src/main/java/org/clever/graaljs/core/builtin/EncodeDecodeUtils.java";
+        String tsPath = "../clever-graaljs-types/src/fast-api/core/EncodeDecodeUtils.d.ts";
+        TypeMappingUtils.addMapping("", "");
+        generateDTS(javaPath, tsPath);
+    }
+
+    @Test
+    public void t16() throws IOException {
+        String javaPath = "../clever-graaljs-core/src/main/java/org/clever/graaljs/core/builtin/IDCardUtils.java";
+        String tsPath = "../clever-graaljs-types/src/fast-api/core/IDCardUtils.d.ts";
+        TypeMappingUtils.addMapping("", "");
+        generateDTS(javaPath, tsPath);
+    }
+
+    @Test
+    public void t17() throws IOException {
+        String javaPath = "../clever-graaljs-core/src/main/java/org/clever/graaljs/core/builtin/IDGenerateUtils.java";
+        String tsPath = "../clever-graaljs-types/src/fast-api/core/IDGenerateUtils.d.ts";
+        TypeMappingUtils.addMapping("", "");
+        generateDTS(javaPath, tsPath);
+    }
+
+    @Test
+    public void t18() throws IOException {
+        String javaPath = "../clever-graaljs-core/src/main/java/org/clever/graaljs/core/utils/SnowFlake.java";
+        String tsPath = "../clever-graaljs-types/src/fast-api/core/SnowFlake.d.ts";
+        TypeMappingUtils.addMapping("", "");
+        generateDTS(javaPath, tsPath);
+    }
+
+//    @Test
+//    public void t17() throws IOException {
+//        String javaPath = "../clever-graaljs-core/src/main/java/org/clever/graaljs/core/builtin/wrap/HttpUtils.java";
+//        String tsPath = "../clever-graaljs-types/src/fast-api/core/HttpUtils.d.ts";
+//        TypeMappingUtils.addMapping("", "");
+//        generateDTS(javaPath, tsPath);
+//    }
 }

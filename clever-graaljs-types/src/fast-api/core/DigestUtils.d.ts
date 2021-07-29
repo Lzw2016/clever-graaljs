@@ -1,17 +1,19 @@
-interface DigestUtils {
+/**
+ * 作者：lizw <br/>
+ * 创建时间：2020/07/28 22:33 <br/>
+ */
+interface DigestUtils extends JObject {
     // Salt 盐
     //----------------------------------------------------------------------------------------------------------------------------------------------
-
     /**
      * 生成随机的Byte[]作为salt<br/>
      *
-     * @param numBytes  JByte数组的大小
+     * @param numBytes byte数组的大小
      */
-    generateSalt(numBytes: JInt): JByte[]
+    generateSalt(numBytes: JInt): JByte[];
 
     // HMAC-SHA1 签名
     //----------------------------------------------------------------------------------------------------------------------------------------------
-
     /**
      * 使用HMAC-SHA1进行消息签名, 返回字节数组,长度为20字节.<br/>
      *
@@ -19,7 +21,7 @@ interface DigestUtils {
      * @param key   HMAC-SHA1密钥
      * @return 返回字节数组, 长度为20字节
      */
-    hmacSha1(input: JByte[], key: JByte[]): JByte[]
+    hmacSha1(input: JByte[], key: JByte[]): JByte[];
 
     /**
      * 校验HMAC-SHA1签名是否正确.<br/>
@@ -29,7 +31,7 @@ interface DigestUtils {
      * @param key      密钥
      * @return 正确返回true，错误返回false
      */
-    isHmacSha1Valid(expected: JByte[], input: JByte[], key: JByte[]): JBoolean
+    isHmacSha1Valid(expected: JByte[], input: JByte[], key: JByte[]): JBoolean;
 
     /**
      * 生成HMAC-SHA1密钥,返回字节数组,长度为160位(20字节).<br/>
@@ -37,18 +39,17 @@ interface DigestUtils {
      *
      * @return HMAC-SHA1密钥,长度为160位(20字节)
      */
-    generateHmacSha1Key(): JByte[]
+    generateHmacSha1Key(): JByte[];
 
     // SHA1 签名
     //----------------------------------------------------------------------------------------------------------------------------------------------
-
     /**
      * 对数据进行sha1散列<br/>
      *
      * @param data 数据
      * @return sha1散列后的数据
      */
-    sha1(data: JByte[]): JByte[]
+    sha1(data: JByte[]): JByte[];
 
     /**
      * 对数据进行sha1散列<br/>
@@ -57,7 +58,7 @@ interface DigestUtils {
      * @param salt 散列盐
      * @return sha1散列后的数据
      */
-    sha1(data: JByte[], salt: JByte[]): JByte[]
+    sha1(data: JByte[], salt: JByte[]): JByte[];
 
     /**
      * 对数据进行sha1散列<br/>
@@ -67,7 +68,7 @@ interface DigestUtils {
      * @param iterations 迭代次数
      * @return sha1散列后的数据
      */
-    sha1(data: JByte[], salt: JByte[], iterations: JInt): JByte[]
+    sha1(data: JByte[], salt: JByte[], iterations: JInt): JByte[];
 
     /**
      * 对文件进行sha1散列<br/>
@@ -75,18 +76,17 @@ interface DigestUtils {
      * @param input 输入流
      * @return sha1散列值
      */
-    sha1(input: JInputStream): JByte[]
+    sha1(input: JInputStream): JByte[];
 
     // MD5 签名
     //----------------------------------------------------------------------------------------------------------------------------------------------
-
     /**
      * 对数据进行md5散列<br/>
      *
      * @param data 数据
      * @return sha1散列后的数据
      */
-    md5(data: JByte[]): JByte[]
+    md5(data: JByte[]): JByte[];
 
     /**
      * 对数据进行md5散列<br/>
@@ -95,7 +95,7 @@ interface DigestUtils {
      * @param salt 散列盐
      * @return sha1散列后的数据
      */
-    md5(data: JByte[], salt: JByte[]): JByte[]
+    md5(data: JByte[], salt: JByte[]): JByte[];
 
     /**
      * 对数据进行md5散列<br/>
@@ -105,7 +105,7 @@ interface DigestUtils {
      * @param iterations 迭代次数
      * @return sha1散列后的数据
      */
-    md5(data: JByte[], salt: JByte[], iterations: JInt): JByte[]
+    md5(data: JByte[], salt: JByte[], iterations: JInt): JByte[];
 
     /**
      * 对文件进行md5散列<br/>
@@ -113,7 +113,7 @@ interface DigestUtils {
      * @param input 输入流
      * @return md5散列值
      */
-    md5(input: JInputStream): JByte[]
+    md5(input: JInputStream): JByte[];
 }
 
 declare const DigestUtils: DigestUtils;

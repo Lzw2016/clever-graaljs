@@ -1,80 +1,86 @@
-interface CookieUtils {
+/**
+ * 作者：lizw <br/>
+ * 创建时间：2020/07/28 22:33 <br/>
+ */
+interface CryptoUtils extends JObject {
+    // 生成向量(IV)
+    //----------------------------------------------------------------------------------------------------------------------------------------------
     /**
-     * 设置Cookie
+     * 生成随机向量
      *
-     * @param response HTTP响应
-     * @param path     Cookie的Path
-     * @param name     名称
-     * @param value    值
-     * @param maxAge   Cookie生存时间，单位：秒。负数表示Cookie永不过期，0表示删除Cookie
+     * @param ivSize 向量长度(默认16)
+     * @return 向量数据
      */
-    setCookie(response: JHttpServletResponse, path: JString, name: JString, value: JString, maxAge: JInt): void;
+    generateIV(ivSize: JInt): JByte[];
 
     /**
-     * 设置Cookie
+     * 生成随机向量,默认大小为cipher.getBlockSize(), 16字节.
      *
-     * @param response HTTP响应
-     * @param path     Cookie的Path
-     * @param name     名称
-     * @param value    值
+     * @return 向量数据
      */
-    setCookie(response: JHttpServletResponse, path: JString, name: JString, value: JString): void;
+    generateIV(): JByte[];
+
+    // AES 加密/解密
+    //----------------------------------------------------------------------------------------------------------------------------------------------
+    /**
+     * 使用AES加密或解密无编码的原始字节数组, 返回无编码的字节数组结果.
+     *
+     * @param input 原始字节数组
+     * @param key   符合AES要求的密钥
+     * @param mode  Cipher.ENCRYPT_MODE 或 Cipher.DECRYPT_MODE
+     * @return 返回无编码的字节数组结果
+     */
+    aes(input: JByte[], key: JByte[], mode: JInt): JByte[];
 
     /**
-     * 设置Cookie(当前路径)
+     * 使用AES加密原始字符串.
      *
-     * @param response HTTP响应
-     * @param name  名称
-     * @param value 值
+     * @param input 原始输入字符数组
+     * @param key   符合AES要求的密钥
+     * @return 字节数组
      */
-    setCookieForCurrentPath(response: JHttpServletResponse, name: JString, value: JString): void;
+    aesEncrypt(input: JByte[], key: JByte[]): JByte[];
 
     /**
-     * 设置Cookie(根路径)
+     * 使用AES解密字符串, 返回原始字符串.
      *
-     * @param response HTTP响应
-     * @param name  名称
-     * @param value 值
+     * @param input Hex编码的加密字符串
+     * @param key   符合AES要求的密钥
+     * @return 原始字符串
      */
-    setCookieForRooPath(response: JHttpServletResponse, name: JString, value: JString): void;
+    aesDecrypt(input: JByte[], key: JByte[]): JString;
 
     /**
-     * 获得指定Cookie的值
+     * 使用AES加密原始字符串.
      *
-     * @param request 请求对象
-     * @param name    名字
-     * @return Cookie值，不存在返回null
+     * @param input 原始输入字符数组
+     * @param key   符合AES要求的密钥
+     * @param iv    初始向量
+     * @return 字节数组
      */
-    getCookie(request: JHttpServletRequest, name: JString): JString;
+    aesEncrypt(input: JByte[], key: JByte[], iv: JByte[]): JByte[];
 
     /**
-     * 删除指定Cookie
+     * 使用AES解密字符串, 返回原始字符串.
      *
-     * @param request  请求对象
-     * @param response 响应对象
-     * @param name     名称
-     * @param path     Cookie的Path
+     * @param input Hex编码的加密字符串
+     * @param key   符合AES要求的密钥
+     * @param iv    初始向量
+     * @return 原始字符串
      */
-    delCookie(request: JHttpServletRequest, response: JHttpServletResponse, name: JString, path: JString): void;
+    aesDecrypt(input: JByte[], key: JByte[], iv: JByte[]): JString;
 
     /**
-     * 删除指定Cookie(当前路径)
+     * 生成AES密钥,可选长度为128,192,256位.
      *
-     * @param request  请求对象
-     * @param response 响应对象
-     * @param name     名称
+     * @param keySize 可选长度为128,192,256位
      */
-    delCookieForCurrentPath(request: JHttpServletRequest, response: JHttpServletResponse, name: JString): void;
+    generateAesKey(keySize: JInt): JByte[];
 
     /**
-     * 删除指定Cookie(根路径)
-     *
-     * @param request  请求对象
-     * @param response 响应对象
-     * @param name     名称
+     * 生成AES密钥,返回字节数组, 默认长度为128位(16字节).
      */
-    delCookieForRooPath(request: JHttpServletRequest, response: JHttpServletResponse, name: JString): void;
+    generateAesKey(): JByte[];
 }
 
-declare const CookieUtils: CookieUtils;
-
+declare const CryptoUtils: CryptoUtils;
