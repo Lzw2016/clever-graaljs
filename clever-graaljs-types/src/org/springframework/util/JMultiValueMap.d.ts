@@ -1,4 +1,6 @@
 interface JMultiValueMap<K, V> extends JMap<K, JList<V>> {
+    org_springframework_util_MultiValueMap: "org.springframework.util.MultiValueMap";
+
     /**
      * 返回给定键的第一个值
      */
