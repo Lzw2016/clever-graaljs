@@ -52,6 +52,9 @@ public class TypeMappingUtils {
         TYPE_MAPPING.put("String[]", "JString[]");
         TYPE_MAPPING.put("CharSequence[]", "JString[]");
         TYPE_MAPPING.put("Object[]", "any[]");
+
+        TYPE_MAPPING.put("Collection", "JCollection");
+        TYPE_MAPPING.put("Collection<Object>", "JCollection<any>");
     }
 
     public static void addMapping(String javaType, String tsType) {

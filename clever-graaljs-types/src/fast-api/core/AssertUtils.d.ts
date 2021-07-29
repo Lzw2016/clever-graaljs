@@ -1,4 +1,10 @@
-interface AssertUtils {
+/**
+ * 作者：lizw <br/>
+ * 创建时间：2020/08/08 23:49 <br/>
+ */
+interface AssertUtils extends JObject {
+    org_clever_graaljs_core_builtin_AssertUtils: "org.clever.graaljs.core.builtin.AssertUtils";
+
     /**
      * 断言表达式的值是 true
      */
@@ -17,7 +23,7 @@ interface AssertUtils {
     /**
      * 断言object非null
      */
-    notNull(object: any, String: JString): void;
+    notNull(object: any, message: JString): void;
 
     /**
      * 断言给定字符串不为空；也就是说，它不能为null，也不能为空字符串

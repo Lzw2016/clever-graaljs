@@ -106,4 +106,12 @@ public class JavaTransformDTSTest {
         TypeMappingUtils.addMapping("Thread", "JThread");
         generateDTS(javaPath, tsPath);
     }
+
+    @Test
+    public void t09() throws IOException {
+        String javaPath = "../clever-graaljs-core/src/main/java/org/clever/graaljs/core/builtin/AssertUtils.java";
+        String tsPath = "../clever-graaljs-types/src/fast-api/core/AssertUtils.d.ts";
+        TypeMappingUtils.addMapping("", "");
+        generateDTS(javaPath, tsPath);
+    }
 }
