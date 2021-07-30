@@ -90,8 +90,8 @@ public class SyncDTSTest {
 
     @Test
     public void t01() {
-//        final String basePath = "../clever-graaljs-types/src";
+        final String basePath = "../clever-graaljs-types/src";
 //        db2File(basePath);
-//        file2db(basePath);
+        file2db(basePath);
     }
 }

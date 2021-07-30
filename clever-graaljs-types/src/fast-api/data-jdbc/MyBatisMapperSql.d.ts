@@ -7,7 +7,7 @@ interface MyBatisMapperSql {
     getSqlSource(sqlId: JString): SqlSource | null;
 
     /**
-     * 获取 SqlSource
+     * 获取 BoundSql
      *
      * @param sqlId     SQL ID
      * @param parameter SQL参数

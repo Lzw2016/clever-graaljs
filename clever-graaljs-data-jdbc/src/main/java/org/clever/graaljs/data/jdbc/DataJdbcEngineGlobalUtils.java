@@ -1,5 +1,6 @@
 package org.clever.graaljs.data.jdbc;
 
+import org.clever.graaljs.data.jdbc.builtin.SqlSourceUtils;
 import org.clever.graaljs.data.jdbc.builtin.wrap.JdbcDatabase;
 import org.clever.graaljs.data.jdbc.builtin.wrap.MyBatisJdbcDatabase;
 import org.clever.graaljs.data.jdbc.builtin.wrap.SQLBuilder;
@@ -23,9 +24,12 @@ public class DataJdbcEngineGlobalUtils {
         contextMap.put("Propagation", JdbcEnum.Propagation.Instance);
         // 基础
         contextMap.put("SQLBuilder", SQLBuilder.Instance);
+        contextMap.put("SqlSourceUtils", SqlSourceUtils.Instance);
         // jdbc
         contextMap.put("JdbcDatabase", JdbcDatabase.Instance);
+        contextMap.put("JdbcDatabaseManage", JdbcDatabase.Instance);
         // mybatis
         contextMap.put("MyBatisJdbcDatabase", MyBatisJdbcDatabase.Instance);
+        contextMap.put("MyBatisJdbcDatabaseManage", MyBatisJdbcDatabase.Instance);
     }
 }

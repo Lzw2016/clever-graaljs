@@ -8,6 +8,22 @@ interface JdbcDatabaseManage {
     setDefault(defaultName: JString): JdbcDataSource;
 
     /**
+     * 设置默认数据源
+     *
+     * @param defaultName    默认数据源名称
+     * @param jdbcDataSource 默认数据源对象
+     */
+    setDefault(defaultName: JString, jdbcDataSource: JdbcDataSource): void;
+
+    /**
+     * 添加数据源
+     *
+     * @param name           数据源名称
+     * @param jdbcDataSource 数据源
+     */
+    add(name: JString, jdbcDataSource: JdbcDataSource): void;
+
+    /**
      * 添加数据源
      *
      * @param name       数据源名称
