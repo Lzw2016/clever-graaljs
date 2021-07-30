@@ -1,52 +1,44 @@
 /**
  * 参数类型
  */
-type ParamType = JChar | JString | JInt | JLong | JFloat | JDouble | JBigDecimal | JBoolean | JDate | JSqlDate | JSqlTime | JSqlTimestamp | Date | number | string | boolean | null;
+type HttpParamType = JChar | JString | JInt | JLong | JFloat | JDouble | JBigDecimal | JBoolean | JDate | JSqlDate | JSqlTime | JSqlTimestamp | Date | number | string | boolean | null;
 
 /**
  * 请求Query String Parameter参数
  */
-interface ParamsMap {
-    [name: string]: ParamType;
+interface HttpParamsMap {
+    [name: string]: HttpParamType;
 }
 
 /**
  * 请求Http Headers参数
  */
-interface HeadersMap {
-    [name: string]: ParamType;
+interface HttpHeadersMap {
+    [name: string]: HttpParamType;
 }
 
 /**
  * 请求Body参数
  */
-interface BodyDataMap {
-    [name: string]: ParamType | BodyDataMap;
+interface HttpBodyDataMap {
+    [name: string]: HttpParamType | HttpBodyDataMap;
 }
 
-type BodyDataType = BodyDataMap | JString | string | null;
+/**
+ * Http请求Body
+ */
+type HttpBodyDataType = HttpBodyDataMap | JString | string | null;
 
-type ResultMap = JMap<string, any>;
-
-interface ResultEntity {
-    [name: string]: ParamType | ResultEntity;
+/**
+ * Http响应数据
+ */
+interface HttpResultMap {
+    [name: string]: HttpParamType | HttpResultMap;
 }
 
-enum HttpMethod {
-    GET = "GET",
-    POST = "POST",
-    DELETE = "DELETE",
-    PUT = "PUT",
-    HEAD = "HEAD",
-    OPTIONS = "OPTIONS",
-    PATCH = "PATCH",
-    TRACE = "TRACE",
-    CONNECT = "CONNECT",
-    MOVE = "MOVE",
-    PROPPATCH = "PROPPATCH",
-    REPORT = "REPORT",
-}
-
+/**
+ * Http响应对象
+ */
 interface HttpResponse {
     /**
      * 响应状态码
@@ -113,7 +105,7 @@ interface HttpResponse {
     /**
      * 获取请求BodyMap对象
      */
-    getBodyMap(): ResultMap;
+    getBodyMap(): JMap<string, any>;
 }
 
 interface HttpUtils {
@@ -127,7 +119,7 @@ interface HttpUtils {
      * @param params  Url Query Parameter(可选)
      * @param headers 请求头(可选)
      */
-    getStr(url: JString, params: ParamsMap, headers: HeadersMap): JString;
+    getStr(url: JString, params: HttpParamsMap, headers: HttpHeadersMap): JString;
 
     /**
      * 使用HTTP GET请求获取数据，支持参数，返回字符串
@@ -135,7 +127,7 @@ interface HttpUtils {
      * @param url    请求url(非空)
      * @param params Url Query Parameter(可选)
      */
-    getStr(url: JString, params: ParamsMap): JString;
+    getStr(url: JString, params: HttpParamsMap): JString;
 
     /**
      * 使用HTTP GET请求获取数据，支持参数，返回字符串
@@ -151,7 +143,7 @@ interface HttpUtils {
      * @param params  Url Query Parameter(可选)
      * @param headers 请求头(可选)
      */
-    getMap<T = ResultEntity>(url: JString, params: ParamsMap, headers: HeadersMap): T;
+    getMap<T = HttpResultMap>(url: JString, params: HttpParamsMap, headers: HttpHeadersMap): T;
 
     /**
      * 使用HTTP GET请求获取数据，支持参数，返回字符串
@@ -159,14 +151,14 @@ interface HttpUtils {
      * @param url    请求url(非空)
      * @param params Url Query Parameter(可选)
      */
-    getMap<T = ResultEntity>(url: JString, params: ParamsMap): T;
+    getMap<T = HttpResultMap>(url: JString, params: HttpParamsMap): T;
 
     /**
      * 使用HTTP GET请求获取数据，支持参数，返回字符串
      *
      * @param url 请求url(非空)
      */
-    getMap<T = ResultEntity>(url: JString): T;
+    getMap<T = HttpResultMap>(url: JString): T;
 
     // POST请求
     //----------------------------------------------------------------------------------------------------------------------------------------------
@@ -179,7 +171,7 @@ interface HttpUtils {
      * @param params  Url Query Parameter(可选)
      * @param headers 请求头(可选)
      */
-    postStr(url: JString, body: BodyDataType, params: ParamsMap, headers: HeadersMap): JString;
+    postStr(url: JString, body: HttpBodyDataType, params: HttpParamsMap, headers: HttpHeadersMap): JString;
 
     /**
      * 使用HTTP POST请求获取数据，支持参数，返回字符串
@@ -188,7 +180,7 @@ interface HttpUtils {
      * @param body   Json Body(非空)
      * @param params Url Query Parameter(可选)
      */
-    postStr(url: JString, body: BodyDataType, params: ParamsMap): JString;
+    postStr(url: JString, body: HttpBodyDataType, params: HttpParamsMap): JString;
 
     /**
      * 使用HTTP POST请求获取数据，支持参数，返回字符串
@@ -196,7 +188,7 @@ interface HttpUtils {
      * @param url  请求url(非空)
      * @param body Json Body(非空)
      */
-    postStr(url: JString, body: BodyDataType): JString;
+    postStr(url: JString, body: HttpBodyDataType): JString;
 
     /**
      * 使用HTTP POST请求获取数据，支持参数，返回字符串
@@ -204,7 +196,7 @@ interface HttpUtils {
      * @param url    请求url(非空)
      * @param params Url Query Parameter(可选)
      */
-    postStr(url: JString, params: ParamsMap): JString;
+    postStr(url: JString, params: HttpParamsMap): JString;
 
     /**
      * 使用HTTP POST请求获取数据，支持参数，返回字符串
@@ -221,7 +213,7 @@ interface HttpUtils {
      * @param params  Url Query Parameter(可选)
      * @param headers 请求头(可选)
      */
-    postMap<T = ResultEntity>(url: JString, body: BodyDataType, params: ParamsMap, headers: HeadersMap): T;
+    postMap<T = HttpResultMap>(url: JString, body: HttpBodyDataType, params: HttpParamsMap, headers: HttpHeadersMap): T;
 
     /**
      * 使用HTTP POST请求获取数据，支持参数，返回字符串
@@ -230,7 +222,7 @@ interface HttpUtils {
      * @param body   Json Body(非空)
      * @param params Url Query Parameter(可选)
      */
-    postMap<T = ResultEntity>(url: JString, body: BodyDataType, params: ParamsMap): T;
+    postMap<T = HttpResultMap>(url: JString, body: HttpBodyDataType, params: HttpParamsMap): T;
 
     /**
      * 使用HTTP POST请求获取数据，支持参数，返回字符串
@@ -238,7 +230,7 @@ interface HttpUtils {
      * @param url  请求url(非空)
      * @param body Json Body(非空)
      */
-    postMap<T = ResultEntity>(url: JString, body: BodyDataType): T;
+    postMap<T = HttpResultMap>(url: JString, body: HttpBodyDataType): T;
 
     /**
      * 使用HTTP POST请求获取数据，支持参数，返回字符串
@@ -246,14 +238,14 @@ interface HttpUtils {
      * @param url    请求url(非空)
      * @param params Url Query Parameter(可选)
      */
-    postMap<T = ResultEntity>(url: JString, params: ParamsMap): T;
+    postMap<T = HttpResultMap>(url: JString, params: HttpParamsMap): T;
 
     /**
      * 使用HTTP POST请求获取数据，支持参数，返回字符串
      *
      * @param url 请求url(非空)
      */
-    postMap<T = ResultEntity>(url: JString): T;
+    postMap<T = HttpResultMap>(url: JString): T;
 
     // DELETE请求
     //----------------------------------------------------------------------------------------------------------------------------------------------
@@ -266,7 +258,7 @@ interface HttpUtils {
      * @param params  Url Query Parameter(可选)
      * @param headers 请求头(可选)
      */
-    deleteStr(url: JString, body: BodyDataType, params: ParamsMap, headers: HeadersMap): JString;
+    deleteStr(url: JString, body: HttpBodyDataType, params: HttpParamsMap, headers: HttpHeadersMap): JString;
 
     /**
      * 使用HTTP DELETE请求获取数据，支持参数，返回字符串
@@ -275,7 +267,7 @@ interface HttpUtils {
      * @param body   Json Body(非空)
      * @param params Url Query Parameter(可选)
      */
-    deleteStr(url: JString, body: BodyDataType, params: ParamsMap): JString;
+    deleteStr(url: JString, body: HttpBodyDataType, params: HttpParamsMap): JString;
 
     /**
      * 使用HTTP DELETE请求获取数据，支持参数，返回字符串
@@ -283,7 +275,7 @@ interface HttpUtils {
      * @param url  请求url(非空)
      * @param body Json Body(非空)
      */
-    deleteStr(url: JString, body: BodyDataType): JString;
+    deleteStr(url: JString, body: HttpBodyDataType): JString;
 
     /**
      * 使用HTTP DELETE请求获取数据，支持参数，返回字符串
@@ -291,7 +283,7 @@ interface HttpUtils {
      * @param url    请求url(非空)
      * @param params Url Query Parameter(可选)
      */
-    deleteStr(url: JString, params: ParamsMap): JString;
+    deleteStr(url: JString, params: HttpParamsMap): JString;
 
     /**
      * 使用HTTP DELETE请求获取数据，支持参数，返回字符串
@@ -308,7 +300,7 @@ interface HttpUtils {
      * @param params  Url Query Parameter(可选)
      * @param headers 请求头(可选)
      */
-    deleteMap<T = ResultEntity>(url: JString, body: BodyDataType, params: ParamsMap, headers: HeadersMap): T;
+    deleteMap<T = HttpResultMap>(url: JString, body: HttpBodyDataType, params: HttpParamsMap, headers: HttpHeadersMap): T;
 
     /**
      * 使用HTTP DELETE请求获取数据，支持参数，返回字符串
@@ -317,7 +309,7 @@ interface HttpUtils {
      * @param body   Json Body(非空)
      * @param params Url Query Parameter(可选)
      */
-    deleteMap<T = ResultEntity>(url: JString, body: BodyDataType, params: ParamsMap): T;
+    deleteMap<T = HttpResultMap>(url: JString, body: HttpBodyDataType, params: HttpParamsMap): T;
 
     /**
      * 使用HTTP DELETE请求获取数据，支持参数，返回字符串
@@ -325,7 +317,7 @@ interface HttpUtils {
      * @param url  请求url(非空)
      * @param body Json Body(非空)
      */
-    deleteMap<T = ResultEntity>(url: JString, body: BodyDataType): T;
+    deleteMap<T = HttpResultMap>(url: JString, body: HttpBodyDataType): T;
 
     /**
      * 使用HTTP DELETE请求获取数据，支持参数，返回字符串
@@ -333,14 +325,14 @@ interface HttpUtils {
      * @param url    请求url(非空)
      * @param params Url Query Parameter(可选)
      */
-    deleteMap<T = ResultEntity>(url: JString, params: ParamsMap): T;
+    deleteMap<T = HttpResultMap>(url: JString, params: HttpParamsMap): T;
 
     /**
      * 使用HTTP DELETE请求获取数据，支持参数，返回字符串
      *
      * @param url 请求url(非空)
      */
-    deleteMap<T = ResultEntity>(url: JString): T;
+    deleteMap<T = HttpResultMap>(url: JString): T;
 
     // PUT请求
     //----------------------------------------------------------------------------------------------------------------------------------------------
@@ -353,7 +345,7 @@ interface HttpUtils {
      * @param params  Url Query Parameter(可选)
      * @param headers 请求头(可选)
      */
-    putStr(url: JString, body: BodyDataType, params: ParamsMap, headers: HeadersMap): JString;
+    putStr(url: JString, body: HttpBodyDataType, params: HttpParamsMap, headers: HttpHeadersMap): JString;
 
     /**
      * 使用HTTP PUT请求获取数据，支持参数，返回字符串
@@ -362,7 +354,7 @@ interface HttpUtils {
      * @param body   Json Body(非空)
      * @param params Url Query Parameter(可选)
      */
-    putStr(url: JString, body: BodyDataType, params: ParamsMap): JString;
+    putStr(url: JString, body: HttpBodyDataType, params: HttpParamsMap): JString;
 
     /**
      * 使用HTTP PUT请求获取数据，支持参数，返回字符串
@@ -370,7 +362,7 @@ interface HttpUtils {
      * @param url  请求url(非空)
      * @param body Json Body(非空)
      */
-    putStr(url: JString, body: BodyDataType): JString;
+    putStr(url: JString, body: HttpBodyDataType): JString;
 
     /**
      * 使用HTTP PUT请求获取数据，支持参数，返回字符串
@@ -378,7 +370,7 @@ interface HttpUtils {
      * @param url    请求url(非空)
      * @param params Url Query Parameter(可选)
      */
-    putStr(url: JString, params: ParamsMap): JString;
+    putStr(url: JString, params: HttpParamsMap): JString;
 
     /**
      * 使用HTTP PUT请求获取数据，支持参数，返回字符串
@@ -395,7 +387,7 @@ interface HttpUtils {
      * @param params  Url Query Parameter(可选)
      * @param headers 请求头(可选)
      */
-    putMap<T = ResultEntity>(url: JString, body: BodyDataType, params: ParamsMap, headers: HeadersMap): T;
+    putMap<T = HttpResultMap>(url: JString, body: HttpBodyDataType, params: HttpParamsMap, headers: HttpHeadersMap): T;
 
     /**
      * 使用HTTP PUT请求获取数据，支持参数，返回字符串
@@ -404,7 +396,7 @@ interface HttpUtils {
      * @param body   Json Body(非空)
      * @param params Url Query Parameter(可选)
      */
-    putMap<T = ResultEntity>(url: JString, body: BodyDataType, params: ParamsMap): T;
+    putMap<T = HttpResultMap>(url: JString, body: HttpBodyDataType, params: HttpParamsMap): T;
 
     /**
      * 使用HTTP PUT请求获取数据，支持参数，返回字符串
@@ -412,7 +404,7 @@ interface HttpUtils {
      * @param url  请求url(非空)
      * @param body Json Body(非空)
      */
-    putMap<T = ResultEntity>(url: JString, body: BodyDataType): T;
+    putMap<T = HttpResultMap>(url: JString, body: HttpBodyDataType): T;
 
     /**
      * 使用HTTP PUT请求获取数据，支持参数，返回字符串
@@ -420,14 +412,14 @@ interface HttpUtils {
      * @param url    请求url(非空)
      * @param params Url Query Parameter(可选)
      */
-    putMap<T = ResultEntity>(url: JString, params: ParamsMap): T;
+    putMap<T = HttpResultMap>(url: JString, params: HttpParamsMap): T;
 
     /**
      * 使用HTTP PUT请求获取数据，支持参数，返回字符串
      *
      * @param url 请求url(非空)
      */
-    putMap<T = ResultEntity>(url: JString): T;
+    putMap<T = HttpResultMap>(url: JString): T;
 
     // HEAD请求
     //----------------------------------------------------------------------------------------------------------------------------------------------
@@ -439,7 +431,7 @@ interface HttpUtils {
      * @param params  Url Query Parameter(可选)
      * @param headers 请求头(可选)
      */
-    headStr(url: JString, params: ParamsMap, headers: HeadersMap): JString;
+    headStr(url: JString, params: HttpParamsMap, headers: HttpHeadersMap): JString;
 
     /**
      * 使用HTTP HEAD请求获取数据，支持参数，返回字符串
@@ -447,7 +439,7 @@ interface HttpUtils {
      * @param url    请求url(非空)
      * @param params Url Query Parameter(可选)
      */
-    headStr(url: JString, params: ParamsMap): JString;
+    headStr(url: JString, params: HttpParamsMap): JString;
 
     /**
      * 使用HTTP HEAD请求获取数据，支持参数，返回字符串
@@ -463,7 +455,7 @@ interface HttpUtils {
      * @param params  Url Query Parameter(可选)
      * @param headers 请求头(可选)
      */
-    headMap<T = ResultEntity>(url: JString, params: ParamsMap, headers: HeadersMap): T;
+    headMap<T = HttpResultMap>(url: JString, params: HttpParamsMap, headers: HttpHeadersMap): T;
 
     /**
      * 使用HTTP HEAD请求获取数据，支持参数，返回字符串
@@ -471,14 +463,14 @@ interface HttpUtils {
      * @param url    请求url(非空)
      * @param params Url Query Parameter(可选)
      */
-    headMap<T = ResultEntity>(url: JString, params: ParamsMap): T;
+    headMap<T = HttpResultMap>(url: JString, params: HttpParamsMap): T;
 
     /**
      * 使用HTTP HEAD请求获取数据，支持参数，返回字符串
      *
      * @param url 请求url(非空)
      */
-    headMap<T = ResultEntity>(url: JString): T;
+    headMap<T = HttpResultMap>(url: JString): T;
 
     // OPTIONS请求
     //----------------------------------------------------------------------------------------------------------------------------------------------
@@ -491,7 +483,7 @@ interface HttpUtils {
      * @param params  Url Query Parameter(可选)
      * @param headers 请求头(可选)
      */
-    optionsStr(url: JString, body: BodyDataType, params: ParamsMap, headers: HeadersMap): JString;
+    optionsStr(url: JString, body: HttpBodyDataType, params: HttpParamsMap, headers: HttpHeadersMap): JString;
 
     /**
      * 使用HTTP OPTIONS请求获取数据，支持参数，返回字符串
@@ -500,7 +492,7 @@ interface HttpUtils {
      * @param body   Json Body(非空)
      * @param params Url Query Parameter(可选)
      */
-    optionsStr(url: JString, body: BodyDataType, params: ParamsMap): JString;
+    optionsStr(url: JString, body: HttpBodyDataType, params: HttpParamsMap): JString;
 
     /**
      * 使用HTTP OPTIONS请求获取数据，支持参数，返回字符串
@@ -508,7 +500,7 @@ interface HttpUtils {
      * @param url  请求url(非空)
      * @param body Json Body(非空)
      */
-    optionsStr(url: JString, body: BodyDataType): JString;
+    optionsStr(url: JString, body: HttpBodyDataType): JString;
 
     /**
      * 使用HTTP OPTIONS请求获取数据，支持参数，返回字符串
@@ -516,7 +508,7 @@ interface HttpUtils {
      * @param url    请求url(非空)
      * @param params Url Query Parameter(可选)
      */
-    optionsStr(url: JString, params: ParamsMap): JString;
+    optionsStr(url: JString, params: HttpParamsMap): JString;
 
     /**
      * 使用HTTP OPTIONS请求获取数据，支持参数，返回字符串
@@ -533,7 +525,7 @@ interface HttpUtils {
      * @param params  Url Query Parameter(可选)
      * @param headers 请求头(可选)
      */
-    optionsMap<T = ResultEntity>(url: JString, body: BodyDataType, params: ParamsMap, headers: HeadersMap): T;
+    optionsMap<T = HttpResultMap>(url: JString, body: HttpBodyDataType, params: HttpParamsMap, headers: HttpHeadersMap): T;
 
     /**
      * 使用HTTP OPTIONS请求获取数据，支持参数，返回字符串
@@ -542,7 +534,7 @@ interface HttpUtils {
      * @param body   Json Body(非空)
      * @param params Url Query Parameter(可选)
      */
-    optionsMap<T = ResultEntity>(url: JString, body: BodyDataType, params: ParamsMap): T;
+    optionsMap<T = HttpResultMap>(url: JString, body: HttpBodyDataType, params: HttpParamsMap): T;
 
     /**
      * 使用HTTP OPTIONS请求获取数据，支持参数，返回字符串
@@ -550,7 +542,7 @@ interface HttpUtils {
      * @param url  请求url(非空)
      * @param body Json Body(非空)
      */
-    optionsMap<T = ResultEntity>(url: JString, body: BodyDataType): T;
+    optionsMap<T = HttpResultMap>(url: JString, body: HttpBodyDataType): T;
 
     /**
      * 使用HTTP OPTIONS请求获取数据，支持参数，返回字符串
@@ -558,14 +550,14 @@ interface HttpUtils {
      * @param url    请求url(非空)
      * @param params Url Query Parameter(可选)
      */
-    optionsMap<T = ResultEntity>(url: JString, params: ParamsMap): T;
+    optionsMap<T = HttpResultMap>(url: JString, params: HttpParamsMap): T;
 
     /**
      * 使用HTTP OPTIONS请求获取数据，支持参数，返回字符串
      *
      * @param url 请求url(非空)
      */
-    optionsMap<T = ResultEntity>(url: JString): T;
+    optionsMap<T = HttpResultMap>(url: JString): T;
 
     // PATCH请求
     //----------------------------------------------------------------------------------------------------------------------------------------------
@@ -578,7 +570,7 @@ interface HttpUtils {
      * @param params  Url Query Parameter(可选)
      * @param headers 请求头(可选)
      */
-    patchStr(url: JString, body: BodyDataType, params: ParamsMap, headers: HeadersMap): JString;
+    patchStr(url: JString, body: HttpBodyDataType, params: HttpParamsMap, headers: HttpHeadersMap): JString;
 
     /**
      * 使用HTTP PATCH请求获取数据，支持参数，返回字符串
@@ -587,7 +579,7 @@ interface HttpUtils {
      * @param body   Json Body(非空)
      * @param params Url Query Parameter(可选)
      */
-    patchStr(url: JString, body: BodyDataType, params: ParamsMap): JString;
+    patchStr(url: JString, body: HttpBodyDataType, params: HttpParamsMap): JString;
 
     /**
      * 使用HTTP PATCH请求获取数据，支持参数，返回字符串
@@ -595,7 +587,7 @@ interface HttpUtils {
      * @param url  请求url(非空)
      * @param body Json Body(非空)
      */
-    patchStr(url: JString, body: BodyDataType): JString;
+    patchStr(url: JString, body: HttpBodyDataType): JString;
 
     /**
      * 使用HTTP PATCH请求获取数据，支持参数，返回字符串
@@ -603,7 +595,7 @@ interface HttpUtils {
      * @param url    请求url(非空)
      * @param params Url Query Parameter(可选)
      */
-    patchStr(url: JString, params: ParamsMap): JString;
+    patchStr(url: JString, params: HttpParamsMap): JString;
 
     /**
      * 使用HTTP PATCH请求获取数据，支持参数，返回字符串
@@ -620,7 +612,7 @@ interface HttpUtils {
      * @param params  Url Query Parameter(可选)
      * @param headers 请求头(可选)
      */
-    patchMap<T = ResultEntity>(url: JString, body: BodyDataType, params: ParamsMap, headers: HeadersMap): T;
+    patchMap<T = HttpResultMap>(url: JString, body: HttpBodyDataType, params: HttpParamsMap, headers: HttpHeadersMap): T;
 
     /**
      * 使用HTTP PATCH请求获取数据，支持参数，返回字符串
@@ -629,7 +621,7 @@ interface HttpUtils {
      * @param body   Json Body(非空)
      * @param params Url Query Parameter(可选)
      */
-    patchMap<T = ResultEntity>(url: JString, body: BodyDataType, params: ParamsMap): T;
+    patchMap<T = HttpResultMap>(url: JString, body: HttpBodyDataType, params: HttpParamsMap): T;
 
     /**
      * 使用HTTP PATCH请求获取数据，支持参数，返回字符串
@@ -637,7 +629,7 @@ interface HttpUtils {
      * @param url  请求url(非空)
      * @param body Json Body(非空)
      */
-    patchMap<T = ResultEntity>(url: JString, body: BodyDataType): T;
+    patchMap<T = HttpResultMap>(url: JString, body: HttpBodyDataType): T;
 
     /**
      * 使用HTTP PATCH请求获取数据，支持参数，返回字符串
@@ -645,14 +637,14 @@ interface HttpUtils {
      * @param url    请求url(非空)
      * @param params Url Query Parameter(可选)
      */
-    patchMap<T = ResultEntity>(url: JString, params: ParamsMap): T;
+    patchMap<T = HttpResultMap>(url: JString, params: HttpParamsMap): T;
 
     /**
      * 使用HTTP PATCH请求获取数据，支持参数，返回字符串
      *
      * @param url 请求url(非空)
      */
-    patchMap<T = ResultEntity>(url: JString): T;
+    patchMap<T = HttpResultMap>(url: JString): T;
 
     // TRACE请求
     //----------------------------------------------------------------------------------------------------------------------------------------------
@@ -665,7 +657,7 @@ interface HttpUtils {
      * @param params  Url Query Parameter(可选)
      * @param headers 请求头(可选)
      */
-    traceStr(url: JString, body: BodyDataType, params: ParamsMap, headers: HeadersMap): JString;
+    traceStr(url: JString, body: HttpBodyDataType, params: HttpParamsMap, headers: HttpHeadersMap): JString;
 
     /**
      * 使用HTTP TRACE请求获取数据，支持参数，返回字符串
@@ -674,7 +666,7 @@ interface HttpUtils {
      * @param body   Json Body(非空)
      * @param params Url Query Parameter(可选)
      */
-    traceStr(url: JString, body: BodyDataType, params: ParamsMap): JString;
+    traceStr(url: JString, body: HttpBodyDataType, params: HttpParamsMap): JString;
 
     /**
      * 使用HTTP TRACE请求获取数据，支持参数，返回字符串
@@ -682,7 +674,7 @@ interface HttpUtils {
      * @param url  请求url(非空)
      * @param body Json Body(非空)
      */
-    traceStr(url: JString, body: BodyDataType): JString;
+    traceStr(url: JString, body: HttpBodyDataType): JString;
 
     /**
      * 使用HTTP TRACE请求获取数据，支持参数，返回字符串
@@ -690,7 +682,7 @@ interface HttpUtils {
      * @param url    请求url(非空)
      * @param params Url Query Parameter(可选)
      */
-    traceStr(url: JString, params: ParamsMap): JString;
+    traceStr(url: JString, params: HttpParamsMap): JString;
 
     /**
      * 使用HTTP TRACE请求获取数据，支持参数，返回字符串
@@ -707,7 +699,7 @@ interface HttpUtils {
      * @param params  Url Query Parameter(可选)
      * @param headers 请求头(可选)
      */
-    traceMap<T = ResultEntity>(url: JString, body: BodyDataType, params: ParamsMap, headers: HeadersMap): T;
+    traceMap<T = HttpResultMap>(url: JString, body: HttpBodyDataType, params: HttpParamsMap, headers: HttpHeadersMap): T;
 
     /**
      * 使用HTTP TRACE请求获取数据，支持参数，返回字符串
@@ -716,7 +708,7 @@ interface HttpUtils {
      * @param body   Json Body(非空)
      * @param params Url Query Parameter(可选)
      */
-    traceMap<T = ResultEntity>(url: JString, body: BodyDataType, params: ParamsMap): T;
+    traceMap<T = HttpResultMap>(url: JString, body: HttpBodyDataType, params: HttpParamsMap): T;
 
     /**
      * 使用HTTP TRACE请求获取数据，支持参数，返回字符串
@@ -724,7 +716,7 @@ interface HttpUtils {
      * @param url  请求url(非空)
      * @param body Json Body(非空)
      */
-    traceMap<T = ResultEntity>(url: JString, body: BodyDataType): T;
+    traceMap<T = HttpResultMap>(url: JString, body: HttpBodyDataType): T;
 
     /**
      * 使用HTTP TRACE请求获取数据，支持参数，返回字符串
@@ -732,14 +724,14 @@ interface HttpUtils {
      * @param url    请求url(非空)
      * @param params Url Query Parameter(可选)
      */
-    traceMap<T = ResultEntity>(url: JString, params: ParamsMap): T;
+    traceMap<T = HttpResultMap>(url: JString, params: HttpParamsMap): T;
 
     /**
      * 使用HTTP TRACE请求获取数据，支持参数，返回字符串
      *
      * @param url 请求url(非空)
      */
-    traceMap<T = ResultEntity>(url: JString): T;
+    traceMap<T = HttpResultMap>(url: JString): T;
 
     // CONNECT请求
     //----------------------------------------------------------------------------------------------------------------------------------------------
@@ -752,7 +744,7 @@ interface HttpUtils {
      * @param params  Url Query Parameter(可选)
      * @param headers 请求头(可选)
      */
-    connectStr(url: JString, body: BodyDataType, params: ParamsMap, headers: HeadersMap): JString;
+    connectStr(url: JString, body: HttpBodyDataType, params: HttpParamsMap, headers: HttpHeadersMap): JString;
 
     /**
      * 使用HTTP CONNECT请求获取数据，支持参数，返回字符串
@@ -761,7 +753,7 @@ interface HttpUtils {
      * @param body   Json Body(非空)
      * @param params Url Query Parameter(可选)
      */
-    connectStr(url: JString, body: BodyDataType, params: ParamsMap): JString;
+    connectStr(url: JString, body: HttpBodyDataType, params: HttpParamsMap): JString;
 
     /**
      * 使用HTTP CONNECT请求获取数据，支持参数，返回字符串
@@ -769,7 +761,7 @@ interface HttpUtils {
      * @param url  请求url(非空)
      * @param body Json Body(非空)
      */
-    connectStr(url: JString, body: BodyDataType): JString;
+    connectStr(url: JString, body: HttpBodyDataType): JString;
 
     /**
      * 使用HTTP CONNECT请求获取数据，支持参数，返回字符串
@@ -777,7 +769,7 @@ interface HttpUtils {
      * @param url    请求url(非空)
      * @param params Url Query Parameter(可选)
      */
-    connectStr(url: JString, params: ParamsMap): JString;
+    connectStr(url: JString, params: HttpParamsMap): JString;
 
     /**
      * 使用HTTP CONNECT请求获取数据，支持参数，返回字符串
@@ -794,7 +786,7 @@ interface HttpUtils {
      * @param params  Url Query Parameter(可选)
      * @param headers 请求头(可选)
      */
-    connectMap<T = ResultEntity>(url: JString, body: BodyDataType, params: ParamsMap, headers: HeadersMap): T;
+    connectMap<T = HttpResultMap>(url: JString, body: HttpBodyDataType, params: HttpParamsMap, headers: HttpHeadersMap): T;
 
     /**
      * 使用HTTP CONNECT请求获取数据，支持参数，返回字符串
@@ -803,7 +795,7 @@ interface HttpUtils {
      * @param body   Json Body(非空)
      * @param params Url Query Parameter(可选)
      */
-    connectMap<T = ResultEntity>(url: JString, body: BodyDataType, params: ParamsMap): T;
+    connectMap<T = HttpResultMap>(url: JString, body: HttpBodyDataType, params: HttpParamsMap): T;
 
     /**
      * 使用HTTP CONNECT请求获取数据，支持参数，返回字符串
@@ -811,7 +803,7 @@ interface HttpUtils {
      * @param url  请求url(非空)
      * @param body Json Body(非空)
      */
-    connectMap<T = ResultEntity>(url: JString, body: BodyDataType): T;
+    connectMap<T = HttpResultMap>(url: JString, body: HttpBodyDataType): T;
 
     /**
      * 使用HTTP CONNECT请求获取数据，支持参数，返回字符串
@@ -819,14 +811,14 @@ interface HttpUtils {
      * @param url    请求url(非空)
      * @param params Url Query Parameter(可选)
      */
-    connectMap<T = ResultEntity>(url: JString, params: ParamsMap): T;
+    connectMap<T = HttpResultMap>(url: JString, params: HttpParamsMap): T;
 
     /**
      * 使用HTTP CONNECT请求获取数据，支持参数，返回字符串
      *
      * @param url 请求url(非空)
      */
-    connectMap<T = ResultEntity>(url: JString): T;
+    connectMap<T = HttpResultMap>(url: JString): T;
 
     // 自定义请求
     //----------------------------------------------------------------------------------------------------------------------------------------------
@@ -840,7 +832,7 @@ interface HttpUtils {
      * @param params  请求参数
      * @param headers 请求头
      */
-    execRequest(method: HttpMethod, url: JString, body: BodyDataType, params: ParamsMap, headers: HeadersMap): HttpResponse;
+    execRequest(method: HttpMethod, url: JString, body: HttpBodyDataType, params: HttpParamsMap, headers: HttpHeadersMap): HttpResponse;
 }
 
 declare const HttpUtils: HttpUtils;

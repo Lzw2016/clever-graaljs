@@ -251,11 +251,11 @@ public class JavaTransformDTSTest {
         generateDTS(javaPath, tsPath);
     }
 
-//    @Test
-//    public void t17() throws IOException {
-//        String javaPath = "../clever-graaljs-core/src/main/java/org/clever/graaljs/core/builtin/wrap/HttpUtils.java";
-//        String tsPath = "../clever-graaljs-types/src/fast-api/core/HttpUtils.d.ts";
-//        TypeMappingUtils.addMapping("", "");
-//        generateDTS(javaPath, tsPath);
-//    }
+    @Test
+    public void t28() throws IOException {
+        String javaPath = "../clever-graaljs-core/src/main/java/org/clever/graaljs/core/builtin/wrap/HttpUtils.java";
+        String tsPath = "../clever-graaljs-types/src/fast-api/core/HttpUtils.d.ts";
+        TypeMappingUtils.addMapping("", "");
+        generateDTS(javaPath, tsPath);
+    }
 }

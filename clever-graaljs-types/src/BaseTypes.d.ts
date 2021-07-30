@@ -43,6 +43,9 @@ type JChar = string;
  */
 type JString = string;
 
+/**
+ * 字符集枚举
+ */
 enum Charsets {
     US_ASCII = "US-ASCII",
     ISO_8859_1 = "ISO-8859-1",
@@ -51,3 +54,11 @@ enum Charsets {
     UTF_16LE = "UTF-16LE",
     UTF_16 = "UTF-16",
 }
+
+
+
+
+
+
+
+

@@ -56,7 +56,7 @@ interface StringTreeNodeRes extends TreeNodeRes<JString> {
     getChildren(): JList<StringTreeNodeRes>;
 }
 
-interface LongTreeNodeRes extends TreeNodeRes<JString> {
+interface LongTreeNodeRes extends TreeNodeRes<JLong> {
     /** 返回所有子节点 */
     getChildren(): JList<LongTreeNodeRes>;
 }
@@ -113,12 +113,12 @@ interface TreeUtils {
 
 declare const TreeUtils: TreeUtils;
 
-/**
- * 根节点的“父节点ID”值
- */
-declare const RootTreeNode = {
-    /** String类型 - 根节点的“父节点ID”值 */
-    StringParentId: "",
-    /** Long类型 - 根节点的“父节点ID”值 */
-    LongParentId: Interop.asJLong("-1"),
-}
+// /**
+//  * 根节点的“父节点ID”值
+//  */
+// declare const RootTreeNode = {
+//     /** String类型 - 根节点的“父节点ID”值 */
+//     StringParentId: "",
+//     /** Long类型 - 根节点的“父节点ID”值 */
+//     LongParentId: Interop.asJLong("-1"),
+// }

@@ -1,28 +1,3 @@
-enum HanyuPinyinCaseType {
-    /** 大写 */
-    UPPERCASE = "UPPERCASE",
-    /** 小写 */
-    LOWERCASE = "LOWERCASE",
-}
-
-enum HanyuPinyinToneType {
-    /** 此选项表示以声调数字输出汉语拼音 */
-    WITH_TONE_NUMBER = "WITH_TONE_NUMBER",
-    /** 此选项表示输出的汉语拼音没有声调数字或声调标记 */
-    WITHOUT_TONE = "WITHOUT_TONE",
-    /** 此选项表示输出的汉语拼音带有声调标记 */
-    WITH_TONE_MARK = "WITH_TONE_MARK",
-}
-
-enum HanyuPinyinVCharType {
-    /** 该选项表示'ü'的输出是'u:' */
-    WITH_U_AND_COLON = "WITH_U_AND_COLON",
-    /** 该选项表示'ü'的输出是'v' */
-    WITH_V = "WITH_V",
-    /** 该选项表示'ü'的输出是'ü' */
-    WITH_U_UNICODE = "WITH_U_UNICODE",
-}
-
 interface HanyuPinyinOutputFormat {
     net_sourceforge_pinyin4j_format_HanyuPinyinOutputFormat: "net.sourceforge.pinyin4j.format.HanyuPinyinOutputFormat",
     // /**
