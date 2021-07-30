@@ -47,12 +47,12 @@ public class StringUtils {
      * @param firstUpperCase 首字母是否大写
      * @return 转换好的字符串
      */
-    public String underlineToCamel(String param, Object firstUpperCase) {
+    public String underlineToCamel(String param, boolean firstUpperCase) {
         if (org.apache.commons.lang3.StringUtils.isBlank(param)) {
             return param;
         }
         String res = StrFormatter.underlineToCamel(param);
-        if (firstUpperCase instanceof Boolean && (Boolean) firstUpperCase) {
+        if (firstUpperCase) {
             res = String.valueOf(res.charAt(0)).toUpperCase() + res.substring(1);
         }
         return res;

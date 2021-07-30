@@ -1,19 +1,15 @@
-interface XmlUtils {
+/**
+ * 作者：lizw <br/>
+ * 创建时间：2020/08/12 09:07 <br/>
+ */
+interface XmlUtils extends JObject {
     /**
      * 对象序列化成XML字符串
      *
      * @param object 需要序列化xml的对象
      * @return 返回xml
      */
-    toXml(object: object): JString;
-
-    /**
-     * XML字符串反序列化成对象
-     *
-     * @param xml XML字符串
-     * @return 返回的对象
-     */
-    fromXml<T extends object>(xml: JString): T;
+    toXml(object: any): JString;
 
     /**
      * 当XML里只含有Bean的部分属性时，更新一个已存在Bean，只覆盖该部分的属性
@@ -22,7 +18,7 @@ interface XmlUtils {
      * @param object 需要更新的对象
      * @return 操作成功返回true
      */
-    update(xml: JString, object: object): JBoolean;
+    update(xml: JString, object: any): JBoolean;
 
     /**
      * XML字符串转换成Json字符串<br/>

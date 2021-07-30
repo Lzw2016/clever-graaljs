@@ -1,4 +1,8 @@
-interface IPAddressUtils {
+/**
+ * 作者：lizw <br/>
+ * 创建时间：2020/07/28 22:34 <br/>
+ */
+interface IPAddressUtils extends JObject {
     /**
      * 获取本机所有的IPv4地址,已经获取过就直接返回
      */

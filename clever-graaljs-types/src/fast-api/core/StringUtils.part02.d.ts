@@ -1,7 +1,6 @@
 interface StringUtils {
     // Delete
     //----------------------------------------------------------------------------------------------------------------------------------------------
-
     /**
      * <pre>
      *  .deleteWhitespace(null)         = null
@@ -10,11 +9,10 @@ interface StringUtils {
      *  .deleteWhitespace("   ab  c  ") = "abc"
      * </pre>
      */
-    deleteWhitespace(str: JString): JString
+    deleteWhitespace(str: JString): JString;
 
     // Remove
     //----------------------------------------------------------------------------------------------------------------------------------------------
-
     /**
      * <pre>
      *  .removeStart(null, *)      = null
@@ -26,7 +24,7 @@ interface StringUtils {
      *  .removeStart("abc", "")    = "abc"
      * </pre>
      */
-    removeStart(str: JString, remove: JString): JString
+    removeStart(str: JString, remove: JString): JString;
 
     /**
      * <pre>
@@ -40,7 +38,7 @@ interface StringUtils {
      *  .removeStartIgnoreCase("abc", "")    = "abc"
      * </pre>
      */
-    removeStartIgnoreCase(str: JString, remove: JString): JString
+    removeStartIgnoreCase(str: JString, remove: JString): JString;
 
     /**
      * <pre>
@@ -53,7 +51,7 @@ interface StringUtils {
      *  .removeEnd("abc", "")    = "abc"
      * </pre>
      */
-    removeEnd(str: JString, remove: JString): JString
+    removeEnd(str: JString, remove: JString): JString;
 
     /**
      * <pre>
@@ -68,7 +66,7 @@ interface StringUtils {
      *  .removeEndIgnoreCase("www.domain.COM", ".com") = "www.domain")
      * </pre>
      */
-    removeEndIgnoreCase(str: JString, remove: JString): JString
+    removeEndIgnoreCase(str: JString, remove: JString): JString;
 
     /**
      * <pre>
@@ -80,7 +78,7 @@ interface StringUtils {
      *  .remove("queued", "zz") = "queued"
      * </pre>
      */
-    remove(str: JString, remove: JString): JString
+    remove(str: JString, remove: JString): JString;
 
     /**
      * <pre>
@@ -94,7 +92,7 @@ interface StringUtils {
      *  .removeIgnoreCase("queued", "zZ") = "queued"
      * </pre>
      */
-    removeIgnoreCase(str: JString, remove: JString): JString
+    removeIgnoreCase(str: JString, remove: JString): JString;
 
     /**
      * <pre>
@@ -104,11 +102,10 @@ interface StringUtils {
      *  .remove("queued", 'z') = "queued"
      * </pre>
      */
-    remove(str: JString, remove: JChar): JString
+    remove(str: JString, remove: JChar): JString;
 
     // Replacing
     //----------------------------------------------------------------------------------------------------------------------------------------------
-
     /**
      * <pre>
      *  .replaceOnce(null, *, *)        = null
@@ -121,7 +118,7 @@ interface StringUtils {
      *  .replaceOnce("aba", "a", "z")   = "zba"
      * </pre>
      */
-    replaceOnce(text: JString, searchString: JString, replacement: JString): JString
+    replaceOnce(text: JString, searchString: JString, replacement: JString): JString;
 
     /**
      * <pre>
@@ -136,7 +133,7 @@ interface StringUtils {
      *  .replaceOnceIgnoreCase("FoOFoofoo", "foo", "") = "Foofoo"
      * </pre>
      */
-    replaceOnceIgnoreCase(text: JString, searchString: JString, replacement: JString): JString
+    replaceOnceIgnoreCase(text: JString, searchString: JString, replacement: JString): JString;
 
     /**
      * <pre>
@@ -150,7 +147,7 @@ interface StringUtils {
      *  .replace("aba", "a", "z")   = "zbz"
      * </pre>
      */
-    replace(text: JString, searchString: JString, replacement: JString): JString
+    replace(text: JString, searchString: JString, replacement: JString): JString;
 
     /**
      * <pre>
@@ -164,7 +161,7 @@ interface StringUtils {
      *  .replaceIgnoreCase("aba", "A", "z")   = "zbz"
      * </pre>
      */
-    replaceIgnoreCase(text: JString, searchString: JString, replacement: JString): JString
+    replaceIgnoreCase(text: JString, searchString: JString, replacement: JString): JString;
 
     /**
      * <pre>
@@ -182,7 +179,7 @@ interface StringUtils {
      *  .replace("abaa", "a", "z", -1)  = "zbzz"
      * </pre>
      */
-    replace(text: JString, searchString: JString, replacement: JString, max: JInt): JString
+    replace(text: JString, searchString: JString, replacement: JString, max: JInt): JString;
 
     /**
      * <pre>
@@ -200,7 +197,7 @@ interface StringUtils {
      *  .replaceIgnoreCase("abAa", "a", "z", -1)  = "zbzz"
      * </pre>
      */
-    replaceIgnoreCase(text: JString, searchString: JString, replacement: JString, max: JInt): JString
+    replaceIgnoreCase(text: JString, searchString: JString, replacement: JString, max: JInt): JString;
 
     /**
      * <pre>
@@ -217,7 +214,7 @@ interface StringUtils {
      *   .replaceEach("abcde", new String[]{"ab", "d"}, new String[]{"d", "t"})  = "dcte"
      * </pre>
      */
-    replaceEach(text: JString, searchList: JString[], replacementList: JString[]): JString
+    replaceEach(text: JString, searchList: JString[], replacementList: JString[]): JString;
 
     /**
      * <pre>
@@ -235,11 +232,10 @@ interface StringUtils {
      *  .replaceEachRepeatedly("abcde", new String[]{"ab", "d"}, new String[]{"d", "ab"}) = IllegalStateException
      * </pre>
      */
-    replaceEachRepeatedly(text: JString, searchList: JString[], replacementList: JString[]): JString
+    replaceEachRepeatedly(text: JString, searchList: JString[], replacementList: JString[]): JString;
 
-    // Replace, JCharacter based
+    // Replace, character based
     //----------------------------------------------------------------------------------------------------------------------------------------------
-
     /**
      * <pre>
      *  .replaceChars(null, *, *)        = null
@@ -248,7 +244,7 @@ interface StringUtils {
      *  .replaceChars("abcba", 'z', 'y') = "abcba"
      * </pre>
      */
-    replaceChars(str: JString, searchChar: JChar, replaceChar: JChar): JString
+    replaceChars(str: JString, searchChar: JChar, replaceChar: JChar): JString;
 
     /**
      * <pre>
@@ -263,11 +259,10 @@ interface StringUtils {
      *  .replaceChars("abcba", "bc", "yzx") = "ayzya"
      * </pre>
      */
-    replaceChars(str: JString, searchChars: JString, replaceChars: JString): JString
+    replaceChars(str: JString, searchChars: JString, replaceChars: JString): JString;
 
     // Overlay
     //----------------------------------------------------------------------------------------------------------------------------------------------
-
     /**
      * <pre>
      *  .overlay(null, *, *, *)            = null
@@ -283,11 +278,10 @@ interface StringUtils {
      *  .overlay("abcdef", "zzzz", 8, 10)  = "abcdefzzzz"
      * </pre>
      */
-    overlay(str: JString, overlay: JString, start: JInt, end: JInt): JString
+    overlay(str: JString, overlay: JString, start: JInt, end: JInt): JString;
 
     // Chomping
     //----------------------------------------------------------------------------------------------------------------------------------------------
-
     /**
      * <pre>
      *  .chomp(null)          = null
@@ -303,11 +297,10 @@ interface StringUtils {
      *  .chomp("\r\n")        = ""
      * </pre>
      */
-    chomp(str: JString): JString
+    chomp(str: JString): JString;
 
     // Chopping
     //----------------------------------------------------------------------------------------------------------------------------------------------
-
     /**
      * <pre>
      *  .chop(null)          = null
@@ -323,14 +316,12 @@ interface StringUtils {
      *  .chop("\r\n")        = ""
      * </pre>
      */
-    chop(str: JString): JString
+    chop(str: JString): JString;
 
     // Conversion
     //----------------------------------------------------------------------------------------------------------------------------------------------
-
     // Padding
     //----------------------------------------------------------------------------------------------------------------------------------------------
-
     /**
      * <pre>
      *  .repeat(null, 2) = null
@@ -341,7 +332,7 @@ interface StringUtils {
      *  .repeat("a", -2) = ""
      * </pre>
      */
-    repeat(str: JString, repeat: JInt): JString
+    repeat(str: JString, repeat: JInt): JString;
 
     /**
      * <pre>
@@ -353,7 +344,7 @@ interface StringUtils {
      *  .repeat("?", ", ", 3)  = "?, ?, ?"
      * </pre>
      */
-    repeat(str: JString, separator: JString, repeat: JInt): JString
+    repeat(str: JString, separator: JString, repeat: JInt): JString;
 
     /**
      * <pre>
@@ -362,7 +353,7 @@ interface StringUtils {
      *  .repeat('e', -2) = ""
      * </pre>
      */
-    repeat(ch: JChar, repeat: JInt): JString
+    repeat(ch: JChar, repeat: JInt): JString;
 
     /**
      * <pre>
@@ -374,7 +365,7 @@ interface StringUtils {
      *  .rightPad("bat", -1) = "bat"
      * </pre>
      */
-    rightPad(str: JString, size: JInt): JString
+    rightPad(str: JString, size: JInt): JString;
 
     /**
      * <pre>
@@ -386,7 +377,7 @@ interface StringUtils {
      *  .rightPad("bat", -1, 'z') = "bat"
      * </pre>
      */
-    rightPad(str: JString, size: JInt, padChar: JChar): JString
+    rightPad(str: JString, size: JInt, padChar: JChar): JString;
 
     /**
      * <pre>
@@ -401,7 +392,7 @@ interface StringUtils {
      *  .rightPad("bat", 5, "")    = "bat  "
      * </pre>
      */
-    rightPad(str: JString, size: JInt, padStr: JString): JString
+    rightPad(str: JString, size: JInt, padStr: JString): JString;
 
     /**
      * <pre>
@@ -413,7 +404,7 @@ interface StringUtils {
      *  .leftPad("bat", -1) = "bat"
      * </pre>
      */
-    leftPad(str: JString, size: JInt): JString
+    leftPad(str: JString, size: JInt): JString;
 
     /**
      * <pre>
@@ -425,7 +416,7 @@ interface StringUtils {
      *  .leftPad("bat", -1, 'z') = "bat"
      * </pre>
      */
-    leftPad(str: JString, size: JInt, padChar: JChar): JString
+    leftPad(str: JString, size: JInt, padChar: JChar): JString;
 
     /**
      * <pre>
@@ -440,16 +431,15 @@ interface StringUtils {
      *  .leftPad("bat", 5, "")    = "  bat"
      * </pre>
      */
-    leftPad(str: JString, size: JInt, padStr: JString): JString
+    leftPad(str: JString, size: JInt, padStr: JString): JString;
 
     /**
-     * 获取JCharSequence长度，如果JCharSequence为null，则获取0
+     * 获取CharSequence长度，如果CharSequence为null，则获取0
      */
-    length(cs: JCharSequence | JString): JInt
+    length(cs: JString): JInt;
 
     // Centering
     //----------------------------------------------------------------------------------------------------------------------------------------------
-
     /**
      * <pre>
      *  .center(null, *)   = null
@@ -460,7 +450,7 @@ interface StringUtils {
      *  .center("a", 4)    = " a  "
      * </pre>
      */
-    center(str: JString, size: JInt): JString
+    center(str: JString, size: JInt): JString;
 
     /**
      * <pre>
@@ -473,7 +463,7 @@ interface StringUtils {
      *  .center("a", 4, 'y')    = "yayy"
      * </pre>
      */
-    center(str: JString, size: JInt, padChar: JChar): JString
+    center(str: JString, size: JInt, padChar: JChar): JString;
 
     /**
      * <pre>
@@ -488,11 +478,10 @@ interface StringUtils {
      *  .center("abc", 7, "")   = "  abc  "
      * </pre>
      */
-    center(str: JString, size: JInt, padStr: JString): JString
+    center(str: JString, size: JInt, padStr: JString): JString;
 
     // Case conversion
     //----------------------------------------------------------------------------------------------------------------------------------------------
-
     /**
      * <pre>
      *  .upperCase(null)  = null
@@ -500,16 +489,16 @@ interface StringUtils {
      *  .upperCase("aBc") = "ABC"
      * </pre>
      */
-    upperCase(str: JString): JString
+    upperCase(str: JString): JString;
 
-    // /**
-    //  * <pre>
-    //  *  .upperCase(null, Locale.ENGLISH)  = null
-    //  *  .upperCase("", Locale.ENGLISH)    = ""
-    //  *  .upperCase("aBc", Locale.ENGLISH) = "ABC"
-    //  * </pre>
-    //  */
-    // upperCase(str:JString ,locale: Locale ) :JString
+    /**
+     * <pre>
+     *  .upperCase(null, Locale.ENGLISH)  = null
+     *  .upperCase("", Locale.ENGLISH)    = ""
+     *  .upperCase("aBc", Locale.ENGLISH) = "ABC"
+     * </pre>
+     */
+    upperCase(str: JString, locale: Locale): JString;
 
     /**
      * <pre>
@@ -518,16 +507,16 @@ interface StringUtils {
      *  .lowerCase("aBc") = "abc"
      * </pre>
      */
-    lowerCase(str: JString): JString
+    lowerCase(str: JString): JString;
 
-    // /**
-    //  * <pre>
-    //  *  .lowerCase(null, Locale.ENGLISH)  = null
-    //  *  .lowerCase("", Locale.ENGLISH)    = ""
-    //  *  .lowerCase("aBc", Locale.ENGLISH) = "abc"
-    //  * </pre>
-    //  */
-    // lowerCase(str:JString ,locale: Locale ) :JString
+    /**
+     * <pre>
+     *  .lowerCase(null, Locale.ENGLISH)  = null
+     *  .lowerCase("", Locale.ENGLISH)    = ""
+     *  .lowerCase("aBc", Locale.ENGLISH) = "abc"
+     * </pre>
+     */
+    lowerCase(str: JString, locale: Locale): JString;
 
     /**
      * <pre>
@@ -538,7 +527,7 @@ interface StringUtils {
      *  .capitalize("'cat'") = "'cat'"
      * </pre>
      */
-    capitalize(str: JString): JString
+    capitalize(str: JString): JString;
 
     /**
      * <pre>
@@ -549,7 +538,7 @@ interface StringUtils {
      *  .uncapitalize("CAT") = "cAT"
      * </pre>
      */
-    uncapitalize(str: JString): JString
+    uncapitalize(str: JString): JString;
 
     /**
      * <pre>
@@ -558,11 +547,10 @@ interface StringUtils {
      *  .swapCase("The dog has a BONE") = "tHE DOG HAS A bone"
      * </pre>
      */
-    swapCase(str: JString): JString
+    swapCase(str: JString): JString;
 
     // Count matches
     //----------------------------------------------------------------------------------------------------------------------------------------------
-
     /**
      * <pre>
      *  .countMatches(null, *)       = 0
@@ -574,7 +562,7 @@ interface StringUtils {
      *  .countMatches("abba", "xxx") = 0
      * </pre>
      */
-    countMatches(str: JCharSequence | JString, sub: JCharSequence | JString): JInt
+    countMatches(str: JString, sub: JString): JInt;
 
     /**
      * <pre>
@@ -586,11 +574,10 @@ interface StringUtils {
      *  .countMatches("abba", 'x')   = 0
      * </pre>
      */
-    countMatches(str: JCharSequence | JString, ch: JChar): JInt
+    countMatches(str: JString, ch: JChar): JInt;
 
     // Character Tests
     //----------------------------------------------------------------------------------------------------------------------------------------------
-
     /**
      * <pre>
      *  .isAlpha(null)   = false
@@ -601,7 +588,7 @@ interface StringUtils {
      *  .isAlpha("ab-c") = false
      * </pre>
      */
-    isAlpha(cs: JCharSequence | JString): JBoolean
+    isAlpha(cs: JString): JBoolean;
 
     /**
      * <pre>
@@ -614,7 +601,7 @@ interface StringUtils {
      *  .isAlphaSpace("ab-c") = false
      * </pre>
      */
-    isAlphaSpace(cs: JCharSequence | JString): JBoolean
+    isAlphaSpace(cs: JString): JBoolean;
 
     /**
      * <pre>
@@ -627,7 +614,7 @@ interface StringUtils {
      *  .isAlphanumeric("ab-c") = false
      * </pre>
      */
-    isAlphanumeric(cs: JCharSequence | JString): JBoolean
+    isAlphanumeric(cs: JString): JBoolean;
 
     /**
      * <pre>
@@ -640,7 +627,7 @@ interface StringUtils {
      *  .isAlphanumericSpace("ab-c") = false
      * </pre>
      */
-    isAlphanumericSpace(cs: JCharSequence | JString): JBoolean
+    isAlphanumericSpace(cs: JString): JBoolean;
 
     /**
      * <pre>
@@ -657,7 +644,7 @@ interface StringUtils {
      *  .isAsciiPrintable("Ceki Gülcü") = false
      * </pre>
      */
-    isAsciiPrintable(cs: JCharSequence | JString): JBoolean
+    isAsciiPrintable(cs: JString): JBoolean;
 
     /**
      * <pre>
@@ -674,7 +661,7 @@ interface StringUtils {
      *  .isNumeric("+123") = false
      * </pre>
      */
-    isNumeric(cs: JCharSequence | JString): JBoolean
+    isNumeric(cs: JString): JBoolean;
 
     /**
      * <pre>
@@ -690,7 +677,7 @@ interface StringUtils {
      *  .isNumericSpace("12.3") = false
      * </pre>
      */
-    isNumericSpace(cs: JCharSequence | JString): JBoolean
+    isNumericSpace(cs: JString): JBoolean;
 
     /**
      * <pre>
@@ -703,7 +690,7 @@ interface StringUtils {
      *  .getDigits("\u0967\u0968\u0969") = "\u0967\u0968\u0969"
      * </pre>
      */
-    getDigits(str: JString): JString
+    getDigits(str: JString): JString;
 
     /**
      * <pre>
@@ -715,7 +702,7 @@ interface StringUtils {
      *  .isWhitespace("ab-c") = false
      * </pre>
      */
-    isWhitespace(cs: JCharSequence | JString): JBoolean
+    isWhitespace(cs: JString): JBoolean;
 
     /**
      * <pre>
@@ -729,7 +716,7 @@ interface StringUtils {
      *  .isAllLowerCase("ab/c") = false
      * </pre>
      */
-    isAllLowerCase(cs: JCharSequence | JString): JBoolean
+    isAllLowerCase(cs: JString): JBoolean;
 
     /**
      * <pre>
@@ -743,7 +730,7 @@ interface StringUtils {
      *  .isAllUpperCase("A/C")  = false
      * </pre>
      */
-    isAllUpperCase(cs: JCharSequence | JString): JBoolean
+    isAllUpperCase(cs: JString): JBoolean;
 
     /**
      * <pre>
@@ -758,11 +745,10 @@ interface StringUtils {
      *  .isMixedCase("aC\t")  = true
      * </pre>
      */
-    isMixedCase(cs: JCharSequence | JString): JBoolean
+    isMixedCase(cs: JString): JBoolean;
 
     // Defaults
     //-----------------------------------------------------------------------
-
     /**
      * <pre>
      *  .defaultString(null)  = ""
@@ -770,7 +756,7 @@ interface StringUtils {
      *  .defaultString("bat") = "bat"
      * </pre>
      */
-    defaultString(str: JString): JString
+    defaultString(str: JString): JString;
 
     /**
      * <pre>
@@ -779,60 +765,10 @@ interface StringUtils {
      *  .defaultString("bat", "NULL") = "bat"
      * </pre>
      */
-    defaultString(str: JString, defaultStr: JString): JString
-
-    /**
-     * <pre>
-     *  .firstNonBlank(null, null, null)     = null
-     *  .firstNonBlank(null, "", " ")        = null
-     *  .firstNonBlank("abc")                = "abc"
-     *  .firstNonBlank(null, "xyz")          = "xyz"
-     *  .firstNonBlank(null, "", " ", "xyz") = "xyz"
-     *  .firstNonBlank(null, "xyz", "abc")   = "xyz"
-     *  .firstNonBlank()                     = null
-     * </pre>
-     */
-    firstNonBlank<T extends JCharSequence | JString>(values: T[]): T
-
-    /**
-     * <pre>
-     *  .firstNonEmpty(null, null, null)   = null
-     *  .firstNonEmpty(null, null, "")     = null
-     *  .firstNonEmpty(null, "", " ")      = " "
-     *  .firstNonEmpty("abc")              = "abc"
-     *  .firstNonEmpty(null, "xyz")        = "xyz"
-     *  .firstNonEmpty("", "xyz")          = "xyz"
-     *  .firstNonEmpty(null, "xyz", "abc") = "xyz"
-     *  .firstNonEmpty()                   = null
-     * </pre>
-     */
-    firstNonEmpty<T extends JCharSequence | JString>(values: T[]): T
-
-    /**
-     * <pre>
-     *  .defaultIfBlank(null, "NULL")  = "NULL"
-     *  .defaultIfBlank("", "NULL")    = "NULL"
-     *  .defaultIfBlank(" ", "NULL")   = "NULL"
-     *  .defaultIfBlank("bat", "NULL") = "bat"
-     *  .defaultIfBlank("", null)      = null
-     * </pre>
-     */
-    defaultIfBlank<T extends JCharSequence | JString>(str: T, defaultStr: T): T
-
-    /**
-     * <pre>
-     *  .defaultIfEmpty(null, "NULL")  = "NULL"
-     *  .defaultIfEmpty("", "NULL")    = "NULL"
-     *  .defaultIfEmpty(" ", "NULL")   = " "
-     *  .defaultIfEmpty("bat", "NULL") = "bat"
-     *  .defaultIfEmpty("", null)      = null
-     * </pre>
-     */
-    defaultIfEmpty<T extends JCharSequence | JString>(str: T, defaultStr: T): T
+    defaultString(str: JString, defaultStr: JString): JString;
 
     // Rotating (circular shift)
     //----------------------------------------------------------------------------------------------------------------------------------------------
-
     /**
      * <pre>
      *  .rotate(null, *)        = null
@@ -846,11 +782,10 @@ interface StringUtils {
      *  .rotate("abcdefg", -9)  = "cdefgab"
      * </pre>
      */
-    rotate(str: JString, shift: JInt): JString
+    rotate(str: JString, shift: JInt): JString;
 
     // Reversing
     //----------------------------------------------------------------------------------------------------------------------------------------------
-
     /**
      * <pre>
      *  .reverse(null)  = null
@@ -858,7 +793,7 @@ interface StringUtils {
      *  .reverse("bat") = "tab"
      * </pre>
      */
-    reverse(str: JString): JString
+    reverse(str: JString): JString;
 
     /**
      * <pre>
@@ -868,74 +803,73 @@ interface StringUtils {
      *  .reverseDelimited("a.b.c", ".") = "c.b.a"
      * </pre>
      */
-    reverseDelimited(str: JString, separatorChar: JChar): JString
+    reverseDelimited(str: JString, separatorChar: JChar): JString;
 
     // Abbreviating
     //----------------------------------------------------------------------------------------------------------------------------------------------
-
     /**
      * <pre>
      *  .abbreviate(null, *)      = null
      *  .abbreviate("", 4)        = ""
-     *  .abbreviate("abcdefg", 6) = "abc[]"
+     *  .abbreviate("abcdefg", 6) = "abc..."
      *  .abbreviate("abcdefg", 7) = "abcdefg"
      *  .abbreviate("abcdefg", 8) = "abcdefg"
-     *  .abbreviate("abcdefg", 4) = "a[]"
+     *  .abbreviate("abcdefg", 4) = "a..."
      *  .abbreviate("abcdefg", 3) = IllegalArgumentException
      * </pre>
      */
-    abbreviate(str: JString, maxWidth: JInt): JString
+    abbreviate(str: JString, maxWidth: JInt): JString;
 
     /**
      * <pre>
      *  .abbreviate(null, *, *)                = null
      *  .abbreviate("", 0, 4)                  = ""
-     *  .abbreviate("abcdefghijklmno", -1, 10) = "abcdefg[]"
-     *  .abbreviate("abcdefghijklmno", 0, 10)  = "abcdefg[]"
-     *  .abbreviate("abcdefghijklmno", 1, 10)  = "abcdefg[]"
-     *  .abbreviate("abcdefghijklmno", 4, 10)  = "abcdefg[]"
-     *  .abbreviate("abcdefghijklmno", 5, 10)  = "[]fghi[]"
-     *  .abbreviate("abcdefghijklmno", 6, 10)  = "[]ghij[]"
-     *  .abbreviate("abcdefghijklmno", 8, 10)  = "[]ijklmno"
-     *  .abbreviate("abcdefghijklmno", 10, 10) = "[]ijklmno"
-     *  .abbreviate("abcdefghijklmno", 12, 10) = "[]ijklmno"
+     *  .abbreviate("abcdefghijklmno", -1, 10) = "abcdefg..."
+     *  .abbreviate("abcdefghijklmno", 0, 10)  = "abcdefg..."
+     *  .abbreviate("abcdefghijklmno", 1, 10)  = "abcdefg..."
+     *  .abbreviate("abcdefghijklmno", 4, 10)  = "abcdefg..."
+     *  .abbreviate("abcdefghijklmno", 5, 10)  = "...fghi..."
+     *  .abbreviate("abcdefghijklmno", 6, 10)  = "...ghij..."
+     *  .abbreviate("abcdefghijklmno", 8, 10)  = "...ijklmno"
+     *  .abbreviate("abcdefghijklmno", 10, 10) = "...ijklmno"
+     *  .abbreviate("abcdefghijklmno", 12, 10) = "...ijklmno"
      *  .abbreviate("abcdefghij", 0, 3)        = IllegalArgumentException
      *  .abbreviate("abcdefghij", 5, 6)        = IllegalArgumentException
      * </pre>
      */
-    abbreviate(str: JString, offset: JInt, maxWidth: JInt): JString
+    abbreviate(str: JString, offset: JInt, maxWidth: JInt): JString;
 
     /**
      * <pre>
-     *  .abbreviate(null, "[]", *)      = null
+     *  .abbreviate(null, "...", *)      = null
      *  .abbreviate("abcdefg", null, *)  = "abcdefg"
-     *  .abbreviate("", "[]", 4)        = ""
+     *  .abbreviate("", "...", 4)        = ""
      *  .abbreviate("abcdefg", ".", 5)   = "abcd."
      *  .abbreviate("abcdefg", ".", 7)   = "abcdefg"
      *  .abbreviate("abcdefg", ".", 8)   = "abcdefg"
      *  .abbreviate("abcdefg", "..", 4)  = "ab.."
      *  .abbreviate("abcdefg", "..", 3)  = "a.."
      *  .abbreviate("abcdefg", "..", 2)  = IllegalArgumentException
-     *  .abbreviate("abcdefg", "[]", 3) = IllegalArgumentException
+     *  .abbreviate("abcdefg", "...", 3) = IllegalArgumentException
      * </pre>
      */
-    abbreviate(str: JString, abbrevMarker: JString, maxWidth: JInt): JString
+    abbreviate(str: JString, abbrevMarker: JString, maxWidth: JInt): JString;
 
     /**
      * <pre>
-     *  .abbreviate(null, "[]", *)      = null
+     *  .abbreviate(null, "...", *)      = null
      *  .abbreviate("abcdefg", null, *)  = "abcdefg"
-     *  .abbreviate("", "[]", 4)        = ""
+     *  .abbreviate("", "...", 4)        = ""
      *  .abbreviate("abcdefg", ".", 5)   = "abcd."
      *  .abbreviate("abcdefg", ".", 7)   = "abcdefg"
      *  .abbreviate("abcdefg", ".", 8)   = "abcdefg"
      *  .abbreviate("abcdefg", "..", 4)  = "ab.."
      *  .abbreviate("abcdefg", "..", 3)  = "a.."
      *  .abbreviate("abcdefg", "..", 2)  = IllegalArgumentException
-     *  .abbreviate("abcdefg", "[]", 3) = IllegalArgumentException
+     *  .abbreviate("abcdefg", "...", 3) = IllegalArgumentException
      * </pre>
      */
-    abbreviate(str: JString, abbrevMarker: JString, offset: JInt, maxWidth: JInt): JString
+    abbreviate(str: JString, abbrevMarker: JString, offset: JInt, maxWidth: JInt): JString;
 
     /**
      * <pre>
@@ -946,11 +880,10 @@ interface StringUtils {
      *  .abbreviateMiddle("abcdef", ".", 4)     = "ab.f"
      * </pre>
      */
-    abbreviateMiddle(str: JString, middle: JString, length: JInt): JString
+    abbreviateMiddle(str: JString, middle: JString, length: JInt): JString;
 
     // Difference
     //----------------------------------------------------------------------------------------------------------------------------------------------
-
     /**
      * <pre>
      *  .difference(null, null)          = null
@@ -964,7 +897,7 @@ interface StringUtils {
      *  .difference("abcde", "xyz")      = "xyz"
      * </pre>
      */
-    difference(str1: JString, str2: JString): JString
+    difference(str1: JString, str2: JString): JString;
 
     /**
      * <pre>
@@ -978,7 +911,7 @@ interface StringUtils {
      *  .indexOfDifference("abcde", "xyz")   = 0
      * </pre>
      */
-    indexOfDifference(cs1: JCharSequence | JString, cs2: JCharSequence | JString): JInt
+    indexOfDifference(cs1: JString, cs2: JString): JInt;
 
     /**
      * <pre>
@@ -1001,7 +934,7 @@ interface StringUtils {
      *  .indexOfDifference(new String[] {"i am a machine", "i am a robot"}) = 7
      * </pre>
      */
-    indexOfDifference(css: JCharSequence[] | JString[]): JInt
+    indexOfDifference(...css: JString[]): JInt;
 
     /**
      * <pre>
@@ -1024,14 +957,12 @@ interface StringUtils {
      *  .getCommonPrefix(new String[] {"i am a machine", "i am a robot"})   = "i am a "
      * </pre>
      */
-    getCommonPrefix(strs: JString[]): JString
+    getCommonPrefix(...strs: JString[]): JString;
 
     // Misc
     //----------------------------------------------------------------------------------------------------------------------------------------------
-
     // startsWith
     //----------------------------------------------------------------------------------------------------------------------------------------------
-
     /**
      * <pre>
      *  .startsWith(null, null)      = true
@@ -1041,7 +972,7 @@ interface StringUtils {
      *  .startsWith("ABCDEF", "abc") = false
      * </pre>
      */
-    startsWith(str: JCharSequence | JString, prefix: JCharSequence | JString): JBoolean
+    startsWith(str: JString, prefix: JString): JBoolean;
 
     /**
      * <pre>
@@ -1052,7 +983,7 @@ interface StringUtils {
      *  .startsWithIgnoreCase("ABCDEF", "abc") = true
      * </pre>
      */
-    startsWithIgnoreCase(str: JCharSequence | JString, prefix: JCharSequence | JString): JBoolean
+    startsWithIgnoreCase(str: JString, prefix: JString): JBoolean;
 
     /**
      * <pre>
@@ -1066,11 +997,10 @@ interface StringUtils {
      *  .startsWithAny("ABCXYZ", null, "xyz", "abc")                 = false
      * </pre>
      */
-    startsWithAny(sequence: JCharSequence | JString, searchStrings: JCharSequence[] | JString[]): JBoolean
+    startsWithAny(sequence: JString, ...searchStrings: JString[]): JBoolean;
 
     // endsWith
     //----------------------------------------------------------------------------------------------------------------------------------------------
-
     /**
      * <pre>
      *  .endsWith(null, null)      = true
@@ -1082,7 +1012,7 @@ interface StringUtils {
      *  .endsWith("ABCDEF", "")    = true
      * </pre>
      */
-    endsWith(str: JCharSequence | JString, suffix: JCharSequence | JString): JBoolean
+    endsWith(str: JString, suffix: JString): JBoolean;
 
     /**
      * <pre>
@@ -1094,12 +1024,12 @@ interface StringUtils {
      *  .endsWithIgnoreCase("ABCDEF", "cde") = false
      * </pre>
      */
-    endsWithIgnoreCase(str: JCharSequence | JString, suffix: JCharSequence | JString): JBoolean
+    endsWithIgnoreCase(str: JString, suffix: JString): JBoolean;
 
     /**
      *
      */
-    normalizeSpace(str: JString): JString
+    normalizeSpace(str: JString): JString;
 
     /**
      * <pre>
@@ -1113,7 +1043,7 @@ interface StringUtils {
      *  .endsWithAny("abcXYZ", "def", "xyz")                        = false
      * </pre>
      */
-    endsWithAny(sequence: JCharSequence | JString, searchStrings: JCharSequence[] | JString[]): JBoolean
+    endsWithAny(sequence: JString, ...searchStrings: JString[]): JBoolean;
 
     /**
      * <pre>
@@ -1125,7 +1055,7 @@ interface StringUtils {
      *  .appendIfMissing("abcXYZ", "xyz")   = "abcXYZxyz"
      * </pre>
      */
-    appendIfMissing(str: JString, suffix: JCharSequence | JString, suffixes: JCharSequence[] | JString[]): JString
+    appendIfMissing(str: JString, suffix: JString, ...suffixes: JString[]): JString;
 
     /**
      * <pre>
@@ -1137,7 +1067,7 @@ interface StringUtils {
      *  .appendIfMissingIgnoreCase("abcXYZ", "xyz") = "abcXYZ"
      * </pre>
      */
-    appendIfMissingIgnoreCase(str: JString, suffix: JCharSequence | JString, suffixes: JCharSequence[] | JString[]): JString
+    appendIfMissingIgnoreCase(str: JString, suffix: JString, ...suffixes: JString[]): JString;
 
     /**
      * <pre>
@@ -1149,7 +1079,7 @@ interface StringUtils {
      *  .prependIfMissing("XYZabc", "xyz") = "xyzXYZabc"
      * </pre>
      */
-    prependIfMissing(str: JString, prefix: JCharSequence | JString, prefixes: JCharSequence[] | JString[]): JString
+    prependIfMissing(str: JString, prefix: JString, ...prefixes: JString[]): JString;
 
     /**
      * <pre>
@@ -1161,12 +1091,12 @@ interface StringUtils {
      *  .prependIfMissingIgnoreCase("XYZabc", "xyz") = "XYZabc"
      * </pre>
      */
-    prependIfMissingIgnoreCase(str: JString, prefix: JCharSequence | JString, prefixes: JCharSequence[] | JString[]): JString
+    prependIfMissingIgnoreCase(str: JString, prefix: JString, ...prefixes: JString[]): JString;
 
-    // /**
-    //  * 使用指定的字符编码将byte[]转换为字符串
-    //  */
-    // toEncodedString(bytes:JByte[] ,JCharset: Charset) :JString
+    /**
+     * 使用指定的字符编码将byte[]转换为字符串
+     */
+    toEncodedString(bytes: JByte[], charset: Charset): JString;
 
     /**
      * <pre>
@@ -1178,7 +1108,7 @@ interface StringUtils {
      *  .wrap("\"ab\"", '\"') = "\"\"ab\"\""
      * </pre>
      */
-    wrap(str: JString, wrapWith: JChar): JString
+    wrap(str: JString, wrapWith: JChar): JString;
 
     /**
      * <pre>
@@ -1194,7 +1124,7 @@ interface StringUtils {
      *  .wrap("'abcd'", "\"")  = "\"'abcd'\""
      * </pre>
      */
-    wrap(str: JString, wrapWith: JString): JString
+    wrap(str: JString, wrapWith: JString): JString;
 
     /**
      * <pre>
@@ -1210,7 +1140,7 @@ interface StringUtils {
      *  .wrap("a/b/c/", '/')  = "/a/b/c/"
      * </pre>
      */
-    wrapIfMissing(str: JString, wrapWith: JChar): JString
+    wrapIfMissing(str: JString, wrapWith: JChar): JString;
 
     /**
      * <pre>
@@ -1230,7 +1160,7 @@ interface StringUtils {
      *  .wrap("a/b/c/", "/")  = "/a/b/c/"
      * </pre>
      */
-    wrapIfMissing(str: JString, wrapWith: JString): JString
+    wrapIfMissing(str: JString, wrapWith: JString): JString;
 
     /**
      * <pre>
@@ -1245,7 +1175,7 @@ interface StringUtils {
      *  .unwrap("A#", "#")          = "A#"
      * </pre>
      */
-    unwrap(str: JString, wrapToken: JString): JString
+    unwrap(str: JString, wrapToken: JString): JString;
 
     /**
      * <pre>
@@ -1259,15 +1189,15 @@ interface StringUtils {
      *  .unwrap("A#", '#')          = "A#"
      * </pre>
      */
-    unwrap(str: JString, wrapChar: JChar): JString
+    unwrap(str: JString, wrapChar: JChar): JString;
 
     /**
      * <pre>
-     *  .toCodePoJInts(null)   =  null
-     *  .toCodePoJInts("")     =  []  // empty array
+     *  .toCodePoints(null)   =  null
+     *  .toCodePoints("")     =  []  // empty array
      * </pre>
      */
-    toCodePoints(str: JCharSequence | JString): JInt[]
+    toCodePoints(str: JString): JInt[];
 }
 
 declare const StringUtils: StringUtils;

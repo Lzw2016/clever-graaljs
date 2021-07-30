@@ -1,7 +1,6 @@
 interface StringUtils {
     // Other
     //----------------------------------------------------------------------------------------------------------------------------------------------
-
     /**
      * 字符串驼峰转下划线格式
      *
@@ -26,7 +25,7 @@ interface StringUtils {
      * @return 转换好的字符串
      */
     underlineToCamel(param: JString, firstUpperCase: JBoolean): JString;
-    
+
     /**
      * 获取字符串byte[]数据
      */
@@ -44,7 +43,7 @@ interface StringUtils {
      * @param defaultStr 对象为空时返回的默认值
      * @return 返回对象的toString方法结果
      */
-    objectToString(object: any, defaultStr: JString): JString
+    objectToString(object: any, defaultStr: JString): JString;
 
     /**
      * 除去html标签
@@ -52,11 +51,10 @@ interface StringUtils {
      * @param htmlStr 含有html标签的字符串
      * @return 网页文本内容
      */
-    delHTMLTag(htmlStr: JString): JString
+    delHTMLTag(htmlStr: JString): JString;
 
     // Empty checks
     //----------------------------------------------------------------------------------------------------------------------------------------------
-
     /**
      * 是否是空字符串(“”或null)
      * <pre>
@@ -67,7 +65,7 @@ interface StringUtils {
      *  .isEmpty("  bob  ") = false
      * </pre>
      */
-    isEmpty(cs: JString): JBoolean
+    isEmpty(cs: JString): JBoolean;
 
     /**
      * 是否是非空字符串(“”或null)
@@ -79,7 +77,7 @@ interface StringUtils {
      *  .isNotEmpty("  bob  ") = true
      * </pre>
      */
-    isNotEmpty(cs: JString): JBoolean
+    isNotEmpty(cs: JString): JBoolean;
 
     /**
      * 是否存在空字符串(“”或null)
@@ -96,7 +94,7 @@ interface StringUtils {
      *  .isAnyEmpty(new String[]{""}) = true
      * </pre>
      */
-    isAnyEmpty(css: JString[]): JBoolean
+    isAnyEmpty(...css: JString[]): JBoolean;
 
     /**
      * 是否存在非空字符串(“”或null)
@@ -113,7 +111,7 @@ interface StringUtils {
      *  .isNoneEmpty("foo", "bar")     = true
      * </pre>
      */
-    isNoneEmpty(css: JString[]): JBoolean
+    isNoneEmpty(...css: JString[]): JBoolean;
 
     /**
      * 是否所有字符串都是空字符串(“”或null)
@@ -129,7 +127,7 @@ interface StringUtils {
      *  .isAllEmpty("foo", "bar")     = false
      * </pre>
      */
-    isAllEmpty(css: JString[]): JBoolean
+    isAllEmpty(...css: JString[]): JBoolean;
 
     /**
      * 是否是空字符串(“”、“ ”或null)
@@ -141,7 +139,7 @@ interface StringUtils {
      *  .isBlank("  bob  ") = false
      * </pre>
      */
-    isBlank(cs: JString): JBoolean
+    isBlank(cs: JString): JBoolean;
 
     /**
      * 是否是非空字符串(“”、“ ”或null)
@@ -153,7 +151,7 @@ interface StringUtils {
      *  .isNotBlank("  bob  ") = true
      * </pre>
      */
-    isNotBlank(cs: JString): JBoolean
+    isNotBlank(cs: JString): JBoolean;
 
     /**
      * 是否存在空字符串(“”、“ ”或null)
@@ -171,7 +169,7 @@ interface StringUtils {
      *  .isAnyBlank("foo", "bar")     = false
      * </pre>
      */
-    isAnyBlank(css: JString[]): JBoolean
+    isAnyBlank(...css: JString[]): JBoolean;
 
     /**
      * 是否存在非空字符串(“”、“ ”或null)
@@ -189,7 +187,7 @@ interface StringUtils {
      *  .isNoneBlank("foo", "bar")     = true
      * </pre>
      */
-    isNoneBlank(css: JString[]): JBoolean
+    isNoneBlank(...css: JString[]): JBoolean;
 
     /**
      * 是否所有字符串都是空字符串(“”、“ ”或null)
@@ -205,11 +203,10 @@ interface StringUtils {
      *  .isAllBlank(new String[] {})  = true
      * </pre>
      */
-    isAllBlank(css: JString[]): JBoolean
+    isAllBlank(...css: JString[]): JBoolean;
 
     // Trim
     //----------------------------------------------------------------------------------------------------------------------------------------------
-
     /**
      * <pre>
      *  .trim(null)          = null
@@ -219,7 +216,7 @@ interface StringUtils {
      *  .trim("    abc    ") = "abc"
      * </pre>
      */
-    trim(str: JString): JString
+    trim(str: JString): JString;
 
     /**
      * <pre>
@@ -230,7 +227,7 @@ interface StringUtils {
      *  .trimToNull("    abc    ") = "abc"
      * </pre>
      */
-    trimToNull(str: JString): JString
+    trimToNull(str: JString): JString;
 
     /**
      * <pre>
@@ -241,7 +238,7 @@ interface StringUtils {
      *  .trimToEmpty("    abc    ") = "abc"
      * </pre>
      */
-    trimToEmpty(str: JString): JString
+    trimToEmpty(str: JString): JString;
 
     /**
      * 截断字符串
@@ -256,7 +253,7 @@ interface StringUtils {
      *  .truncate("abcdefg", -1) = throws an IllegalArgumentException
      * </pre>
      */
-    truncate(str: JString, maxWidth: JInt): JString
+    truncate(str: JString, maxWidth: JInt): JString;
 
     /**
      * 截断字符串
@@ -265,11 +262,10 @@ interface StringUtils {
      * @param offset   起始位置
      * @param maxWidth 结果字符串的最大长度
      */
-    truncate(str: JString, offset: JInt, maxWidth: JInt): JString
+    truncate(str: JString, offset: JInt, maxWidth: JInt): JString;
 
     // Stripping
     //----------------------------------------------------------------------------------------------------------------------------------------------
-
     /**
      * 从字符串的开始和结尾删除空白
      * <pre>
@@ -283,7 +279,7 @@ interface StringUtils {
      *  .strip(" ab c ") = "ab c"
      * </pre>
      */
-    strip(str: JString): JString
+    strip(str: JString): JString;
 
     /**
      * 从字符串的开始和结尾去除空白，如果字符串在strip之后为空（“”），则返回null
@@ -298,7 +294,7 @@ interface StringUtils {
      *  .stripToNull(" ab c ") = "ab c"
      * </pre>
      */
-    stripToNull(str: JString): JString
+    stripToNull(str: JString): JString;
 
     /**
      * 从字符串的开始和结尾去除空白，如果字符串在strip之后为null，则返回“”
@@ -313,7 +309,7 @@ interface StringUtils {
      *  .stripToEmpty(" ab c ") = "ab c"
      * </pre>
      */
-    stripToEmpty(str: JString): JString
+    stripToEmpty(str: JString): JString;
 
     /**
      * <pre>
@@ -329,7 +325,7 @@ interface StringUtils {
      * @param str        源字符串
      * @param stripChars 要删除的字符，null被视为空白
      */
-    strip(str: JString, stripChars: JString): JString
+    strip(str: JString, stripChars: JString): JString;
 
     /**
      * 删除开始的空白字符
@@ -347,7 +343,7 @@ interface StringUtils {
      * @param str        源字符串
      * @param stripChars 要删除的字符，null被视为空白
      */
-    stripStart(str: JString, stripChars: JString): JString
+    stripStart(str: JString, stripChars: JString): JString;
 
     /**
      * 删除结束的空白字符
@@ -366,11 +362,10 @@ interface StringUtils {
      * @param str        源字符串
      * @param stripChars 要删除的字符，null被视为空白
      */
-    stripEnd(str: JString, stripChars: JString): JString
+    stripEnd(str: JString, stripChars: JString): JString;
 
     // StripAll
     //----------------------------------------------------------------------------------------------------------------------------------------------
-
     /**
      * <pre>
      *  .stripAll(null)             = null
@@ -379,7 +374,7 @@ interface StringUtils {
      *  .stripAll(["abc  ", null])  = ["abc", null]
      * </pre>
      */
-    stripAll(strs: JString[]): JString[]
+    stripAll(...strs: JString[]): JString[];
 
     /**
      * <pre>
@@ -394,7 +389,7 @@ interface StringUtils {
      * @param strs       源字符串数组
      * @param stripChars 要删除的字符，null被视为空白
      */
-    stripAll(strs: JString[], stripChars: JString): JString[]
+    stripAll(strs: JString[], stripChars: JString): JString[];
 
     /**
      * 从字符串中删除音调符号。例如，“à”将被“a”替换。
@@ -405,11 +400,10 @@ interface StringUtils {
      *  .stripAccents("éclair")     = "eclair"
      * </pre>
      */
-    stripAccents(input: JString): JString
+    stripAccents(input: JString): JString;
 
     // Equals
     //-----------------------------------------------------------------------
-
     /**
      * <pre>
      *  .equals(null, null)   = true
@@ -419,7 +413,7 @@ interface StringUtils {
      *  .equals("abc", "ABC") = false
      * </pre>
      */
-    equals(cs1: JCharSequence | JString, cs2: JCharSequence | JString): JBoolean
+    equals(cs1: JString, cs2: JString): JBoolean;
 
     /**
      * <pre>
@@ -430,11 +424,10 @@ interface StringUtils {
      *  .equalsIgnoreCase("abc", "ABC") = true
      * </pre>
      */
-    equalsIgnoreCase(str1: JCharSequence | JString, str2: JCharSequence | JString): JBoolean
+    equalsIgnoreCase(str1: JString, str2: JString): JBoolean;
 
     // Compare
     //----------------------------------------------------------------------------------------------------------------------------------------------
-
     /**
      * <pre>
      *  .compare(null, null)   = 0
@@ -447,7 +440,7 @@ interface StringUtils {
      *  .compare("ab", "abc")  < 0
      * </pre>
      */
-    compare(str1: JString, str2: JString): JInt
+    compare(str1: JString, str2: JString): JInt;
 
     /**
      * <pre>
@@ -464,10 +457,8 @@ interface StringUtils {
      * </pre>
      *
      * @param nullIsLess 是否是空值小于非空值
-     * @param str1
-     * @param str2
      */
-    compare(str1: JString, str2: JString, nullIsLess: JBoolean): JInt
+    compare(str1: JString, str2: JString, nullIsLess: JBoolean): JInt;
 
     /**
      * <pre>
@@ -483,7 +474,7 @@ interface StringUtils {
      *  .compareIgnoreCase("ab", "ABC")  < 0
      * </pre>
      */
-    compareIgnoreCase(str1: JString, str2: JString): JInt
+    compareIgnoreCase(str1: JString, str2: JString): JInt;
 
     /**
      * <pre>
@@ -502,15 +493,13 @@ interface StringUtils {
      * </pre>
      *
      * @param nullIsLess 是否是空值小于非空值
-     * @param str1
-     * @param str2
      */
-    compareIgnoreCase(str1: JString, str2: JString, nullIsLess: JBoolean): JInt
+    compareIgnoreCase(str1: JString, str2: JString, nullIsLess: JBoolean): JInt;
 
     /**
-     * 将给定字符串与搜索字符串的JCharSequences vararg进行比较，如果字符串等于任何搜索字符串，则返回true
+     * 将给定字符串与搜索字符串的CharSequences vararg进行比较，如果字符串等于任何搜索字符串，则返回true
      * <pre>
-     *  .equalsAny(null, (JCharSequence[]) null) = false
+     *  .equalsAny(null, (CharSequence[]) null) = false
      *  .equalsAny(null, null, null)    = true
      *  .equalsAny(null, "abc", "def")  = false
      *  .equalsAny("abc", null, "def")  = false
@@ -518,12 +507,12 @@ interface StringUtils {
      *  .equalsAny("abc", "ABC", "DEF") = false
      * </pre>
      */
-    equalsAny(string: JCharSequence | JString, searchStrings: JCharSequence[] | JString[]): JBoolean
+    equalsAny(string: JString, ...searchStrings: JString[]): JBoolean;
 
     /**
-     * 将给定字符串与搜索字符串的JCharSequences vararg进行比较，如果字符串等于任何搜索字符串，则返回true。忽略大小写
+     * 将给定字符串与搜索字符串的CharSequences vararg进行比较，如果字符串等于任何搜索字符串，则返回true。忽略大小写
      * <pre>
-     *  .equalsAnyIgnoreCase(null, (JCharSequence[]) null) = false
+     *  .equalsAnyIgnoreCase(null, (CharSequence[]) null) = false
      *  .equalsAnyIgnoreCase(null, null, null)    = true
      *  .equalsAnyIgnoreCase(null, "abc", "def")  = false
      *  .equalsAnyIgnoreCase("abc", null, "def")  = false
@@ -531,11 +520,10 @@ interface StringUtils {
      *  .equalsAnyIgnoreCase("abc", "ABC", "DEF") = true
      * </pre>
      */
-    equalsAnyIgnoreCase(string: JCharSequence | JString, searchStrings: JCharSequence[] | JString[]): JBoolean
+    equalsAnyIgnoreCase(string: JString, ...searchStrings: JString[]): JBoolean;
 
     // IndexOf
     //----------------------------------------------------------------------------------------------------------------------------------------------
-
     /**
      * <pre>
      *  .indexOf(null, *)         = -1
@@ -544,7 +532,7 @@ interface StringUtils {
      *  .indexOf("aabaabaa", 'b') = 2
      * </pre>
      */
-    indexOf(seq: JCharSequence | JString, searchChar: JInt | JString): JInt
+    indexOf(seq: JString, searchChar: JInt): JInt;
 
     /**
      * <pre>
@@ -556,7 +544,7 @@ interface StringUtils {
      *  .indexOf("aabaabaa", 'b', -1) = 2
      * </pre>
      */
-    indexOf(seq: JCharSequence | JString, searchChar: JInt, startPos: JInt): JInt
+    indexOf(seq: JString, searchChar: JInt, startPos: JInt): JInt;
 
     /**
      * <pre>
@@ -570,7 +558,7 @@ interface StringUtils {
      *  .indexOf("aabaabaa", "")   = 0
      * </pre>
      */
-    indexOf(seq: JCharSequence | JString, searchSeq: JCharSequence | JString): JInt
+    indexOf(seq: JString, searchSeq: JString): JInt;
 
     /**
      * <pre>
@@ -588,7 +576,7 @@ interface StringUtils {
      *  .indexOf("abc", "", 9)        = 3
      * </pre>
      */
-    indexOf(seq: JCharSequence | JString, searchSeq: JCharSequence | JString, startPos: JInt): JInt
+    indexOf(seq: JString, searchSeq: JString, startPos: JInt): JInt;
 
     /**
      * <pre>
@@ -606,10 +594,8 @@ interface StringUtils {
      * </pre>
      *
      * @param ordinal 要查找的第n个searchStr
-     * @param str
-     * @param searchStr
      */
-    ordinalIndexOf(str: JCharSequence | JString, searchStr: JCharSequence | JString, ordinal: JInt): JInt
+    ordinalIndexOf(str: JString, searchStr: JString, ordinal: JInt): JInt;
 
     /**
      * <pre>
@@ -621,7 +607,7 @@ interface StringUtils {
      *  .indexOfIgnoreCase("aabaabaa", "ab") = 1
      * </pre>
      */
-    indexOfIgnoreCase(str: JCharSequence | JString, searchStr: JCharSequence | JString): JInt
+    indexOfIgnoreCase(str: JString, searchStr: JString): JInt;
 
     /**
      * <pre>
@@ -638,11 +624,10 @@ interface StringUtils {
      *  .indexOfIgnoreCase("abc", "", 9)        = -1
      * </pre>
      */
-    indexOfIgnoreCase(str: JCharSequence | JString, searchStr: JCharSequence | JString, startPos: JInt): JInt
+    indexOfIgnoreCase(str: JString, searchStr: JString, startPos: JInt): JInt;
 
     // LastIndexOf
     //----------------------------------------------------------------------------------------------------------------------------------------------
-
     /**
      * <pre>
      *  .lastIndexOf(null, *)         = -1
@@ -651,7 +636,7 @@ interface StringUtils {
      *  .lastIndexOf("aabaabaa", 'b') = 5
      * </pre>
      */
-    lastIndexOf(seq: JCharSequence | JString, searchChar: JInt | JString): JInt
+    lastIndexOf(seq: JString, searchChar: JInt): JInt;
 
     /**
      * <pre>
@@ -665,7 +650,7 @@ interface StringUtils {
      *  .lastIndexOf("aabaabaa", 'a', 0)  = 0
      * </pre>
      */
-    lastIndexOf(seq: JCharSequence | JString, searchChar: JInt | JString, startPos: JInt): JInt
+    lastIndexOf(seq: JString, searchChar: JInt, startPos: JInt): JInt;
 
     /**
      * <pre>
@@ -678,7 +663,7 @@ interface StringUtils {
      *  .lastIndexOf("aabaabaa", "")   = 8
      * </pre>
      */
-    lastIndexOf(seq: JCharSequence | JString, searchSeq: JCharSequence | JString): JInt
+    lastIndexOf(seq: JString, searchSeq: JString): JInt;
 
     /**
      * <pre>
@@ -696,10 +681,8 @@ interface StringUtils {
      * </pre>
      *
      * @param ordinal 要查找的第n个searchStr
-     * @param str
-     * @param searchStr
      */
-    lastOrdinalIndexOf(str: JCharSequence | JString, searchStr: JCharSequence | JString, ordinal: JInt): JInt
+    lastOrdinalIndexOf(str: JString, searchStr: JString, ordinal: JInt): JInt;
 
     /**
      * <pre>
@@ -717,7 +700,7 @@ interface StringUtils {
      *  .lastIndexOf("aabaabaa", "ba", 2)  = 2
      * </pre>
      */
-    lastIndexOf(seq: JCharSequence | JString, searchSeq: JCharSequence | JString, startPos: JInt): JInt
+    lastIndexOf(seq: JString, searchSeq: JString, startPos: JInt): JInt;
 
     /**
      * <pre>
@@ -728,7 +711,7 @@ interface StringUtils {
      *  .lastIndexOfIgnoreCase("aabaabaa", "AB") = 4
      * </pre>
      */
-    lastIndexOfIgnoreCase(str: JCharSequence | JString, searchStr: JCharSequence | JString): JInt
+    lastIndexOfIgnoreCase(str: JString, searchStr: JString): JInt;
 
     /**
      * <pre>
@@ -743,11 +726,10 @@ interface StringUtils {
      *  .lastIndexOfIgnoreCase("aabaabaa", "B", 0)  = -1
      * </pre>
      */
-    lastIndexOfIgnoreCase(str: JCharSequence | JString, searchStr: JCharSequence | JString, startPos: JInt): JInt
+    lastIndexOfIgnoreCase(str: JString, searchStr: JString, startPos: JInt): JInt;
 
     // Contains
     //----------------------------------------------------------------------------------------------------------------------------------------------
-
     /**
      * <pre>
      *  .contains(null, *)    = false
@@ -756,7 +738,7 @@ interface StringUtils {
      *  .contains("abc", 'z') = false
      * </pre>
      */
-    contains(seq: JCharSequence | JString, searchChar: JInt | JString): JBoolean
+    contains(seq: JString, searchChar: JInt): JBoolean;
 
     /**
      * <pre>
@@ -768,7 +750,7 @@ interface StringUtils {
      *  .contains("abc", "z")  = false
      * </pre>
      */
-    contains(seq: JCharSequence | JString, searchSeq: JCharSequence | JString): JBoolean
+    contains(seq: JString, searchSeq: JString): JBoolean;
 
     /**
      * <pre>
@@ -782,12 +764,12 @@ interface StringUtils {
      *  .containsIgnoreCase("abc", "Z") = false
      * </pre>
      */
-    containsIgnoreCase(str: JCharSequence | JString, searchStr: JCharSequence | JString): JBoolean
+    containsIgnoreCase(str: JString, searchStr: JString): JBoolean;
 
     /**
-     * 检查给定的JCharSequence是否包含任何空白字符
+     * 检查给定的CharSequence是否包含任何空白字符
      */
-    containsWhitespace(seq: JCharSequence | JString): JBoolean
+    containsWhitespace(seq: JString): JBoolean;
 
     /**
      * <pre>
@@ -800,7 +782,7 @@ interface StringUtils {
      *  .indexOfAny("aba", ['z'])           = -1
      * </pre>
      */
-    indexOfAny(cs: JCharSequence | JString, searchChars: JChar[]): JInt
+    indexOfAny(cs: JString, ...searchChars: JChar[]): JInt;
 
     /**
      * <pre>
@@ -813,7 +795,7 @@ interface StringUtils {
      *  .indexOfAny("aba","z")          = -1
      * </pre>
      */
-    indexOfAny(cs: JCharSequence | JString, searchChars: JString): JInt
+    indexOfAny(cs: JString, searchChars: JString): JInt;
 
     /**
      * <pre>
@@ -827,7 +809,7 @@ interface StringUtils {
      *  .containsAny("aba", ['z'])           = false
      * </pre>
      */
-    containsAny(cs: JCharSequence | JString, searchChars: JChar[]): JBoolean
+    containsAny(cs: JString, ...searchChars: JChar[]): JBoolean;
 
     /**
      * <pre>
@@ -843,7 +825,7 @@ interface StringUtils {
      *  .containsAny("aba","z")             = false
      * </pre>
      */
-    containsAny(cs: JCharSequence | JString, searchChars: JCharSequence | JString): JBoolean
+    containsAny(cs: JString, searchChars: JString): JBoolean;
 
     /**
      * <pre>
@@ -856,27 +838,26 @@ interface StringUtils {
      *  .containsAny("abc", "d", "abc")  = true
      * </pre>
      */
-    containsAny(cs: JCharSequence | JString, searchJCharSequences: JCharSequence[] | JString[]): JBoolean
+    containsAny(cs: JString, ...searchCharSequences: JString[]): JBoolean;
 
-    // IndexOfAnyBut JChars
+    // IndexOfAnyBut chars
     //----------------------------------------------------------------------------------------------------------------------------------------------
-
     /**
-     * 搜索JCharSequence以查找不在给定字符集中的任何字符的第一个索引。空的JCharSequence将返回-1。空搜索字符串将返回-1。
+     * 搜索CharSequence以查找不在给定字符集中的任何字符的第一个索引。空的CharSequence将返回-1。空搜索字符串将返回-1。
      * <pre>
      *  .indexOfAnyBut(null, *)                              = -1
      *  .indexOfAnyBut("", *)                                = -1
      *  .indexOfAnyBut(*, null)                              = -1
      *  .indexOfAnyBut(*, [])                                = -1
-     *  .indexOfAnyBut("zzabyycdxx", new JChar[] {'z', 'a'} ) = 3
-     *  .indexOfAnyBut("aba", new JChar[] {'z'} )             = 0
-     *  .indexOfAnyBut("aba", new JChar[] {'a', 'b'} )        = -1
+     *  .indexOfAnyBut("zzabyycdxx", new char[] {'z', 'a'} ) = 3
+     *  .indexOfAnyBut("aba", new char[] {'z'} )             = 0
+     *  .indexOfAnyBut("aba", new char[] {'a', 'b'} )        = -1
      * </pre>
      */
-    indexOfAnyBut(cs: JCharSequence | JString, searchChars: JChar[]): JInt
+    indexOfAnyBut(cs: JString, ...searchChars: JChar[]): JInt;
 
     /**
-     * 搜索JCharSequence以查找不在给定字符集中的任何字符的第一个索引。空的JCharSequence将返回-1。空搜索字符串将返回-1。
+     * 搜索CharSequence以查找不在给定字符集中的任何字符的第一个索引。空的CharSequence将返回-1。空搜索字符串将返回-1。
      * <pre>
      *  .indexOfAnyBut(null, *)            = -1
      *  .indexOfAnyBut("", *)              = -1
@@ -887,13 +868,12 @@ interface StringUtils {
      *  .indexOfAnyBut("aba","ab")         = -1
      * </pre>
      */
-    indexOfAnyBut(seq: JCharSequence | JString, searchChars: JCharSequence | JString): JInt
+    indexOfAnyBut(seq: JString, searchChars: JString): JInt;
 
     // ContainsOnly
     //----------------------------------------------------------------------------------------------------------------------------------------------
-
     /**
-     * 检查JCharSequence是否只包含某些字符
+     * 检查CharSequence是否只包含某些字符
      * <pre>
      *  .containsOnly(null, *)       = false
      *  .containsOnly(*, null)       = false
@@ -904,10 +884,10 @@ interface StringUtils {
      *  .containsOnly("abz", 'abc')  = false
      * </pre>
      */
-    containsOnly(cs: JCharSequence | JString, valid: JChar[]): JBoolean
+    containsOnly(cs: JString, ...valid: JChar[]): JBoolean;
 
     /**
-     * 检查JCharSequence是否只包含某些字符
+     * 检查CharSequence是否只包含某些字符
      * <pre>
      *  .containsOnly(null, *)       = false
      *  .containsOnly(*, null)       = false
@@ -918,13 +898,12 @@ interface StringUtils {
      *  .containsOnly("abz", "abc")  = false
      * </pre>
      */
-    containsOnly(cs: JCharSequence | JString, validChars: JString | JString): JBoolean
+    containsOnly(cs: JString, validChars: JString): JBoolean;
 
     // ContainsNone
     //----------------------------------------------------------------------------------------------------------------------------------------------
-
     /**
-     * 检查JCharSequence是否不包含某些字符
+     * 检查CharSequence是否不包含某些字符
      * <pre>
      *  .containsNone(null, *)       = true
      *  .containsNone(*, null)       = true
@@ -935,10 +914,10 @@ interface StringUtils {
      *  .containsNone("abz", 'xyz')  = false
      * </pre>
      */
-    containsNone(cs: JCharSequence | JString, searchChars: JChar[]): JBoolean
+    containsNone(cs: JString, ...searchChars: JChar[]): JBoolean;
 
     /**
-     * 检查JCharSequence是否不包含某些字符
+     * 检查CharSequence是否不包含某些字符
      * <pre>
      *  .containsNone(null, *)       = true
      *  .containsNone(*, null)       = true
@@ -949,11 +928,10 @@ interface StringUtils {
      *  .containsNone("abz", "xyz")  = false
      * </pre>
      */
-    containsNone(cs: JCharSequence | JString, invalidChars: JString): JBoolean
+    containsNone(cs: JString, invalidChars: JString): JBoolean;
 
-    // IndexOfAny Strings
+    // IndexOfAny strings
     //----------------------------------------------------------------------------------------------------------------------------------------------
-
     /**
      * <pre>
      *  .indexOfAny(null, *)                     = -1
@@ -968,7 +946,7 @@ interface StringUtils {
      *  .indexOfAny("", ["a"])                   = -1
      * </pre>
      */
-    indexOfAny(str: JCharSequence | JString, searchStrs: JCharSequence[] | JString[]): JInt
+    indexOfAny(str: JString, ...searchStrs: JString[]): JInt;
 
     /**
      * <pre>
@@ -983,11 +961,10 @@ interface StringUtils {
      *  .lastIndexOfAny("zzabyycdxx", ["mn",""])   = 10
      * </pre>
      */
-    lastIndexOfAny(str: JCharSequence | JString, searchStrs: JCharSequence[] | JString[]): JInt
+    lastIndexOfAny(str: JString, ...searchStrs: JString[]): JInt;
 
-    // SubString
+    // Substring
     //----------------------------------------------------------------------------------------------------------------------------------------------
-
     /**
      * <pre>
      *  .substring(null, *)   = null
@@ -999,7 +976,7 @@ interface StringUtils {
      *  .substring("abc", -4) = "abc"
      * </pre>
      */
-    substring(str: JString, start: JInt): JString
+    substring(str: JString, start: JInt): JString;
 
     /**
      * <pre>
@@ -1014,11 +991,10 @@ interface StringUtils {
      *  .substring("abc", -4, 2)  = "ab"
      * </pre>
      */
-    substring(str: JString, start: JInt, end: JInt): JString
+    substring(str: JString, start: JInt, end: JInt): JString;
 
     // Left/Right/Mid
     //----------------------------------------------------------------------------------------------------------------------------------------------
-
     /**
      * <pre>
      *  .left(null, *)    = null
@@ -1029,7 +1005,7 @@ interface StringUtils {
      *  .left("abc", 4)   = "abc"
      * </pre>
      */
-    left(str: JString, len: JInt): JString
+    left(str: JString, len: JInt): JString;
 
     /**
      * <pre>
@@ -1041,7 +1017,7 @@ interface StringUtils {
      *  .right("abc", 4)   = "abc"
      * </pre>
      */
-    right(str: JString, len: JInt): JString
+    right(str: JString, len: JInt): JString;
 
     /**
      * <pre>
@@ -1055,11 +1031,10 @@ interface StringUtils {
      *  .mid("abc", -2, 2)  = "ab"
      * </pre>
      */
-    mid(str: JString, pos: JInt, len: JInt): JString
+    mid(str: JString, pos: JInt, len: JInt): JString;
 
     // SubStringAfter/SubStringBefore
     //----------------------------------------------------------------------------------------------------------------------------------------------
-
     /**
      * 获取第一次出现分隔符之前的子字符串
      * <pre>
@@ -1073,7 +1048,7 @@ interface StringUtils {
      *  .substringBefore("abc", null)  = "abc"
      * </pre>
      */
-    substringBefore(str: JString, separator: JString): JString
+    substringBefore(str: JString, separator: JString): JString;
 
     /**
      * 获取第一次出现分隔符后的子字符串
@@ -1088,7 +1063,7 @@ interface StringUtils {
      *  .substringAfter("abc", "")    = "abc"
      * </pre>
      */
-    substringAfter(str: JString, separator: JString): JString
+    substringAfter(str: JString, separator: JString): JString;
 
     /**
      * 获取最后一次出现分隔符之前的子字符串
@@ -1103,7 +1078,7 @@ interface StringUtils {
      *  .substringBeforeLast("a", "")      = "a"
      * </pre>
      */
-    substringBeforeLast(str: JString, separator: JString): JString
+    substringBeforeLast(str: JString, separator: JString): JString;
 
     /**
      * 获取最后一次出现分隔符后的子字符串
@@ -1119,11 +1094,10 @@ interface StringUtils {
      *  .substringAfterLast("a", "z")     = ""
      * </pre>
      */
-    substringAfterLast(str: JString, separator: JString): JString
+    substringAfterLast(str: JString, separator: JString): JString;
 
-    // SubString between
+    // Substring between
     //----------------------------------------------------------------------------------------------------------------------------------------------
-
     /**
      * 获取嵌套在同一字符串的两个实例之间的字符串
      * <pre>
@@ -1135,7 +1109,7 @@ interface StringUtils {
      *  .substringBetween("tagabctag", "tag") = "abc"
      * </pre>
      */
-    substringBetween(str: JString, tag: JString): JString
+    substringBetween(str: JString, tag: JString): JString;
 
     /**
      * 获取嵌套在两个字符串之间的字符串。只返回第一个匹配项
@@ -1152,7 +1126,7 @@ interface StringUtils {
      *  .substringBetween("yabczyabcz", "y", "z")   = "abc"
      * </pre>
      */
-    substringBetween(str: JString, open: JString, close: JString): JString
+    substringBetween(str: JString, open: JString, close: JString): JString;
 
     /**
      * 在字符串中搜索由开始和结束标记分隔的子字符串，返回数组中所有匹配的子字符串
@@ -1164,14 +1138,12 @@ interface StringUtils {
      *  .substringsBetween("", "[", "]")          = []
      * </pre>
      */
-    substringsBetween(str: JString, open: JString, close: JString): JString[]
+    substringsBetween(str: JString, open: JString, close: JString): JString[];
 
     // Nested extraction
     //----------------------------------------------------------------------------------------------------------------------------------------------
-
     // Splitting
     //----------------------------------------------------------------------------------------------------------------------------------------------
-
     /**
      * 使用空格作为分隔符，将提供的文本拆分为数组
      * <pre>
@@ -1182,7 +1154,7 @@ interface StringUtils {
      *  .split(" abc ")    = ["abc"]
      * </pre>
      */
-    split(str: JString): JString[]
+    split(str: JString): JString[];
 
     /**
      * <pre>
@@ -1194,7 +1166,7 @@ interface StringUtils {
      *  .split("a b c", ' ')    = ["a", "b", "c"]
      * </pre>
      */
-    split(str: JString, separatorChar: JChar): JString[]
+    split(str: JString, separatorChar: JChar): JString[];
 
     /**
      * <pre>
@@ -1206,7 +1178,7 @@ interface StringUtils {
      *  .split("ab:cd:ef", ":") = ["ab", "cd", "ef"]
      * </pre>
      */
-    split(str: JString, separatorChars: JString): JString[]
+    split(str: JString, separatorChars: JString): JString[];
 
     /**
      * <pre>
@@ -1218,10 +1190,9 @@ interface StringUtils {
      *  .split("ab:cd:ef", ":", 2)    = ["ab", "cd:ef"]
      * </pre>
      */
-    split(str: JString, separatorChars: JString, max: JInt): JString[]
+    split(str: JString, separatorChars: JString, max: JInt): JString[];
 
     //----------------------------------------------------------------------------------------------------------------------------------------------
-
     /**
      * <pre>
      *  .splitByWholeSeparator(null, *)               = null
@@ -1232,7 +1203,7 @@ interface StringUtils {
      *  .splitByWholeSeparator("ab-!-cd-!-ef", "-!-") = ["ab", "cd", "ef"]
      * </pre>
      */
-    splitByWholeSeparator(str: JString, separator: JString): JString[]
+    splitByWholeSeparator(str: JString, separator: JString): JString[];
 
     /**
      * <pre>
@@ -1245,7 +1216,7 @@ interface StringUtils {
      *  .splitByWholeSeparator("ab-!-cd-!-ef", "-!-", 2) = ["ab", "cd-!-ef"]
      * </pre>
      */
-    splitByWholeSeparator(str: JString, separator: JString, max: JInt): JString[]
+    splitByWholeSeparator(str: JString, separator: JString, max: JInt): JString[];
 
     /**
      * <pre>
@@ -1257,7 +1228,7 @@ interface StringUtils {
      *  .splitByWholeSeparatorPreserveAllTokens("ab-!-cd-!-ef", "-!-") = ["ab", "cd", "ef"]
      * </pre>
      */
-    splitByWholeSeparatorPreserveAllTokens(str: JString, separator: JString): JString[]
+    splitByWholeSeparatorPreserveAllTokens(str: JString, separator: JString): JString[];
 
     /**
      * <pre>
@@ -1270,7 +1241,7 @@ interface StringUtils {
      *  .splitByWholeSeparatorPreserveAllTokens("ab-!-cd-!-ef", "-!-", 2) = ["ab", "cd-!-ef"]
      * </pre>
      */
-    splitByWholeSeparatorPreserveAllTokens(str: JString, separator: JString, max: JInt): JString[]
+    splitByWholeSeparatorPreserveAllTokens(str: JString, separator: JString, max: JInt): JString[];
 
     /**
      * <pre>
@@ -1281,7 +1252,7 @@ interface StringUtils {
      *  .splitPreserveAllTokens(" abc ")    = ["", "abc", ""]
      * </pre>
      */
-    splitPreserveAllTokens(str: JString): JString[]
+    splitPreserveAllTokens(str: JString): JString[];
 
     /**
      * <pre>
@@ -1299,8 +1270,7 @@ interface StringUtils {
      *  .splitPreserveAllTokens(" a b c ", ' ')  = ["", a", "b", "c", ""]
      * </pre>
      */
-    splitPreserveAllTokens(str: JString, separatorChar: JChar): JString[]
-
+    splitPreserveAllTokens(str: JString, separatorChar: JChar): JString[];
 
     /**
      * <pre>
@@ -1318,7 +1288,7 @@ interface StringUtils {
      *  .splitPreserveAllTokens(":cd:ef:", ":")    = ["", cd", "ef", ""]
      * </pre>
      */
-    splitPreserveAllTokens(str: JString, separatorChars: JString): JString[]
+    splitPreserveAllTokens(str: JString, separatorChars: JString): JString[];
 
     /**
      * <pre>
@@ -1333,7 +1303,7 @@ interface StringUtils {
      *  .splitPreserveAllTokens("ab   de fg", null, 4) = ["ab", "", "", "de fg"]
      * </pre>
      */
-    splitPreserveAllTokens(str: JString, separatorChars: JString, max: JInt): JString[]
+    splitPreserveAllTokens(str: JString, separatorChars: JString, max: JInt): JString[];
 
     /**
      * <pre>
@@ -1348,7 +1318,7 @@ interface StringUtils {
      *  .splitByCharacterType("ASFRules")   = ["ASFR", "ules"]
      * </pre>
      */
-    splitByCharacterType(str: JString): JString[]
+    splitByCharacterType(str: JString): JString[];
 
     /**
      * <pre>
@@ -1363,21 +1333,7 @@ interface StringUtils {
      *  .splitByCharacterTypeCamelCase("ASFRules")   = ["ASF", "Rules"]
      * </pre>
      */
-    splitByCharacterTypeCamelCase(str: JString): JString[]
-
-    // Joining
-    //----------------------------------------------------------------------------------------------------------------------------------------------
-
-    /**
-     * <pre>
-     *  .join(null)            = null
-     *  .join([])              = ""
-     *  .join([null])          = ""
-     *  .join(["a", "b", "c"]) = "abc"
-     *  .join([null, "", "a"]) = "a"
-     * </pre>
-     */
-    join<T extends any>(elements: T[]): JString
+    splitByCharacterTypeCamelCase(str: JString): JString[];
 
     /**
      * <pre>
@@ -1389,7 +1345,7 @@ interface StringUtils {
      *  .join([null, "", "a"], ';')  = ";;a"
      * </pre>
      */
-    join(array: any[], separator: JChar): JString
+    join(array: any[], separator: JChar): JString;
 
     /**
      * <pre>
@@ -1400,7 +1356,7 @@ interface StringUtils {
      *  .join([1, 2, 3], null) = "123"
      * </pre>
      */
-    join(array: JLong[], separator: JChar): JString
+    join(array: JLong[], separator: JChar): JString;
 
     /**
      * <pre>
@@ -1411,7 +1367,7 @@ interface StringUtils {
      *  .join([1, 2, 3], null) = "123"
      * </pre>
      */
-    join(array: JInt[], separator: JChar): JString
+    join(array: JInt[], separator: JChar): JString;
 
     /**
      * <pre>
@@ -1422,7 +1378,7 @@ interface StringUtils {
      *  .join([1, 2, 3], null) = "123"
      * </pre>
      */
-    join(array: JShort[], separator: JChar): JString
+    join(array: JShort[], separator: JChar): JString;
 
     /**
      * <pre>
@@ -1433,7 +1389,7 @@ interface StringUtils {
      *  .join([1, 2, 3], null) = "123"
      * </pre>
      */
-    join(array: JByte[], separator: JChar): JString
+    join(array: JByte[], separator: JChar): JString;
 
     /**
      * <pre>
@@ -1444,7 +1400,7 @@ interface StringUtils {
      *  .join([1, 2, 3], null) = "123"
      * </pre>
      */
-    join(array: JChar[], separator: JChar): JString
+    join(array: JChar[], separator: JChar): JString;
 
     /**
      * <pre>
@@ -1455,7 +1411,7 @@ interface StringUtils {
      *  .join([1, 2, 3], null) = "123"
      * </pre>
      */
-    join(array: JFloat[], separator: JChar): JString
+    join(array: JFloat[], separator: JChar): JString;
 
     /**
      * <pre>
@@ -1466,7 +1422,7 @@ interface StringUtils {
      *  .join([1, 2, 3], null) = "123"
      * </pre>
      */
-    join(array: JDouble[], separator: JChar): JString
+    join(array: JDouble[], separator: JChar): JString;
 
     /**
      * <pre>
@@ -1478,7 +1434,7 @@ interface StringUtils {
      *  .join([null, "", "a"], ';')  = ";;a"
      * </pre>
      */
-    join(array: any[], separator: JChar, startIndex: JInt, endIndex: JInt): JString
+    join(array: any[], separator: JChar, startIndex: JInt, endIndex: JInt): JString;
 
     /**
      * <pre>
@@ -1489,7 +1445,7 @@ interface StringUtils {
      *  .join([1, 2, 3], null) = "123"
      * </pre>
      */
-    join(array: JLong[], separator: JChar, startIndex: JInt, endIndex: JInt): JString
+    join(array: JLong[], separator: JChar, startIndex: JInt, endIndex: JInt): JString;
 
     /**
      * <pre>
@@ -1500,7 +1456,7 @@ interface StringUtils {
      *  .join([1, 2, 3], null) = "123"
      * </pre>
      */
-    join(array: JInt[], separator: JChar, startIndex: JInt, endIndex: JInt): JString
+    join(array: JInt[], separator: JChar, startIndex: JInt, endIndex: JInt): JString;
 
     /**
      * <pre>
@@ -1511,7 +1467,7 @@ interface StringUtils {
      *  .join([1, 2, 3], null) = "123"
      * </pre>
      */
-    join(array: JByte[], separator: JChar, startIndex: JInt, endIndex: JInt): JString
+    join(array: JByte[], separator: JChar, startIndex: JInt, endIndex: JInt): JString;
 
     /**
      * <pre>
@@ -1522,7 +1478,7 @@ interface StringUtils {
      *  .join([1, 2, 3], null) = "123"
      * </pre>
      */
-    join(array: JShort[], separator: JChar, startIndex: JInt, endIndex: JInt): JString
+    join(array: JShort[], separator: JChar, startIndex: JInt, endIndex: JInt): JString;
 
     /**
      * <pre>
@@ -1533,7 +1489,7 @@ interface StringUtils {
      *  .join([1, 2, 3], null) = "123"
      * </pre>
      */
-    join(array: JChar[], separator: JChar, startIndex: JInt, endIndex: JInt): JString
+    join(array: JChar[], separator: JChar, startIndex: JInt, endIndex: JInt): JString;
 
     /**
      * <pre>
@@ -1544,7 +1500,7 @@ interface StringUtils {
      *  .join([1, 2, 3], null) = "123"
      * </pre>
      */
-    join(array: JDouble[], separator: JChar, startIndex: JInt, endIndex: JInt): JString
+    join(array: JDouble[], separator: JChar, startIndex: JInt, endIndex: JInt): JString;
 
     /**
      * <pre>
@@ -1555,7 +1511,7 @@ interface StringUtils {
      *  .join([1, 2, 3], null) = "123"
      * </pre>
      */
-    join(array: JFloat[], separator: JChar, startIndex: JInt, endIndex: JInt): JString
+    join(array: JFloat[], separator: JChar, startIndex: JInt, endIndex: JInt): JString;
 
     /**
      * <pre>
@@ -1568,7 +1524,7 @@ interface StringUtils {
      *  .join([null, "", "a"], ',')   = ",,a"
      * </pre>
      */
-    join(array: any[], separator: JString): JString
+    join(array: any[], separator: JString): JString;
 
     /**
      * <pre>
@@ -1584,27 +1540,27 @@ interface StringUtils {
      *  .join([null, "", "a"], ',', 0, 3)   = ",,a"
      * </pre>
      */
-    join(array: any[], separator: JString, startIndex: JInt, endIndex: JInt): JString
+    join(array: any[], separator: JString, startIndex: JInt, endIndex: JInt): JString;
 
     /**
      * 将所提供迭代器的元素联接到包含所提供元素的单个字符串中
      */
-    join(iterator: Iterator<any>, separator: JChar): JString
+    join(iterator: Iterator<any>, separator: JChar): JString;
 
     /**
      * 将所提供迭代器的元素联接到包含所提供元素的单个字符串中
      */
-    join(iterator: Iterator<any>, separator: JString): JString
+    join(iterator: JIterator<any>, separator: JString): JString;
 
     /**
      * 将提供的Iterable的元素联接到包含所提供元素的单个字符串中
      */
-    join(iterable: Iterable<any>, separator: JChar): JString
+    join(iterable: JIterable<any>, separator: JChar): JString;
 
     /**
      * 将提供的Iterable的元素联接到包含所提供元素的单个字符串中
      */
-    join(iterable: Iterable<any>, separator: JString): JString
+    join(iterable: JIterable<any>, separator: JString): JString;
 
     /**
      * <pre>
@@ -1616,7 +1572,7 @@ interface StringUtils {
      *  .join([null, "", "a"], ';')  = ";;a"
      * </pre>
      */
-    join(list: JList<any>, separator: JChar, startIndex: JInt, endIndex: JInt): JString
+    join(list: JList<any>, separator: JChar, startIndex: JInt, endIndex: JInt): JString;
 
     /**
      * <pre>
@@ -1628,7 +1584,7 @@ interface StringUtils {
      *  .join([null, "", "a"], ';')  = ";;a"
      * </pre>
      */
-    join(list: JList<any>, separator: JString, startIndex: JInt, endIndex: JInt): JString
+    join(list: JList<any>, separator: JString, startIndex: JInt, endIndex: JInt): JString;
 
     /**
      * <pre>
@@ -1638,7 +1594,7 @@ interface StringUtils {
      *  .joinWith(null, {"a", "b"})       = "ab"
      * </pre>
      */
-    joinWith(separator: JString, objects: any[]): JString
+    joinWith(separator: JString, ...objects: any[]): JString;
 }
 
 declare const StringUtils: StringUtils;

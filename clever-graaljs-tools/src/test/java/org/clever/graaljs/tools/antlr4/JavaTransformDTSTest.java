@@ -187,6 +187,70 @@ public class JavaTransformDTSTest {
         generateDTS(javaPath, tsPath);
     }
 
+    @Test
+    public void t19() throws IOException {
+        String javaPath = "../clever-graaljs-core/src/main/java/org/clever/graaljs/core/builtin/ImageValidateUtils.java";
+        String tsPath = "../clever-graaljs-types/src/fast-api/core/ImageValidateUtils.d.ts";
+        TypeMappingUtils.addMapping("", "");
+        generateDTS(javaPath, tsPath);
+    }
+
+    @Test
+    public void t20() throws IOException {
+        String javaPath = "../clever-graaljs-core/src/main/java/org/clever/graaljs/core/builtin/IOUtils.java";
+        String tsPath = "../clever-graaljs-types/src/fast-api/core/IOUtils.d.ts";
+        generateDTS(javaPath, tsPath);
+    }
+
+    @Test
+    public void t21() throws IOException {
+        String javaPath = "../clever-graaljs-core/src/main/java/org/clever/graaljs/core/builtin/IPAddressUtils.java";
+        String tsPath = "../clever-graaljs-types/src/fast-api/core/IPAddressUtils.d.ts";
+        generateDTS(javaPath, tsPath);
+    }
+
+    @Test
+    public void t22() throws IOException {
+        String javaPath = "../clever-graaljs-core/src/main/java/org/clever/graaljs/core/builtin/JsonUtils.java";
+        String tsPath = "../clever-graaljs-types/src/fast-api/core/JsonUtils.d.ts";
+        generateDTS(javaPath, tsPath);
+    }
+
+    @Test
+    public void t23() throws IOException {
+        String javaPath = "../clever-graaljs-core/src/main/java/org/clever/graaljs/core/builtin/RMBUtils.java";
+        String tsPath = "../clever-graaljs-types/src/fast-api/core/RMBUtils.d.ts";
+        generateDTS(javaPath, tsPath);
+    }
+
+    @Test
+    public void t24() throws IOException {
+        String javaPath = "../clever-graaljs-core/src/main/java/org/clever/graaljs/core/builtin/StringUtils.java";
+        String tsPath = "../clever-graaljs-types/src/fast-api/core/StringUtils.d.ts";
+        generateDTS(javaPath, tsPath);
+    }
+
+    @Test
+    public void t25() throws IOException {
+        String javaPath = "../clever-graaljs-core/src/main/java/org/clever/graaljs/core/builtin/ThreadUtils.java";
+        String tsPath = "../clever-graaljs-types/src/fast-api/core/ThreadUtils.d.ts";
+        generateDTS(javaPath, tsPath);
+    }
+
+    @Test
+    public void t26() throws IOException {
+        String javaPath = "../clever-graaljs-core/src/main/java/org/clever/graaljs/core/builtin/UnderlineToCamelUtils.java";
+        String tsPath = "../clever-graaljs-types/src/fast-api/core/UnderlineToCamelUtils.d.ts";
+        generateDTS(javaPath, tsPath);
+    }
+
+    @Test
+    public void t27() throws IOException {
+        String javaPath = "../clever-graaljs-core/src/main/java/org/clever/graaljs/core/builtin/XmlUtils.java";
+        String tsPath = "../clever-graaljs-types/src/fast-api/core/XmlUtils.d.ts";
+        generateDTS(javaPath, tsPath);
+    }
+
 //    @Test
 //    public void t17() throws IOException {
 //        String javaPath = "../clever-graaljs-core/src/main/java/org/clever/graaljs/core/builtin/wrap/HttpUtils.java";

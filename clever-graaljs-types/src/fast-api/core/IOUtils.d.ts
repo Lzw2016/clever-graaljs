@@ -1,22 +1,15 @@
-enum Charsets {
-    US_ASCII = "US-ASCII",
-    ISO_8859_1 = "ISO-8859-1",
-    UTF_8 = "UTF-8",
-    UTF_16BE = "UTF-16BE",
-    UTF_16LE = "UTF-16LE",
-    UTF_16 = "UTF-16",
-}
-
-interface IOUtils {
+/**
+ * 作者：lizw <br/>
+ * 创建时间：2020/09/09 18:48 <br/>
+ */
+interface IOUtils extends JObject {
     // ---------------------------------------------------------------------------------------------------------------------------------------------------- File
-
     /**
      * 获取绝对路径
      *
      * @param path 路径
      */
     getAbsolutePath(path: JString): JString;
-
 
     /**
      * 是否是文件
@@ -78,7 +71,7 @@ interface IOUtils {
     /**
      * 读取字符串
      */
-    readFileToString(filePath: JString, encoding: Charsets | JString): JString;
+    readFileToString(filePath: JString, encoding: JString): JString;
 
     /**
      * 读取字符串
@@ -88,12 +81,12 @@ interface IOUtils {
     /**
      * 读取行数据
      */
-    readLines(filePath: JString, encoding: Charsets | JString): JList<JString>;
+    readLines(filePath: JString, encoding: JString): List<String>;
 
     /**
      * 读取行数据
      */
-    readLines(filePath: JString): JList<JString>;
+    readLines(filePath: JString): List<String>;
 
     /**
      * 读取二进制数据
@@ -103,12 +96,12 @@ interface IOUtils {
     /**
      * 写字符串到文件
      */
-    writeStringToFile(filePath: JString, data: JString, encoding: Charsets | JString, append: JBoolean): void;
+    writeStringToFile(filePath: JString, data: JString, encoding: JString, append: JBoolean): void;
 
     /**
      * 写字符串到文件
      */
-    writeStringToFile(filePath: JString, data: JString, encoding: Charsets | JString): void;
+    writeStringToFile(filePath: JString, data: JString, encoding: JString): void;
 
     /**
      * 写字符串到文件
@@ -118,22 +111,22 @@ interface IOUtils {
     /**
      * 写行数据到文件
      */
-    writeLines(filePath: JString, lines: JCollection<JString>, lineEnding: JString, encoding: Charsets | JString, append: JBoolean): void;
+    writeLines(filePath: JString, lines: JCollection<any>, lineEnding: JString, encoding: JString, append: JBoolean): void;
 
     /**
      * 写行数据到文件
      */
-    writeLines(filePath: JString, lines: JCollection<JString>, lineEnding: JString, encoding: Charsets | JString): void;
+    writeLines(filePath: JString, lines: JCollection<any>, lineEnding: JString, encoding: JString): void;
 
     /**
      * 写行数据到文件
      */
-    writeLines(filePath: JString, lines: JCollection<JString>, lineEnding: JString): void;
+    writeLines(filePath: JString, lines: JCollection<any>, lineEnding: JString): void;
 
     /**
      * 写行数据到文件
      */
-    writeLines(filePath: JString, lines: JCollection<JString>): void;
+    writeLines(filePath: JString, lines: JCollection<any>): void;
 
     /**
      * 写二进制数据到文件
@@ -151,11 +144,10 @@ interface IOUtils {
     byteCountToDisplaySize(size: JLong): JString;
 
     // ---------------------------------------------------------------------------------------------------------------------------------------------------- IO
-
     /**
      * 读取文本
      */
-    readToString(input: JInputStream, encoding: Charsets | JString): JString;
+    readToString(input: JInputStream, encoding: JString): JString;
 
     /**
      * 读取文本
@@ -165,12 +157,12 @@ interface IOUtils {
     /**
      * 读取行数据
      */
-    readLines(input: JInputStream, encoding: Charsets | JString): JList<JString>
+    readLines(input: JInputStream, encoding: JString): List<String>;
 
     /**
      * 读取行数据
      */
-    readLines(input: JInputStream): JList<JString>
+    readLines(input: JInputStream): List<String>;
 
     /**
      * 读取二进制数据
@@ -180,7 +172,7 @@ interface IOUtils {
     /**
      * 写入文本
      */
-    writeString(output: JOutputStream, data: JString, encoding: Charsets | JString): void;
+    writeString(output: JOutputStream, data: JString, encoding: JString): void;
 
     /**
      * 写入文本
@@ -195,7 +187,7 @@ interface IOUtils {
      * @param lineEnding 行尾
      * @param encoding   编码
      */
-    writeLines(output: JOutputStream, lines: JCollection<JString>, lineEnding: JString, encoding: Charsets | JString): void;
+    writeLines(output: JOutputStream, lines: JCollection<any>, lineEnding: JString, encoding: JString): void;
 
     /**
      * 写入文本
@@ -204,12 +196,12 @@ interface IOUtils {
      * @param lines      行内容
      * @param lineEnding 行尾
      */
-    writeLines(output: JOutputStream, lines: JCollection<JString>, lineEnding: JString): void;
+    writeLines(output: JOutputStream, lines: JCollection<any>, lineEnding: JString): void;
 
     /**
      * 写入文本
      */
-    writeLines(output: JOutputStream, lines: JCollection<JString>): void;
+    writeLines(output: JOutputStream, lines: JCollection<any>): void;
 
     /**
      * 写入二进制数据

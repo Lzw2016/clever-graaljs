@@ -1,4 +1,8 @@
-interface ThreadUtils {
+/**
+ * 作者：lizw <br/>
+ * 创建时间：2020/07/28 22:34 <br/>
+ */
+interface ThreadUtils extends JObject {
     /**
      * 线程栈信息
      *
@@ -28,7 +32,12 @@ interface ThreadUtils {
      *
      * @param millis 毫秒
      */
-    sleep(millis: JLong): void;
+    sleep(millis: number): void;
+
+    /**
+     * 放弃当前CPU使用权(当前线程放弃本次CPU时间)
+     */
+    yield(): void;
 
     /**
      * 获取当前线程
@@ -37,3 +46,4 @@ interface ThreadUtils {
 }
 
 declare const ThreadUtils: ThreadUtils;
+
