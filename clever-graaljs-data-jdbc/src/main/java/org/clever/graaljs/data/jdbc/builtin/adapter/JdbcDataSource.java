@@ -1056,7 +1056,7 @@ public class JdbcDataSource extends AbstractDataSource {
      * @see org.springframework.transaction.TransactionDefinition
      */
     public <T> T beginTX(TransactionCallback<T> action, int propagationBehavior, int timeout, int isolationLevel, boolean readOnly) {
-        Assert.notNull(action, "分页配置不能为空");
+        Assert.notNull(action, "数据库操作不能为空");
         TransactionTemplate transactionTemplate = createTransactionDefinition(isolationLevel, propagationBehavior, readOnly, timeout);
         return transactionTemplate.execute(action);
     }
@@ -1122,7 +1122,7 @@ public class JdbcDataSource extends AbstractDataSource {
      * @see org.springframework.transaction.TransactionDefinition
      */
     public <T> T beginReadOnlyTX(TransactionCallback<T> action, int propagationBehavior, int timeout, int isolationLevel) {
-        return beginTX(action, propagationBehavior, timeout, isolationLevel, Default_ReadOnly);
+        return beginTX(action, propagationBehavior, timeout, isolationLevel, true);
     }
 
     /**
@@ -1135,7 +1135,7 @@ public class JdbcDataSource extends AbstractDataSource {
      * @see org.springframework.transaction.TransactionDefinition
      */
     public <T> T beginReadOnlyTX(TransactionCallback<T> action, int propagationBehavior, int timeout) {
-        return beginTX(action, propagationBehavior, timeout, TransactionDefinition.ISOLATION_DEFAULT, Default_ReadOnly);
+        return beginTX(action, propagationBehavior, timeout, TransactionDefinition.ISOLATION_DEFAULT, true);
     }
 
     /**
