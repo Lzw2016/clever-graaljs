@@ -60,8 +60,8 @@ management:
     export:
       prometheus:
         enabled: true
-        descriptions: false
-        step: 3s
+        descriptions: true
+        step: 60s
     distribution:
       percentiles-histogram:
         http.server.requests: true

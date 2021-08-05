@@ -46,10 +46,17 @@ public class MeterRegistryUtils {
     public void gauge(Double number, String name, Map<String, Object> tags, String description, String unit) {
         Assert.isTrue(number != null, "参数number不能为空");
         Assert.hasText(name, "参数name不能为空");
-        final Gauge.Builder<?> builder = Gauge.builder(name, number, Double::doubleValue)
-                .tags(toTags(tags))
-                .baseUnit(unit)
-                .description(description);
+        final Gauge.Builder<?> builder = Gauge.builder(name, number, Double::doubleValue);
+        builder.strongReference(true);
+        if (tags != null && !tags.isEmpty()) {
+            builder.tags(toTags(tags));
+        }
+        if (StringUtils.isNotBlank(description)) {
+            builder.description(description);
+        }
+        if (StringUtils.isNotBlank(unit)) {
+            builder.baseUnit(unit);
+        }
         final Gauge gauge = builder.register(meterRegistry);
         GAUGE_VALUE_MAP.compute(gauge.getId(), (id, oldNumber) -> {
             // 指标存在且值发生变化
