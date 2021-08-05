@@ -258,4 +258,12 @@ public class JavaTransformDTSTest {
         TypeMappingUtils.addMapping("", "");
         generateDTS(javaPath, tsPath);
     }
+
+    @Test
+    public void t29() throws IOException {
+        String javaPath = "./src/test/resources/io/micrometer/core/instrument/Gauge.java";
+        String tsPath = "../clever-graaljs-types/src/io/micrometer/core/instrument/Gauge.d.ts";
+        TypeMappingUtils.addMapping("Builder", "GaugeBuilder");
+        generateDTS(javaPath, tsPath);
+    }
 }
