@@ -2,6 +2,7 @@ package org.clever.graaljs.spring;
 
 import org.clever.graaljs.spring.core.builtin.CookieUtils;
 import org.clever.graaljs.spring.core.builtin.HttpRequestUtils;
+import org.clever.graaljs.spring.core.builtin.MeterRegistryUtils;
 import org.clever.graaljs.spring.core.builtin.SpringContext;
 import org.clever.graaljs.spring.core.builtin.constant.ExcelEnum;
 import org.clever.graaljs.spring.core.builtin.wrap.ExcelUtils;
@@ -41,6 +42,7 @@ public class SpringCommonEngineGlobalUtils {
         contextMap.put("HttpMethod", HttpMethodEnum.HttpMethod.Instance);
         contextMap.put("MediaType", MediaTypeEnum.MediaType.Instance);
         // core
+        contextMap.put("MeterRegistryUtils", MeterRegistryUtils.Instance);
         contextMap.put("CookieUtils", CookieUtils.Instance);
         contextMap.put("HttpRequestUtils", HttpRequestUtils.Instance);
         contextMap.put("SpringContext", SpringContext.Instance);

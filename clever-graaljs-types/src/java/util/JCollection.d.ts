@@ -1,4 +1,4 @@
-interface JCollection<E> extends JObject {
+interface JCollection<E> extends JIterable<E> {
     java_util_Collection: "java.util.Collection";
 
     /**

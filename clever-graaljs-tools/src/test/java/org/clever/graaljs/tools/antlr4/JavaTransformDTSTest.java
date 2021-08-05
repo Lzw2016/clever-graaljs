@@ -266,4 +266,21 @@ public class JavaTransformDTSTest {
         TypeMappingUtils.addMapping("Builder", "GaugeBuilder");
         generateDTS(javaPath, tsPath);
     }
+
+    @Test
+    public void t30() throws IOException {
+        String javaPath = "./src/test/resources/io/micrometer/core/instrument/Counter.java";
+        String tsPath = "../clever-graaljs-types/src/io/micrometer/core/instrument/Counter.d.ts";
+        TypeMappingUtils.addMapping("Builder", "CounterBuilder");
+        TypeMappingUtils.addMapping("Builder<T>", "CounterBuilder");
+        generateDTS(javaPath, tsPath);
+    }
+
+    @Test
+    public void t31() throws IOException {
+        String javaPath = "../clever-graaljs-spring-common/src/main/java/org/clever/graaljs/spring/core/builtin/MeterRegistryUtils.java";
+        String tsPath = "../clever-graaljs-types/src/fast-api/spring-common/MeterRegistryUtils.d.ts";
+        TypeMappingUtils.addMapping("", "");
+        generateDTS(javaPath, tsPath);
+    }
 }

@@ -4,9 +4,7 @@
 interface Gauge extends Meter {
     io_micrometer_core_instrument_Gauge: "io.micrometer.core.instrument.Gauge";
 
-    builder<T = any>(name: JString, obj: T, callback: (obj: T) => JDouble): GaugeBuilder;
-
-    builder(name: JString, callback: () => JDouble): GaugeBuilder;
+    value(): JDouble;
 }
 
 /**

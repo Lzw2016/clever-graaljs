@@ -30,6 +30,47 @@ server:
       force: false
 
 ###################################################################################
+### management配置
+###################################################################################
+management:
+  endpoints:
+    enabled-by-default: true
+    web:
+      exposure:
+        include:
+          - health
+          - info
+          - env
+          - metrics
+          - prometheus
+  endpoint:
+    prometheus:
+      enabled: true
+  metrics:
+    enable:
+      root: true
+      jvm: false
+      system: false
+      process: false
+      logback: false
+      jdbc: false
+      hikaricp: false
+      tomcat: false
+      http: false
+    export:
+      prometheus:
+        enabled: true
+        descriptions: false
+        step: 3s
+    distribution:
+      percentiles-histogram:
+        http.server.requests: true
+      percentiles:
+        http.server.requests: 0.5, 0.75, 0.9, 0.95, 0.99
+      slo:
+        http.server.requests: 10ms, 50ms, 100ms, 200ms, 500ms, 1s, 2s, 3s, 4s, 5s, 10s, 15s, 20s, 30s, 50s
+
+###################################################################################
 ### Spring配置
 ###################################################################################
 spring:
