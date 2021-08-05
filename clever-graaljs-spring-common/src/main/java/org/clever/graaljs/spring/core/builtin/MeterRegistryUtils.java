@@ -51,9 +51,9 @@ public class MeterRegistryUtils {
                 .baseUnit(unit)
                 .description(description);
         final Gauge gauge = builder.register(meterRegistry);
-        GAUGE_VALUE_MAP.computeIfPresent(gauge.getId(), (id, oldNumber) -> {
+        GAUGE_VALUE_MAP.compute(gauge.getId(), (id, oldNumber) -> {
             // 指标存在且值发生变化
-            if (!Objects.equals(oldNumber, number)) {
+            if (oldNumber != null && !Objects.equals(oldNumber, number)) {
                 meterRegistry.remove(id);
                 builder.register(meterRegistry);
             }
