@@ -5,10 +5,9 @@ import com.fasterxml.jackson.core.util.DefaultIndenter;
 import com.fasterxml.jackson.core.util.DefaultPrettyPrinter;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.fasterxml.jackson.databind.util.JSONPObject;
-import com.fasterxml.jackson.datatype.joda.cfg.JacksonJodaDateFormat;
-import com.fasterxml.jackson.datatype.joda.ser.DateTimeSerializer;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.clever.graaljs.core.utils.ExceptionUtils;
@@ -17,6 +16,10 @@ import org.joda.time.format.DateTimeFormat;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Locale;
 import java.util.TimeZone;
 
@@ -146,31 +149,46 @@ public class JacksonMapper {
     }
 
     public static ObjectMapper newObjectMapper() {
-        final String dateFormatPattern = "yyyy-MM-dd HH:mm:ss";
+        final String dateTimePattern = "yyyy-MM-dd HH:mm:ss";
+        final String datePattern = "yyyy-MM-dd";
+        final String timePattern = "HH:mm:ss";
         final ClassLoader moduleClassLoader = JacksonMapper.class.getClassLoader();
         // 创建 ObjectMapper
         ObjectMapper mapper = new ObjectMapper();
+        // 查找并注册Modules
+        mapper.findAndRegisterModules();
         // 设置输入时忽略在JSON字符串中存在但Java对象实际没有的属性
         mapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
         // 允许单引号、允许不带引号的字段名称
         mapper.configure(JsonParser.Feature.ALLOW_SINGLE_QUOTES, true);
         mapper.configure(JsonParser.Feature.ALLOW_UNQUOTED_FIELD_NAMES, true);
         // 使用枚举的的toString函数来读写枚举
-        // mapper.enable(SerializationFeature.WRITE_ENUMS_USING_TO_STRING);
-        // mapper.enable(DeserializationFeature.READ_ENUMS_USING_TO_STRING);
+        mapper.enable(SerializationFeature.WRITE_ENUMS_USING_TO_STRING);
+        mapper.enable(DeserializationFeature.READ_ENUMS_USING_TO_STRING);
         // 设置时区 getTimeZone("GMT+8")
         mapper.setTimeZone(TimeZone.getTimeZone("GMT+8"));
         // locale: zh_CN
         mapper.setLocale(Locale.CHINA);
         // 设置时间格式
-        mapper.setDateFormat(new SimpleDateFormat(dateFormatPattern));
+        mapper.setDateFormat(new SimpleDateFormat(dateTimePattern));
         // 注册 Module
         ObjectMapper.findModules(moduleClassLoader).forEach(mapper::registerModules);
         SimpleModule module = new SimpleModule();
-        module.addSerializer(DateTime.class, new DateTimeSerializer(new JacksonJodaDateFormat(DateTimeFormat.forPattern(dateFormatPattern).withZoneUTC()), 0));
+        module.addSerializer(
+                DateTime.class,
+                new com.fasterxml.jackson.datatype.joda.ser.DateTimeSerializer(
+                        new com.fasterxml.jackson.datatype.joda.cfg.JacksonJodaDateFormat(DateTimeFormat.forPattern(dateTimePattern).withZoneUTC()), 0
+                )
+        );
+        module.addSerializer(LocalDateTime.class, new com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer(DateTimeFormatter.ofPattern(dateTimePattern)));
+        module.addSerializer(LocalDate.class, new com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer(DateTimeFormatter.ofPattern(datePattern)));
+        module.addSerializer(LocalTime.class, new com.fasterxml.jackson.datatype.jsr310.ser.LocalTimeSerializer(DateTimeFormatter.ofPattern(timePattern)));
         // module.addSerializer(BigInteger.class, ToStringSerializer.instance);
         // module.addSerializer(Long.class, ToStringSerializer.instance);
         // module.addSerializer(Long.TYPE, ToStringSerializer.instance);
+        module.addDeserializer(LocalDateTime.class, new com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer(DateTimeFormatter.ofPattern(dateTimePattern)));
+        module.addDeserializer(LocalDate.class, new com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer(DateTimeFormatter.ofPattern(datePattern)));
+        module.addDeserializer(LocalTime.class, new com.fasterxml.jackson.datatype.jsr310.deser.LocalTimeDeserializer(DateTimeFormatter.ofPattern(timePattern)));
         mapper.registerModules(module);
         return mapper;
     }
