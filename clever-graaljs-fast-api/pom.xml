@@ -38,6 +38,14 @@
             <groupId>org.clever</groupId>
             <artifactId>clever-graaljs-spring-common</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.clever</groupId>
+            <artifactId>clever-task-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.clever</groupId>
+            <artifactId>clever-task-ext</artifactId>
+        </dependency>
         <!--spring-->
         <dependency>
             <groupId>javax.servlet</groupId>

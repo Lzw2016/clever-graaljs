@@ -20,7 +20,7 @@ public class FastApiConfig implements Serializable {
     /**
      * FileResource 命名空间
      */
-    private String namespace;
+    private String namespace = "default";
     /**
      * 文件资源变化检查时间间隔(默认3秒)
      */
@@ -45,4 +45,9 @@ public class FastApiConfig implements Serializable {
      */
     @NestedConfigurationProperty
     private MultipleRedisConfig multipleRedis = new MultipleRedisConfig();
+    /**
+     * 定时任务配置
+     */
+    @NestedConfigurationProperty
+    private TaskConfig taskConfig = new TaskConfig();
 }

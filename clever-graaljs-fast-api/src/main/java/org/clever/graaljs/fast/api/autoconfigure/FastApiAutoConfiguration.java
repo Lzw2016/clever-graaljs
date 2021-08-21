@@ -17,6 +17,16 @@ import org.clever.graaljs.meta.data.builtin.wrap.MateDataManage;
 import org.clever.graaljs.spring.SpringCommonEngineGlobalUtils;
 import org.clever.graaljs.spring.mvc.DefaultExceptionResolver;
 import org.clever.graaljs.spring.mvc.ExceptionResolver;
+import org.clever.task.core.TaskInstance;
+import org.clever.task.core.config.SchedulerConfig;
+import org.clever.task.core.job.HttpJobExecutor;
+import org.clever.task.core.job.JavaJobExecutor;
+import org.clever.task.core.job.MockJobExecutor;
+import org.clever.task.core.listeners.JobLogListener;
+import org.clever.task.core.listeners.JobTriggerLogListener;
+import org.clever.task.core.listeners.SchedulerLogListener;
+import org.clever.task.ext.job.JsJobExecutor;
+import org.clever.task.ext.job.ShellJobExecutor;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.boot.autoconfigure.AutoConfigureOrder;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -28,6 +38,9 @@ import org.springframework.core.Ordered;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.util.Assert;
 
+import javax.sql.DataSource;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -108,6 +121,21 @@ public class FastApiAutoConfiguration {
             }
         }));
         return scriptEngineInstance;
+    }
+
+    @Bean("taskInstance")
+    @ConditionalOnMissingBean
+    public TaskInstance taskInstance(DataSource dataSource, ScriptEngineInstance scriptEngineInstance) {
+        final SchedulerConfig schedulerConfig = fastApiConfig.getTaskConfig().toSchedulerConfig();
+        schedulerConfig.setNamespace(fastApiConfig.getNamespace());
+        return new TaskInstance(
+                dataSource,
+                schedulerConfig,
+                Arrays.asList(new MockJobExecutor(), new HttpJobExecutor(), new JavaJobExecutor(), new ShellJobExecutor(), new JsJobExecutor(scriptEngineInstance)),
+                Collections.singletonList(new SchedulerLogListener()),
+                Collections.singletonList(new JobTriggerLogListener()),
+                Collections.singletonList(new JobLogListener())
+        );
     }
 
     @Bean("exceptionResolver")

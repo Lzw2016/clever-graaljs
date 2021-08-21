@@ -6,7 +6,7 @@ logging:
   level:
     _org.springframework: warn
     org.springframework: warn
-    org.springframework.jdbc.datasource.DataSourceTransactionManager: debug
+    org.springframework.jdbc.datasource.DataSourceTransactionManager: info
     org.springframework.beans.factory: warn
     com.zaxxer.hikari: info
     reactor.util.Loggers: info
@@ -16,6 +16,8 @@ logging:
     springfox.documentation: warn
     schemacrawler: error
     us.fatehi: error
+    org.clever.task.core.TaskInstance: info
+    org.clever.task.core.DaemonExecutor: info
     org.clever: debug
 
 ###################################################################################
@@ -190,3 +192,10 @@ clever:
           lettuce.pool:
             min-idle: 2
             max-active: 32
+    task-config:
+      instance-name: n01
+      heartbeat-interval: 3s
+      scheduler-executor-pool-size: 8
+      job-executor-pool-size: 32
+      load-weight: 1
+      max-concurrent: 10240
