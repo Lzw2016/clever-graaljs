@@ -92,6 +92,7 @@ public class HttpApiManageService {
         this.namespace = fastApiConfig.getNamespace();
     }
 
+    @Transactional(readOnly = true)
     public List<SimpleTreeNode<ApiFileResourceRes>> getHttpApiTree() {
         // 查询所有文件夹
         List<ApiFileResourceRes> allDir = jdbcTemplate.query(
@@ -108,6 +109,7 @@ public class HttpApiManageService {
         list.addAll(allDir);
         List<SimpleTreeNode<ApiFileResourceRes>> tree = new ArrayList<>(list.size());
         for (ApiFileResourceRes apiFileResourceRes : list) {
+            // noinspection DuplicatedCode
             allDir.stream()
                     .filter(dir -> {
                         if (!Objects.equals(EnumConstant.IS_FILE_0, dir.getIsFile())) {

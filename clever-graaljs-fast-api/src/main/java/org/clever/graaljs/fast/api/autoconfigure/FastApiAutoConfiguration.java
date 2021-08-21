@@ -21,7 +21,6 @@ import org.clever.task.core.TaskInstance;
 import org.clever.task.core.config.SchedulerConfig;
 import org.clever.task.core.job.HttpJobExecutor;
 import org.clever.task.core.job.JavaJobExecutor;
-import org.clever.task.core.job.MockJobExecutor;
 import org.clever.task.core.listeners.JobLogListener;
 import org.clever.task.core.listeners.JobTriggerLogListener;
 import org.clever.task.core.listeners.SchedulerLogListener;
@@ -131,7 +130,7 @@ public class FastApiAutoConfiguration {
         return new TaskInstance(
                 dataSource,
                 schedulerConfig,
-                Arrays.asList(new MockJobExecutor(), new HttpJobExecutor(), new JavaJobExecutor(), new ShellJobExecutor(), new JsJobExecutor(scriptEngineInstance)),
+                Arrays.asList(new HttpJobExecutor(), new JavaJobExecutor(), new ShellJobExecutor(), new JsJobExecutor(scriptEngineInstance)),
                 Collections.singletonList(new SchedulerLogListener()),
                 Collections.singletonList(new JobTriggerLogListener()),
                 Collections.singletonList(new JobLogListener())
