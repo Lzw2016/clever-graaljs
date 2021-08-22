@@ -152,9 +152,6 @@ public class HttpApiManageService {
         if (StringUtils.isBlank(req.getRequestMapping())) {
             req.setRequestMapping(req.getPath() + name);
         }
-        if (StringUtils.isBlank(req.getContent())) {
-            req.setContent("//default code \nreturn { ok: true };");
-        }
         // 校验接口是否存在
         Integer count = jdbcTemplate.queryForObject(HTTP_API_EXISTS, Integer.class, namespace, req.getRequestMethod(), req.getRequestMapping());
         if (count != null && count > 0) {

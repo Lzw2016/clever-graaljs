@@ -38,8 +38,7 @@ public class TaskManageController {
 
     @PostMapping("/add_js_job")
     public AddJsJobRes addJsJob(@RequestBody @Validated AddJsJobReq req) {
-        // TODO 新增定时任务
-        return null;
+        return taskManageService.addJsJob(req);
     }
 
     @DeleteMapping("/del_js_job")

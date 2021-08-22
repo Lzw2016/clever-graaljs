@@ -4,13 +4,21 @@ import lombok.extern.slf4j.Slf4j;
 import org.clever.graaljs.core.utils.tree.BuildTreeUtils;
 import org.clever.graaljs.core.utils.tree.SimpleTreeNode;
 import org.clever.graaljs.fast.api.config.FastApiConfig;
+import org.clever.graaljs.fast.api.dto.request.AddDirReq;
+import org.clever.graaljs.fast.api.dto.request.AddJsJobReq;
+import org.clever.graaljs.fast.api.dto.response.AddJsJobRes;
 import org.clever.graaljs.fast.api.dto.response.JobFileResourceRes;
 import org.clever.graaljs.fast.api.dto.response.JsJobInfoRes;
 import org.clever.graaljs.fast.api.entity.EnumConstant;
 import org.clever.graaljs.fast.api.entity.FileResource;
+import org.clever.task.core.TaskInstance;
 import org.clever.task.core.entity.Job;
 import org.clever.task.core.entity.JobTrigger;
 import org.clever.task.core.entity.JsJob;
+import org.clever.task.core.model.AbstractTrigger;
+import org.clever.task.core.model.AddJobRes;
+import org.clever.task.core.model.CronTrigger;
+import org.clever.task.core.model.JsJobModel;
 import org.springframework.jdbc.core.DataClassRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
@@ -70,6 +78,8 @@ public class TaskManageService {
     private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
     @Resource
     private FileResourceManageService fileResourceManageService;
+    @Resource
+    private TaskInstance taskInstance;
 
     public TaskManageService(FastApiConfig fastApiConfig) {
         this.namespace = fastApiConfig.getNamespace();
@@ -142,6 +152,49 @@ public class TaskManageService {
             FileResource fileResource = fileResourceManageService.getFileResource(jsJob.getFileResourceId());
             res.setFileResource(fileResource);
         }
+        return res;
+    }
+
+    @Transactional
+    public AddJsJobRes addJsJob(AddJsJobReq req) {
+        if (!req.getFileName().toLowerCase().endsWith(".js")) {
+            req.setFileName(req.getFileName() + ".js");
+        }
+        final String name = req.getFileName().substring(0, req.getFileName().length() - 3);
+        req.setFileName(name + ".js");
+        AddJsJobRes res = new AddJsJobRes();
+        AddDirReq addDirReq = new AddDirReq();
+        addDirReq.setModule(EnumConstant.MODULE_4);
+        addDirReq.setFullPath(req.getFilePath());
+        List<FileResource> fileResourceList = fileResourceManageService.addDir(addDirReq);
+        res.getFileList().addAll(fileResourceList);
+        JsJobModel jobModel = new JsJobModel(req.getName(), req.getFilePath(), req.getFileName(), req.getFileContent());
+        jobModel.setMaxReentry(req.getMaxReentry());
+        jobModel.setAllowConcurrent(req.getJobAllowConcurrent());
+        jobModel.setMaxRetryCount(req.getMaxRetryCount());
+        // jobModel.setRouteStrategy();
+        // jobModel.setFirstScheduler();
+        // jobModel.setWhitelistScheduler();
+        // jobModel.setBlacklistScheduler();
+        // jobModel.setLoadBalance();
+        jobModel.setIsUpdateData(req.getIsUpdateData());
+        jobModel.setJobData(req.getJobData());
+        jobModel.setDisable(req.getDisable());
+        jobModel.setDescription(req.getDescription());
+        AbstractTrigger trigger = new CronTrigger(String.format("%s_trigger", req.getName()), req.getCron());
+        trigger.setStartTime(req.getStartTime());
+        trigger.setEndTime(req.getEndTime());
+        trigger.setMisfireStrategy(req.getMisfireStrategy());
+        trigger.setAllowConcurrent(req.getTriggerAllowConcurrent());
+        AddJobRes addJobRes = taskInstance.addJob(jobModel, trigger);
+        if (addJobRes.getFileResource() != null && addJobRes.getFileResource().getId() != null) {
+            FileResource fileResource = fileResourceManageService.getFileResource(addJobRes.getFileResource().getId());
+            if (fileResource != null) {
+                res.getFileList().add(fileResource);
+            }
+        }
+        res.setJob(addJobRes.getJob());
+        res.setJobTrigger(addJobRes.getJobTrigger());
         return res;
     }
 }

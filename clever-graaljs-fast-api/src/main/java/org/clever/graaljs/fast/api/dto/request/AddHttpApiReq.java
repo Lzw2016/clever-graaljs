@@ -1,6 +1,7 @@
 package org.clever.graaljs.fast.api.dto.request;
 
 import lombok.Data;
+import org.apache.commons.lang3.StringUtils;
 import org.clever.graaljs.fast.api.entity.EnumConstant;
 import org.clever.graaljs.spring.core.utils.validator.annotation.ValidStringStatus;
 
@@ -40,4 +41,11 @@ public class AddHttpApiReq implements Serializable {
     private String requestMapping;
 
     private String content;
+
+    public String getContent() {
+        if (StringUtils.isBlank(content)) {
+            return "//default code \nreturn { ok: true };";
+        }
+        return content;
+    }
 }
