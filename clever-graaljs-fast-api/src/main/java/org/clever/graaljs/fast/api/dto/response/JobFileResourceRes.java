@@ -46,6 +46,10 @@ public class JobFileResourceRes implements Serializable {
     // -------------------------------------------------------------------------------- Job
 
     /**
+     * 任务名称
+     */
+    private String jobName;
+    /**
      * 最大重入执行数量(对于单个节点当前任务未执行完成就触发了下一次执行导致任务重入执行)，小于等于0：表示禁止重入执行
      */
     private Integer maxReentry;

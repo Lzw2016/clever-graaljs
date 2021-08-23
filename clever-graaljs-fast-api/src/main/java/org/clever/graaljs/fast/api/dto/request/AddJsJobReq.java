@@ -130,7 +130,12 @@ public class AddJsJobReq implements Serializable {
             EnumConstant.JOB_TRIGGER_ALLOW_CONCURRENT_1
     })
     private Integer triggerAllowConcurrent;
-    
+
+    /**
+     * 是否禁用：0-启用，1-禁用
+     */
+    protected Integer triggerDisable;
+
     public String getFileContent() {
         if (StringUtils.isBlank(fileContent)) {
             return String.format("//default code\njobData.now = CommonUtils.currentTimeMillis();\nconsole.log('# %s -->', jobData.now);\n", name);

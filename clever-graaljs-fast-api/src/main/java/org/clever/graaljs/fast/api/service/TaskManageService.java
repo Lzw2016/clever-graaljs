@@ -40,7 +40,7 @@ public class TaskManageService {
     private static final String QUERY_ALL_JS_JOB = "" +
             "select " +
             "    a.id as jobId, d.id as jobTriggerId, c.id as fileResourceId, c.namespace, c.path, c.name, c.is_file, c.`read_only`, " +
-            "    a.max_reentry, a.allow_concurrent, a.max_retry_count, a.route_strategy, a.first_scheduler, " +
+            "    a.name as jobName, a.max_reentry, a.allow_concurrent, a.max_retry_count, a.route_strategy, a.first_scheduler, " +
             "    a.whitelist_scheduler, a.blacklist_scheduler, a.load_balance, a.disable, " +
             "    d.start_time, d.end_time, d.last_fire_time, d.next_fire_time, d.misfire_strategy, " +
             "    d.allow_concurrent as triggerAllowConcurrent, d.type, d.cron, d.fixed_interval, d.disable as triggerDisable " +
@@ -67,6 +67,7 @@ public class TaskManageService {
     private static final String GET_JOB_BY_ID = "select * from job where namespace=? and id=?";
     private static final String GET_JOB_TRIGGER_BY_ID = "select * from job_trigger where namespace=? and job_id=?";
     private static final String GET_JS_JOB_BY_ID = "select * from js_job where namespace=? and job_id=?";
+    private static final String GET_JOB_TRIGGER_ID_BY_JOB_ID = "select id from job_trigger where namespace=? and job_id=?";
 
     /**
      * FileResource 命名空间
@@ -186,6 +187,7 @@ public class TaskManageService {
         trigger.setEndTime(req.getEndTime());
         trigger.setMisfireStrategy(req.getMisfireStrategy());
         trigger.setAllowConcurrent(req.getTriggerAllowConcurrent());
+        trigger.setDisable(req.getTriggerDisable());
         AddJobRes addJobRes = taskInstance.addJob(jobModel, trigger);
         if (addJobRes.getFileResource() != null && addJobRes.getFileResource().getId() != null) {
             FileResource fileResource = fileResourceManageService.getFileResource(addJobRes.getFileResource().getId());
@@ -196,5 +198,17 @@ public class TaskManageService {
         res.setJob(addJobRes.getJob());
         res.setJobTrigger(addJobRes.getJobTrigger());
         return res;
+    }
+
+    @Transactional
+    public void disable(Long jobId) {
+        List<Long> triggerIds = jdbcTemplate.queryForList(GET_JOB_TRIGGER_ID_BY_JOB_ID, Long.class, namespace, jobId);
+        taskInstance.disableTriggers(triggerIds);
+    }
+
+    @Transactional
+    public void enable(Long jobId) {
+        List<Long> triggerIds = jdbcTemplate.queryForList(GET_JOB_TRIGGER_ID_BY_JOB_ID, Long.class, namespace, jobId);
+        taskInstance.enableTriggers(triggerIds);
     }
 }

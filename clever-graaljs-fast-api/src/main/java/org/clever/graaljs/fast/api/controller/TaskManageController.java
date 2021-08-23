@@ -46,4 +46,21 @@ public class TaskManageController {
         // TODO 删除定时任务
         return null;
     }
+
+    @PostMapping("/disable")
+    public JsJobInfoRes disable(@RequestParam("jobId") Long jobId) {
+        taskManageService.disable(jobId);
+        return taskManageService.getJsJobInfo(jobId);
+    }
+
+    @PostMapping("/enable")
+    public JsJobInfoRes enable(@RequestParam("jobId") Long jobId) {
+        taskManageService.enable(jobId);
+        return taskManageService.getJsJobInfo(jobId);
+    }
+
+    @PostMapping("/exec_job")
+    public void execJob(@RequestParam("jobId") Long jobId) {
+        taskInstance.execJob(jobId);
+    }
 }
