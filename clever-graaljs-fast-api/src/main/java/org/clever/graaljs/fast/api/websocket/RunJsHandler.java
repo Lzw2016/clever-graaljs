@@ -8,6 +8,7 @@ import org.clever.graaljs.core.utils.ExceptionUtils;
 import org.clever.graaljs.core.utils.RingBuffer;
 import org.clever.graaljs.core.utils.mapper.JacksonMapper;
 import org.clever.graaljs.fast.api.dto.request.RunJsReq;
+import org.clever.graaljs.fast.api.dto.response.RunJsErrorRes;
 import org.clever.graaljs.fast.api.entity.FileResource;
 import org.clever.graaljs.fast.api.service.FileResourceManageService;
 import org.clever.graaljs.spring.logger.GraalJsDebugLogbackAppender;
@@ -177,7 +178,9 @@ public class RunJsHandler extends AbstractWebSocketHandler {
         try {
             doRunJs(session, msg);
         } catch (Exception e) {
-            sendMessage(session, ExceptionUtils.getStackTraceAsString(e));
+            RunJsErrorRes runJsErrorRes = new RunJsErrorRes();
+            runJsErrorRes.setErrorStackTrace(ExceptionUtils.getStackTraceAsString(e));
+            sendMessage(session, runJsErrorRes);
             close(session);
         }
     }
