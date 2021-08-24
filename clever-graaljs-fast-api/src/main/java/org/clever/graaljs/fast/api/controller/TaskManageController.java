@@ -43,8 +43,7 @@ public class TaskManageController {
 
     @DeleteMapping("/del_js_job")
     public DelJsJobRes delJsJob(@RequestParam("fileResourceId") Long fileResourceId) {
-        // TODO 删除定时任务
-        return null;
+        return taskManageService.delJsJob(fileResourceId);
     }
 
     @PostMapping("/disable")
@@ -63,4 +62,6 @@ public class TaskManageController {
     public void execJob(@RequestParam("jobId") Long jobId) {
         taskInstance.execJob(jobId);
     }
+
+    // TODO 更新定时任务
 }

@@ -1,8 +1,10 @@
 package org.clever.graaljs.fast.api.dto.response;
 
 import lombok.Data;
+import org.clever.graaljs.fast.api.entity.FileResource;
 
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * 作者：lizw <br/>
@@ -10,6 +12,5 @@ import java.io.Serializable;
  */
 @Data
 public class DelJsJobRes implements Serializable {
-
-
+    List<FileResource> fileList;
 }

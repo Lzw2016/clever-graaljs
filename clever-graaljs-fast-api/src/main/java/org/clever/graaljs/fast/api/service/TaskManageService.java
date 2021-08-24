@@ -1,12 +1,14 @@
 package org.clever.graaljs.fast.api.service;
 
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.clever.graaljs.core.utils.tree.BuildTreeUtils;
 import org.clever.graaljs.core.utils.tree.SimpleTreeNode;
 import org.clever.graaljs.fast.api.config.FastApiConfig;
 import org.clever.graaljs.fast.api.dto.request.AddDirReq;
 import org.clever.graaljs.fast.api.dto.request.AddJsJobReq;
 import org.clever.graaljs.fast.api.dto.response.AddJsJobRes;
+import org.clever.graaljs.fast.api.dto.response.DelJsJobRes;
 import org.clever.graaljs.fast.api.dto.response.JobFileResourceRes;
 import org.clever.graaljs.fast.api.dto.response.JsJobInfoRes;
 import org.clever.graaljs.fast.api.entity.EnumConstant;
@@ -68,6 +70,7 @@ public class TaskManageService {
     private static final String GET_JOB_TRIGGER_BY_ID = "select * from job_trigger where namespace=? and job_id=?";
     private static final String GET_JS_JOB_BY_ID = "select * from js_job where namespace=? and job_id=?";
     private static final String GET_JOB_TRIGGER_ID_BY_JOB_ID = "select id from job_trigger where namespace=? and job_id=?";
+    private static final String GET_JS_JOB_ID_BY_RESOURCE_ID = "select job_id from js_job where namespace=? and file_resource_id in ( %s )";
 
     /**
      * FileResource 命名空间
@@ -197,6 +200,34 @@ public class TaskManageService {
         }
         res.setJob(addJobRes.getJob());
         res.setJobTrigger(addJobRes.getJobTrigger());
+        return res;
+    }
+
+    @Transactional
+    public DelJsJobRes delJsJob(Long fileResourceId) {
+        DelJsJobRes res = new DelJsJobRes();
+        // 删除文件资源
+        List<FileResource> fileList = fileResourceManageService.delFileResource(fileResourceId);
+        res.setFileList(fileList);
+        // 删除Job
+        List<Long> fileResourceIds = new ArrayList<>();
+        fileList.forEach(fileResource -> {
+            if (Objects.equals(fileResource.getIsFile(), EnumConstant.IS_FILE_1)) {
+                fileResourceIds.add(fileResource.getId());
+            }
+        });
+        if (fileResourceIds.isEmpty()) {
+            return res;
+        }
+        String sql = String.format(GET_JS_JOB_ID_BY_RESOURCE_ID, StringUtils.repeat("?", ", ", fileResourceIds.size()));
+        List<Object> args = new ArrayList<>(fileResourceIds.size() + 1);
+        args.add(namespace);
+        args.addAll(fileResourceIds);
+        List<Long> jobIds = jdbcTemplate.queryForList(sql, Long.class, args.toArray());
+        if (jobIds.isEmpty()) {
+            return res;
+        }
+        taskInstance.deleteJobs(jobIds);
         return res;
     }
 
