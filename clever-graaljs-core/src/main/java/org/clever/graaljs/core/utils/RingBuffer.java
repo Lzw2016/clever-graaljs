@@ -31,11 +31,12 @@ public class RingBuffer<T> implements Serializable {
     private final long createTime = System.currentTimeMillis();
     private final Lock lock = new ReentrantLock();
     /**
-     * 日志缓冲区大小(日志条目数量)
+     * 数据缓冲区大小(数据条目数量)
      */
+    @Getter
     private int bufferSize = Normal_Buffer_Size;
     /**
-     * 日志缓冲区
+     * 数据缓冲区
      */
     private final T[] buffer;
     /**

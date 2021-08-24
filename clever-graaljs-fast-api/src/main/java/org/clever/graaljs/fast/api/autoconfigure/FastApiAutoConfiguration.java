@@ -47,7 +47,13 @@ import java.util.Map;
  * 作者：lizw <br/>
  * 创建时间：2021/06/14 09:57 <br/>
  */
-@ComponentScan(basePackages = {"org.clever.graaljs.fast.api.controller", "org.clever.graaljs.fast.api.service"})
+@ComponentScan(basePackages =
+        {
+                "org.clever.graaljs.fast.api.controller",
+                "org.clever.graaljs.fast.api.websocket",
+                "org.clever.graaljs.fast.api.service"
+        }
+)
 @AutoConfigureOrder(Ordered.LOWEST_PRECEDENCE - 3)
 @EnableConfigurationProperties({FastApiConfig.class})
 @Configuration
