@@ -137,6 +137,7 @@ clever:
   fast-api:
     namespace: 'default'
     scan-interval: 3s
+    preload: false
     script-engine:
       max-wait-millis: 1000
       min-idle: 2

@@ -147,4 +147,8 @@ public class HttpApiFileResourceCacheService {
         }
         return null;
     }
+
+    public List<HttpApiFileResource> getAllHttpApiFileResource() {
+        return new ArrayList<>(httpApiCache.values());
+    }
 }

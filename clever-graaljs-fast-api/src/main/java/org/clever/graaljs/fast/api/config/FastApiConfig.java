@@ -26,6 +26,10 @@ public class FastApiConfig implements Serializable {
      */
     private Duration scanInterval = Duration.ofSeconds(3);
     /**
+     * 是否预加载脚本
+     */
+    private boolean preload = false;
+    /**
      * 脚本引擎配置
      */
     @NestedConfigurationProperty

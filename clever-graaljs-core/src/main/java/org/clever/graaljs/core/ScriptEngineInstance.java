@@ -228,7 +228,6 @@ public class ScriptEngineInstance implements Closeable {
     }
 
     // --------------------------------------------------------------------------------------------------- Script
-    // TODO context.parse()
 
     /**
      * 把脚本代码包装成函数对象(预加载脚本代码)
