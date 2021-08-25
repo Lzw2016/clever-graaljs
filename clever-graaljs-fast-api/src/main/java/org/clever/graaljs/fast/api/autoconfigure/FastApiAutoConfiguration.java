@@ -11,6 +11,7 @@ import org.clever.graaljs.data.redis.builtin.wrap.RedisDatabase;
 import org.clever.graaljs.fast.api.config.FastApiConfig;
 import org.clever.graaljs.fast.api.config.MvcConfig;
 import org.clever.graaljs.fast.api.intercept.FastApiHttpInterceptor;
+import org.clever.graaljs.fast.api.plugin.PutGlobalObjects;
 import org.clever.graaljs.fast.api.service.HttpApiFileResourceCacheService;
 import org.clever.graaljs.meta.data.MetaDataEngineGlobalUtils;
 import org.clever.graaljs.meta.data.builtin.wrap.MateDataManage;
@@ -38,10 +39,7 @@ import org.springframework.core.convert.ConversionService;
 import org.springframework.util.Assert;
 
 import javax.sql.DataSource;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 /**
  * 作者：lizw <br/>
@@ -67,14 +65,20 @@ public class FastApiAutoConfiguration {
 
     @Bean("scriptEngineInstance")
     @ConditionalOnMissingBean
-    public ScriptEngineInstance scriptEngineInstance() {
+    public ScriptEngineInstance scriptEngineInstance(ObjectProvider<List<PutGlobalObjects>> putGlobalObjectsListObjectProvider) {
         final ScriptEngineConfig scriptEngine = fastApiConfig.getScriptEngine();
         final Map<String, Object> contextMap = new HashMap<>();
         MetaDataEngineGlobalUtils.putGlobalObjects(contextMap);
         DataJdbcEngineGlobalUtils.putGlobalObjects(contextMap);
         DataRedisEngineGlobalUtils.putGlobalObjects(contextMap);
         SpringCommonEngineGlobalUtils.putGlobalObjects(contextMap);
-        // TODO 其他内置对象
+        // 其他内置对象
+        List<PutGlobalObjects> putGlobalObjectsList = putGlobalObjectsListObjectProvider.getIfAvailable();
+        if (putGlobalObjectsList != null && !putGlobalObjectsList.isEmpty()) {
+            for (PutGlobalObjects putGlobalObjects : putGlobalObjectsList) {
+                putGlobalObjects.handle(contextMap);
+            }
+        }
         final Map<String, Object> global = new HashMap<>();
         final ScriptEngineInstance scriptEngineInstance = new ScriptEngineInstance(
                 scriptEngine.toGenericObjectPoolConfig(),
