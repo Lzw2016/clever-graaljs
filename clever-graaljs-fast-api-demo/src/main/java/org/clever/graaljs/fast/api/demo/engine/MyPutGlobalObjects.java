@@ -1,4 +1,4 @@
-package org.clever.graaljs.fast.api.demo.config;
+package org.clever.graaljs.fast.api.demo.engine;
 
 import org.clever.graaljs.fast.api.demo.utils.JSUtils;
 import org.clever.graaljs.fast.api.plugin.PutGlobalObjects;
