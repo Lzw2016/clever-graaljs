@@ -1,6 +1,6 @@
 # --------- bug
-[  ]  1.使用GraalVM compiler功能之后，脚本执行异常解析错误
-[  ]  2.Multiple applicable overloads found for method name问题(graaljs版本问题)
+[NO]  1.使用GraalVM compiler功能之后，脚本执行异常解析错误(graaljs版本问题，使用graalvm-21.2.0 & java-11没有问题)
+[NO]  2.Multiple applicable overloads found for method name问题(graaljs版本问题)
 [OK]  3.注入枚举值
 [OK]  4.前端debug-id使用uuid
 [  ]  5.clever-graaljs-fast-api-demo 全局异常处理
