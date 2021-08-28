@@ -77,6 +77,7 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <clever-dynamic-sql.version>1.0.0-SNAPSHOT</clever-dynamic-sql.version>
         <clever-task.version>0.0.1-SNAPSHOT</clever-task.version>
+        <cleve-hot-reload.version>0.0.1-SNAPSHOT</cleve-hot-reload.version>
         <graalvm.version>21.2.0</graalvm.version>
         <schemacrawler.version>16.14.6</schemacrawler.version>
         <antlr4.version>4.9.2</antlr4.version>
@@ -140,6 +141,16 @@
                 <groupId>org.clever</groupId>
                 <artifactId>clever-task-ext</artifactId>
                 <version>${clever-task.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.clever</groupId>
+                <artifactId>cleve-hot-reload-core</artifactId>
+                <version>${cleve-hot-reload.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.clever</groupId>
+                <artifactId>cleve-hot-reload-spring</artifactId>
+                <version>${cleve-hot-reload.version}</version>
             </dependency>
             <!--三方依赖-->
             <dependency>

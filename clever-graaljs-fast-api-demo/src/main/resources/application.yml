@@ -134,6 +134,11 @@ spring:
 ### clever
 ###################################################################################
 clever:
+  hot-reload:
+    dev-mode: true
+    root-paths: [ './clever-graaljs-fast-api-demo/src/main/groovy' ]
+    http-route-modules:
+      - 'org.clever.graaljs.fast.api.demo.HttpRouteDemo'
   fast-api:
     namespace: 'default'
     scan-interval: 3s

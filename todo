@@ -33,7 +33,7 @@
 [  ] 18.支持websocket
 [OK] 17.执行脚本预加载(生产环境)
 [OK] 18.用户自定义putGlobalObjects contextMap机制
-[  ] 19.
+[OK] 19.接入cleve-hot-reload-spring支持java(groovy)代码热修改
 [  ] 20.
 
 

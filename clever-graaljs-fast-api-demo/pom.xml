@@ -18,6 +18,15 @@
             <groupId>org.clever</groupId>
             <artifactId>clever-graaljs-fast-api</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.clever</groupId>
+            <artifactId>cleve-hot-reload-spring</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.codehaus.groovy</groupId>
+            <artifactId>groovy</artifactId>
+            <scope>provided</scope>
+        </dependency>
         <!--actuator-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -74,6 +83,26 @@
                 <configuration>
                     <skip>true</skip>
                 </configuration>
+            </plugin>
+            <!--cleve-hot-reload-->
+            <plugin>
+                <groupId>org.codehaus.gmavenplus</groupId>
+                <artifactId>gmavenplus-plugin</artifactId>
+                <version>1.12.1</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>addSources</goal>
+                            <goal>addTestSources</goal>
+                            <goal>generateStubs</goal>
+                            <goal>compile</goal>
+                            <goal>generateTestStubs</goal>
+                            <goal>compileTests</goal>
+                            <goal>removeStubs</goal>
+                            <goal>removeTestStubs</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>
