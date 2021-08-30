@@ -6,7 +6,7 @@
 [  ]  5.clever-graaljs-fast-api-demo 全局异常处理
 [OK]  6.支持SQLBuilder创建动态sql语句
 [OK]  7.clever-graaljs-types 基础类型需要重新设计
-[  ]  8.
+[  ]  8.HttpApiFileResourceCacheService、FileResourceMyBatisMapperSqlService缓存刷新问题
 [  ]  9.
 [  ] 10.
 [  ] 11.
@@ -34,7 +34,8 @@
 [OK] 17.执行脚本预加载(生产环境)
 [OK] 18.用户自定义putGlobalObjects contextMap机制
 [OK] 19.接入cleve-hot-reload-spring支持java(groovy)代码热修改
-[  ] 20.
+[OK] 20.资源文件mybatis mapper.xml文件
+[  ] 21.
 
 
 

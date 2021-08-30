@@ -1,6 +1,8 @@
 package org.clever.graaljs.data.jdbc.builtin;
 
+import org.apache.commons.lang3.StringUtils;
 import org.clever.dynamic.sql.BoundSql;
+import org.clever.dynamic.sql.DynamicSqlParser;
 import org.clever.dynamic.sql.builder.SqlSource;
 
 /**
@@ -19,7 +21,14 @@ public class SqlSourceUtils {
      * @param xmlSql MyBatis XML sql
      */
     public SqlSource getSqlSource(String xmlSql) {
-        return null;
+        if (StringUtils.isBlank(xmlSql)) {
+            return null;
+        }
+        xmlSql = StringUtils.trim(xmlSql);
+        if (!xmlSql.startsWith("<script>")) {
+            xmlSql = String.format("<script>\n%s\n</script>", xmlSql);
+        }
+        return DynamicSqlParser.parserSql(xmlSql);
     }
 
     /**
@@ -29,6 +38,6 @@ public class SqlSourceUtils {
      * @param parameter SQL参数
      */
     public BoundSql getBoundSql(String xmlSql, Object parameter) {
-        return null;
+        return getSqlSource(xmlSql).getBoundSql(parameter);
     }
 }

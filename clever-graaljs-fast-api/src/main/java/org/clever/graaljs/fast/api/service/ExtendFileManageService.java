@@ -32,11 +32,13 @@ public class ExtendFileManageService {
     private static final String QUERY_ALL_RESOURCE = "" +
             "select id, namespace, module, path, name, is_file,`read_only` " +
             "from file_resource " +
-            "where module=0 and is_file=1 and namespace=?";
+            "where module=0 and is_file=1 and namespace=? " +
+            "order by name";
     private static final String QUERY_ALL_DIR = "" +
             "select id, namespace, module, path, name, is_file,`read_only` " +
             "from file_resource " +
-            "where module=0 and is_file=0 and namespace=?";
+            "where module=0 and is_file=0 and namespace=? " +
+            "order by name";
     private static final String QUERY_ALL_EXTEND_FILE = "select * from file_resource where module=0 and is_file=1 and namespace=?";
 
     /**
@@ -63,6 +65,7 @@ public class ExtendFileManageService {
                 DataClassRowMapper.newInstance(FileResourceTreeNodeRes.class),
                 namespace
         );
+        // noinspection DuplicatedCode
         list.addAll(allDir);
         List<SimpleTreeNode<FileResourceTreeNodeRes>> tree = new ArrayList<>(list.size());
         for (FileResourceTreeNodeRes fileResource : list) {

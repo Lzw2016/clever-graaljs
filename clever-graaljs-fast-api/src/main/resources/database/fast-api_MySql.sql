@@ -151,31 +151,6 @@ create index idx_http_global_request_data_update_at on http_global_request_data 
 
 
 /* ====================================================================================================================
-    TODO timed_task -- 定时任务
-==================================================================================================================== */
-create table timed_task
-(
-    id                  bigint          not null auto_increment comment '主键id',
-    namespace           varchar(63)     not null comment '命名空间',
-    file_resource_id    bigint          not null comment '资源文件id',
-    start_time          datetime(3)                                                             comment '开始时间',
-    end_time            datetime(3)                                                             comment '结束时间',
-    cron                varchar(255)    not null                                                comment '触发cron表达式',
-    disable             tinyint         not null        default 0                               comment '是否禁用：0-启用，1-禁用',
-    create_at           datetime(3)     not null        default current_timestamp(3)            comment '创建时间',
-    update_at           datetime(3)                     on update current_timestamp(3)          comment '更新时间',
-    primary key (id)
-) comment = '定时任务';
-create index idx_timed_task_namespace on timed_task (namespace);
-create index idx_timed_task_file_resource_id on timed_task (file_resource_id);
-create index idx_timed_task_create_at on timed_task (create_at);
-create index idx_timed_task_update_at on timed_task (update_at);
-/*------------------------------------------------------------------------------------------------------------------------
-TODO timed_task_run_log
---------------------------------------------------------------------------------------------------------------------------*/
-
-
-/* ====================================================================================================================
     TODO access_log -- 接口访问日志
 ==================================================================================================================== */
 create table access_log

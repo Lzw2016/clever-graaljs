@@ -208,7 +208,7 @@ public class ScriptEngineInstance implements Closeable {
     public String getEngineName() {
         final String engineName = engineFactory.getEngine().getImplementationName();
         if (GraalConstant.Error_Engine_Name.equalsIgnoreCase(engineName)) {
-            log.error("当前GraalJs未使用GraalVM compiler功能，请使用GraalVM compiler功能以提升性能(2 ~ 10倍性能提升)!");
+            log.warn("当前GraalJs未使用GraalVM compiler功能，请使用GraalVM compiler功能以提升性能(2 ~ 10倍性能提升)!");
         }
         return engineName;
     }
