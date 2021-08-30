@@ -3,11 +3,15 @@ package org.clever.graaljs.fast.api.autoconfigure;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.clever.graaljs.core.ScriptEngineInstance;
+import org.clever.graaljs.core.ScriptObject;
 import org.clever.graaljs.data.jdbc.mybatis.MyBatisMapperSql;
 import org.clever.graaljs.fast.api.config.FastApiConfig;
+import org.clever.graaljs.fast.api.entity.EnumConstant;
+import org.clever.graaljs.fast.api.entity.FileResource;
 import org.clever.graaljs.fast.api.model.HttpApiFileResource;
 import org.clever.graaljs.fast.api.service.FileResourceMyBatisMapperSqlService;
 import org.clever.graaljs.fast.api.service.HttpApiFileResourceCacheService;
+import org.clever.graaljs.fast.api.service.InitScriptService;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.autoconfigure.AutoConfigureOrder;
@@ -20,6 +24,7 @@ import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
+import java.util.function.Consumer;
 
 /**
  * 作者：lizw <br/>
@@ -34,18 +39,22 @@ public class FastApiInitCommandLineRunner implements CommandLineRunner {
     private final ScriptEngineInstance scriptEngineInstance;
     private final ScheduledExecutorService scheduled = Executors.newSingleThreadScheduledExecutor();
     private final HttpApiFileResourceCacheService httpApiFileResourceCacheService;
+    private final InitScriptService initScriptService;
     private final MyBatisMapperSql mybatisMapperSql;
 
     public FastApiInitCommandLineRunner(
             FastApiConfig fastApiConfig,
             ScriptEngineInstance scriptEngineInstance,
             ObjectProvider<HttpApiFileResourceCacheService> fileResourceCacheService,
+            ObjectProvider<InitScriptService> initScriptService,
             ObjectProvider<MyBatisMapperSql> mybatisMapperSql) {
         Assert.notNull(fileResourceCacheService.getIfUnique(), String.format("依赖实例%s未注入或注入多个", HttpApiFileResourceCacheService.class.getName()));
+        Assert.notNull(initScriptService.getIfUnique(), String.format("依赖实例%s未注入或注入多个", InitScriptService.class.getName()));
         Assert.notNull(mybatisMapperSql.getIfUnique(), String.format("依赖实例%s未注入或注入多个", MyBatisMapperSql.class.getName()));
         this.fastApiConfig = fastApiConfig;
         this.scriptEngineInstance = scriptEngineInstance;
         this.httpApiFileResourceCacheService = fileResourceCacheService.getIfUnique();
+        this.initScriptService = initScriptService.getIfUnique();
         this.mybatisMapperSql = mybatisMapperSql.getIfUnique();
     }
 
@@ -87,6 +96,17 @@ public class FastApiInitCommandLineRunner implements CommandLineRunner {
                 } catch (Exception e) {
                     log.error("预加载脚本：{} 失败", httpApiFileResource.getPath() + httpApiFileResource.getName(), e);
                 }
+            }
+        }
+        // 执行初始化脚本
+        List<FileResource> list = initScriptService.getAllFileByModule(EnumConstant.MODULE_2);
+        for (FileResource fileResource : list) {
+            try {
+                scriptEngineInstance.wrapFunctionAndEval(fileResource.getContent(), (Consumer<ScriptObject>) ScriptObject::executeVoid);
+                log.info("初始化脚本：{} 执行成功", fileResource.getPath() + fileResource.getName());
+            } catch (Exception e) {
+                log.error("初始化脚本：{} 执行失败", fileResource.getPath() + fileResource.getName(), e);
+                System.exit(-1);
             }
         }
         log.info("FastApi初始化完成!");
