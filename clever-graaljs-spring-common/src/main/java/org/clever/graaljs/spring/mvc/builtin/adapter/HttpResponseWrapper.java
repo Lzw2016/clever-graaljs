@@ -284,9 +284,12 @@ public class HttpResponseWrapper {
     public void setDownloadFileName(String fileName, Long contentLength) {
         fileName = StringUtils.trim(fileName);
         Assert.hasText(fileName, "参数fileName不能为空");
-        fileName = EncodeDecodeUtils.browserDownloadFileName(httpContext.request.getHeader("User-Agent"), fileName);
         delegate.setContentType("application/force-download");
-        delegate.setHeader("Content-Disposition", "attachment;fileName=" + fileName);
+        fileName = EncodeDecodeUtils.urlEncode(fileName).replaceAll("\\+", "%20");
+        String contentDisposition = "attachment;" +
+                "filename=" + fileName + ";" +
+                "filename*=" + "utf-8''" + fileName;
+        delegate.setHeader("Content-Disposition", contentDisposition);
         if (contentLength != null && contentLength >= 0) {
             delegate.setContentLengthLong(contentLength);
         }

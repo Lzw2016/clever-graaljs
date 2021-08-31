@@ -124,17 +124,6 @@ interface EncodeDecodeUtils extends JObject {
      * @return url解码字符串
      */
     urlDecode(url: JString): JString;
-
-    // browser
-    //----------------------------------------------------------------------------------------------------------------------------------------------
-    /**
-     * 处理浏览器下载文件的文件编码问题
-     *
-     * @param userAgent 浏览器标识:request.getHeader("User-Agent")
-     * @param fileName  文件名称
-     * @return 处理之后的文件名称
-     */
-    browserDownloadFileName(userAgent: JString, fileName: JString): JString;
 }
 
 declare const EncodeDecodeUtils: EncodeDecodeUtils;

@@ -67,8 +67,11 @@ public class ExcelDataWriter {
         if (!fileName.toLowerCase().endsWith(".xlsx") && !fileName.toLowerCase().endsWith(".xls")) {
             fileName = fileName + ".xlsx";
         }
-        fileName = EncodeDecodeUtils.browserDownloadFileName(request.getHeader("User-Agent"), fileName);
-        response.setHeader("Content-Disposition", "attachment;fileName=" + fileName);
+        fileName = EncodeDecodeUtils.urlEncode(fileName).replaceAll("\\+", "%20");
+        String contentDisposition = "attachment;" +
+                "filename=" + fileName + ";" +
+                "filename*=" + "utf-8''" + fileName;
+        response.setHeader("Content-Disposition", contentDisposition);
         response.setContentType("application/vnd.ms-excel;charset=utf-8");
         return response.getOutputStream();
     }

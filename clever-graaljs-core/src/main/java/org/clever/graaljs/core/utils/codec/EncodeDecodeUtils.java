@@ -9,7 +9,6 @@ import org.clever.graaljs.core.utils.ExceptionUtils;
 
 import java.net.URLDecoder;
 import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
 
 /**
  * 各种格式的编码、解码工具类：<br/>
@@ -198,27 +197,5 @@ public class EncodeDecodeUtils {
             log.error(e.getMessage(), e);
             throw ExceptionUtils.unchecked(e);
         }
-    }
-
-    /**
-     * 处理浏览器下载文件的文件编码问题
-     *
-     * @param userAgent 浏览器标识:request.getHeader("User-Agent")
-     * @param fileName  文件名称
-     * @return 处理之后的文件名称
-     */
-    public static String browserDownloadFileName(String userAgent, String fileName) {
-        try {
-            if (userAgent.toUpperCase().indexOf("SAFARI") > 0) {
-                fileName = new String(fileName.getBytes(StandardCharsets.UTF_8), "ISO8859-1");
-            } else if (userAgent.toUpperCase().indexOf("MSIE") > 0 || userAgent.toUpperCase().indexOf("LIKE GECKO") > 0) {
-                fileName = URLEncoder.encode(fileName, "UTF-8");
-            } else {
-                fileName = new String(fileName.getBytes(StandardCharsets.UTF_8), "ISO8859-1");
-            }
-        } catch (Throwable e) {
-            log.error("字符串编码转码失败", e);
-        }
-        return fileName;
     }
 }

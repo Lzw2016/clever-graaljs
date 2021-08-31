@@ -163,18 +163,4 @@ public class EncodeDecodeUtils {
     public String urlDecode(String url) {
         return org.clever.graaljs.core.utils.codec.EncodeDecodeUtils.urlDecode(url);
     }
-
-    // browser
-    //----------------------------------------------------------------------------------------------------------------------------------------------
-
-    /**
-     * 处理浏览器下载文件的文件编码问题
-     *
-     * @param userAgent 浏览器标识:request.getHeader("User-Agent")
-     * @param fileName  文件名称
-     * @return 处理之后的文件名称
-     */
-    public String browserDownloadFileName(String userAgent, String fileName) {
-        return org.clever.graaljs.core.utils.codec.EncodeDecodeUtils.browserDownloadFileName(userAgent, fileName);
-    }
 }
