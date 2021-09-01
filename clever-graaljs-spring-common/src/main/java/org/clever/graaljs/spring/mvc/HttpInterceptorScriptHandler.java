@@ -11,8 +11,6 @@ import org.clever.graaljs.core.utils.TupleOne;
 import org.clever.graaljs.core.utils.TupleTow;
 import org.clever.graaljs.spring.logger.GraalJsDebugLogbackAppender;
 import org.clever.graaljs.spring.mvc.builtin.wrap.HttpContext;
-import org.clever.graaljs.spring.mvc.model.request.ApiDebugReq;
-import org.clever.graaljs.spring.mvc.model.response.ApiDebugRes;
 import org.clever.graaljs.spring.mvc.support.IntegerToDateConverter;
 import org.clever.graaljs.spring.mvc.support.StringToDateConverter;
 import org.graalvm.polyglot.PolyglotException;
@@ -52,6 +50,10 @@ public abstract class HttpInterceptorScriptHandler implements HandlerInterceptor
      */
     @SuppressWarnings("UastIncorrectHttpHeaderInspection")
     protected static final String USE_SCRIPT_HANDLER_HEAD = "script-file-resource";
+    /**
+     * 是否调试接口
+     */
+    private static final String API_DEBUG_HEADER = "api-debug";
     /**
      * 初始化状态
      */
@@ -203,6 +205,7 @@ public abstract class HttpInterceptorScriptHandler implements HandlerInterceptor
     /**
      * 序列化返回对象
      */
+    @SuppressWarnings("SameParameterValue")
     protected String serializeRes(Object res, boolean pretty) {
         if (pretty) {
             return JacksonMapperSupport.getHttpApiJacksonMapper().toPrettyJson(res);
@@ -246,16 +249,11 @@ public abstract class HttpInterceptorScriptHandler implements HandlerInterceptor
         if (!supportScript(request, handler)) {
             return false;
         }
-        final ApiDebugReq apiDebugReq = (ApiDebugReq) request.getAttribute(ApiDebugReq.REQUEST_ATTRIBUTE);
-        final ApiDebugRes apiDebugRes = new ApiDebugRes(request);
         long startTime1 = -1;                                   // 开始查找脚本文件时间
         long startTime2 = -1;                                   // 开始执行脚本时间
-        final TupleOne<Long> startTime3 = TupleOne.creat(-1L);  // 开始序列化返回值时间;
+        final TupleOne<Long> startTime3 = TupleOne.creat(-1L);  // 开始序列化返回值时间
         TupleTow<String, String> scriptInfo = null;
         try {
-            if (apiDebugReq.isDebug()) {
-                GraalJsDebugLogbackAppender.apiDebugStart(apiDebugReq.getApiDebugUniqueId(), apiDebugReq.getDebugBufferSize());
-            }
             // 1.加载执行脚本代码
             startTime1 = System.currentTimeMillis();
             scriptInfo = getScriptFileResource(request);
@@ -270,14 +268,11 @@ public abstract class HttpInterceptorScriptHandler implements HandlerInterceptor
                 // 3.序列化返回数据
                 startTime3.setValue1(System.currentTimeMillis());
                 if (!resIsEmpty(res) && !response.isCommitted()) {
-                    return serializeRes(res, apiDebugReq.isDebug());
+                    return serializeRes(res);
                 }
                 return null;
             });
-            if (apiDebugReq.isDebug()) {
-                apiDebugRes.setData(resJson);
-            }
-            if (resJson != null && !response.isCommitted() && !apiDebugReq.isDebug()) {
+            if (resJson != null && !response.isCommitted()) {
                 response.setContentType(CONTENT_TYPE);
                 response.getWriter().print(resJson);
             }
@@ -302,9 +297,6 @@ public abstract class HttpInterceptorScriptHandler implements HandlerInterceptor
                 );
                 log.debug(logText);
             }
-            if (apiDebugReq.isDebug()) {
-                apiDebugRes.setLogs(GraalJsDebugLogbackAppender.apiDebugEnd(apiDebugReq.getApiDebugUniqueId()));
-            }
         }
         return true;
     }
@@ -324,22 +316,18 @@ public abstract class HttpInterceptorScriptHandler implements HandlerInterceptor
             // 不支持跨域
             return false;
         }
-        final ApiDebugReq apiDebugReq = new ApiDebugReq(request);
+        final String apiDebugId = StringUtils.trim(request.getHeader(API_DEBUG_HEADER));
+        final boolean isDebug = StringUtils.isNotBlank(apiDebugId);
         try {
-            final boolean res = !handle(request, response, handler);
-            final ApiDebugRes apiDebugRes = (ApiDebugRes) request.getAttribute(ApiDebugRes.REQUEST_ATTRIBUTE);
-            if (!res && apiDebugReq.isDebug() && !response.isCommitted() && apiDebugRes != null) {
-                response.setContentType(CONTENT_TYPE);
-                String json = serializeRes(apiDebugRes);
-                response.getWriter().print(json);
+            if (isDebug) {
+                GraalJsDebugLogbackAppender.apiDebugStart(apiDebugId, 2048);
             }
-            return res;
+            return !handle(request, response, handler);
         } catch (Exception e) {
             if (response.isCommitted()) {
                 log.info("Script处理请求异常", e);
                 return false;
             }
-            final ApiDebugRes apiDebugRes = (ApiDebugRes) request.getAttribute(ApiDebugRes.REQUEST_ATTRIBUTE);
             Object res;
             if (exceptionResolver != null) {
                 res = exceptionResolver.resolveException(request, response, handler, e);
@@ -350,16 +338,12 @@ public abstract class HttpInterceptorScriptHandler implements HandlerInterceptor
             }
             if (res != null) {
                 response.setContentType(CONTENT_TYPE);
-                if (apiDebugReq.isDebug() && apiDebugRes != null) {
-                    apiDebugRes.setData(res);
-                    res = apiDebugRes;
-                }
                 String json = serializeRes(res);
                 response.getWriter().println(json);
             }
         } finally {
-            if (apiDebugReq.isDebug()) {
-                GraalJsDebugLogbackAppender.apiDebugEnd(apiDebugReq.getApiDebugUniqueId());
+            if (isDebug) {
+                GraalJsDebugLogbackAppender.apiDebugEnd(apiDebugId);
             }
         }
         return false;

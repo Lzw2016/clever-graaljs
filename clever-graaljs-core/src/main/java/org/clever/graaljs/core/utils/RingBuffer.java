@@ -96,8 +96,8 @@ public class RingBuffer<T> implements Serializable {
     /**
      * 获取数据
      */
+    @SuppressWarnings("DuplicatedCode")
     public BufferContent<T> getBuffer() {
-        // noinspection DuplicatedCode
         return exclusiveOperation(param -> {
             final long first = firstIndex.get();
             final long last = lastIndex.get();
@@ -128,10 +128,10 @@ public class RingBuffer<T> implements Serializable {
     /**
      * 获取数据
      */
+    @SuppressWarnings("DuplicatedCode")
     public BufferContent<T> getBuffer(final long startIndex, long size) {
         Assert.isTrue(startIndex >= 0, "startIndex 必须大于等于 0");
         Assert.isTrue(size > 0, "size 必须大于 0");
-        // noinspection DuplicatedCode
         return exclusiveOperation(param -> {
             long first = firstIndex.get();
             long last = lastIndex.get();

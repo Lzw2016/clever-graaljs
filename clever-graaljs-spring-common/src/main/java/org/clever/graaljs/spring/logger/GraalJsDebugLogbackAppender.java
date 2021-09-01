@@ -9,7 +9,6 @@ import org.clever.graaljs.core.utils.Assert;
 import org.clever.graaljs.core.utils.RingBuffer;
 import org.slf4j.MDC;
 
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
@@ -102,31 +101,27 @@ public class GraalJsDebugLogbackAppender extends AppenderBase<ILoggingEvent> {
     }
 
     /**
-     * 开始调试API
+     * 开始运行JS
      *
      * @param uniqueId   唯一ID
      * @param bufferSize 缓存大小
      */
-    public static void apiDebugStart(String uniqueId, int bufferSize) {
+    public static RingBuffer<String> apiDebugStart(String uniqueId, int bufferSize) {
         Assert.isNotBlank(uniqueId, "uniqueId 不能为空");
-        API_DEBUG_CACHE.computeIfAbsent(uniqueId, traceLogId -> new RingBuffer<>(bufferSize));
+        RingBuffer<String> ringBuffer = API_DEBUG_CACHE.computeIfAbsent(uniqueId, traceLogId -> new RingBuffer<>(bufferSize));
         MDC.put(getKey(MDC_API_DEBUG_ID), uniqueId);
+        return ringBuffer;
     }
 
     /**
-     * 调试API结束
+     * 运行JS结束
      *
      * @param uniqueId 唯一ID
      */
-    public static RingBuffer.BufferContent<String> apiDebugEnd(String uniqueId) {
+    public static void apiDebugEnd(String uniqueId) {
         Assert.isNotBlank(uniqueId, "uniqueId 不能为空");
         MDC.remove(getKey(MDC_API_DEBUG_ID));
-        RingBuffer<String> ringBuffer = API_DEBUG_CACHE.get(uniqueId);
-        if (ringBuffer == null) {
-            return new RingBuffer.BufferContent<>(0, 0, Collections.emptyList());
-        }
         API_DEBUG_CACHE.remove(uniqueId);
-        return ringBuffer.getBuffer();
     }
 
     /**

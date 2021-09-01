@@ -29,7 +29,7 @@
 [  ] 13.支持在js脚本中定义servlet过滤器(拦截器)逻辑
 [  ] 14.支持在线swagger文档
 [80] 15.支持定时任务
-[  ] 16.支持初始化脚本
+[OK] 16.支持初始化脚本
 [  ] 18.支持websocket
 [OK] 17.执行脚本预加载(生产环境)
 [OK] 18.用户自定义putGlobalObjects contextMap机制

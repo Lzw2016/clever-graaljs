@@ -8,9 +8,10 @@ import org.clever.graaljs.core.utils.ExceptionUtils;
 import org.clever.graaljs.core.utils.RingBuffer;
 import org.clever.graaljs.core.utils.mapper.JacksonMapper;
 import org.clever.graaljs.fast.api.dto.request.RunJsReq;
-import org.clever.graaljs.fast.api.dto.response.RunJsErrorRes;
+import org.clever.graaljs.fast.api.dto.response.WebSocketErrorRes;
 import org.clever.graaljs.fast.api.entity.FileResource;
 import org.clever.graaljs.fast.api.service.FileResourceManageService;
+import org.clever.graaljs.fast.api.utils.WebsocketUtils;
 import org.clever.graaljs.spring.logger.GraalJsDebugLogbackAppender;
 import org.springframework.stereotype.Component;
 import org.springframework.web.socket.CloseStatus;
@@ -19,7 +20,6 @@ import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.AbstractWebSocketHandler;
 
 import javax.annotation.Resource;
-import java.io.IOException;
 import java.util.concurrent.*;
 
 /**
@@ -94,36 +94,6 @@ public class RunJsHandler extends AbstractWebSocketHandler {
         }
     }
 
-    private static void sendMessage(WebSocketSession session, Object object) {
-        if (!session.isOpen()) {
-            return;
-        }
-        String msg;
-        if (object instanceof CharSequence) {
-            msg = String.valueOf(object);
-        } else {
-            msg = JacksonMapper.getInstance().toJson(object);
-        }
-        TextMessage textMessage = new TextMessage(msg);
-        if (session.isOpen()) {
-            try {
-                session.sendMessage(textMessage);
-            } catch (IOException e) {
-                log.warn("[RunJsHandler] 发送数据失败", e);
-            }
-        }
-    }
-
-    private static void close(WebSocketSession session) {
-        if (session != null) {
-            try {
-                session.close();
-            } catch (IOException e) {
-                log.warn("[RunJsHandler] 关闭连接失败 | SessionId={}", session.getId(), e);
-            }
-        }
-    }
-
     @Resource
     private ScriptEngineInstance scriptEngineInstance;
     @Resource
@@ -149,7 +119,7 @@ public class RunJsHandler extends AbstractWebSocketHandler {
         String sessionId = session.getId();
         Future<?> future = EXECUTOR.submit(() -> scriptEngineInstance.wrapFunctionAndEval(fileResource.getContent(), scriptObject -> {
             try {
-                RingBuffer<String> ringBuffer = GraalJsDebugLogbackAppender.runJsStart(sessionId, 2048);
+                RingBuffer<String> ringBuffer = GraalJsDebugLogbackAppender.runJsStart(sessionId, 512);
                 LOG_RING_BUFFER_MAP.put(session, ringBuffer);
                 scriptObject.executeVoid();
             } finally {
@@ -159,10 +129,10 @@ public class RunJsHandler extends AbstractWebSocketHandler {
                     Long logStartIndex = LOG_START_INDEX_MAP.get(sessionId);
                     RingBuffer.BufferContent<String> logContent = logStartIndex == null ? ringBuffer.getBuffer() : ringBuffer.getBuffer(logStartIndex, ringBuffer.getBufferSize());
                     if (!logContent.getContent().isEmpty()) {
-                        sendMessage(session, logContent);
+                        WebsocketUtils.sendMessage(session, logContent);
                     }
                 }
-                close(session);
+                WebsocketUtils.close(session);
             }
         }));
         FUTURE_MAP.put(sessionId, future);
@@ -172,16 +142,16 @@ public class RunJsHandler extends AbstractWebSocketHandler {
     protected void handleTextMessage(WebSocketSession session, TextMessage message) {
         String msg = message.getPayload();
         if (StringUtils.isBlank(msg)) {
-            close(session);
+            WebsocketUtils.close(session);
             return;
         }
         try {
             doRunJs(session, msg);
         } catch (Exception e) {
-            RunJsErrorRes runJsErrorRes = new RunJsErrorRes();
-            runJsErrorRes.setErrorStackTrace(ExceptionUtils.getStackTraceAsString(e));
-            sendMessage(session, runJsErrorRes);
-            close(session);
+            WebSocketErrorRes WebSocketErrorRes = new WebSocketErrorRes();
+            WebSocketErrorRes.setErrorStackTrace(ExceptionUtils.getStackTraceAsString(e));
+            WebsocketUtils.sendMessage(session, WebSocketErrorRes);
+            WebsocketUtils.close(session);
         }
     }
 

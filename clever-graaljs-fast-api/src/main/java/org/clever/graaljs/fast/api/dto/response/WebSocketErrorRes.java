@@ -9,6 +9,6 @@ import java.io.Serializable;
  * 创建时间：2021/08/24 19:45 <br/>
  */
 @Data
-public class RunJsErrorRes implements Serializable {
+public class WebSocketErrorRes implements Serializable {
     private String errorStackTrace;
 }
