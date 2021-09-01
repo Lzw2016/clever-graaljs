@@ -9,6 +9,7 @@ import org.clever.graaljs.core.internal.jackson.JacksonMapperSupport;
 import org.clever.graaljs.core.utils.ExceptionUtils;
 import org.clever.graaljs.core.utils.TupleOne;
 import org.clever.graaljs.core.utils.TupleTow;
+import org.clever.graaljs.core.utils.codec.EncodeDecodeUtils;
 import org.clever.graaljs.spring.logger.GraalJsDebugLogbackAppender;
 import org.clever.graaljs.spring.mvc.builtin.wrap.HttpContext;
 import org.clever.graaljs.spring.mvc.support.IntegerToDateConverter;
@@ -262,7 +263,7 @@ public abstract class HttpInterceptorScriptHandler implements HandlerInterceptor
             }
             // 2.执行脚本
             startTime2 = System.currentTimeMillis();
-            response.setHeader(USE_SCRIPT_HANDLER_HEAD, scriptInfo.getValue1());
+            response.setHeader(USE_SCRIPT_HANDLER_HEAD, EncodeDecodeUtils.urlEncode(scriptInfo.getValue1()));
             String resJson = scriptEngineInstance.wrapFunctionAndEval(scriptInfo.getValue2(), scriptObject -> {
                 Object res = doHandle(request, response, scriptObject);
                 // 3.序列化返回数据

@@ -119,7 +119,7 @@ public class RunJsHandler extends AbstractWebSocketHandler {
         String sessionId = session.getId();
         Future<?> future = EXECUTOR.submit(() -> scriptEngineInstance.wrapFunctionAndEval(fileResource.getContent(), scriptObject -> {
             try {
-                RingBuffer<String> ringBuffer = GraalJsDebugLogbackAppender.runJsStart(sessionId, 512);
+                RingBuffer<String> ringBuffer = GraalJsDebugLogbackAppender.runJsStart(sessionId, 128);
                 LOG_RING_BUFFER_MAP.put(session, ringBuffer);
                 scriptObject.executeVoid();
             } finally {

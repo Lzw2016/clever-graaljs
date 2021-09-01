@@ -103,7 +103,7 @@ public class DebugApiLogsHandler extends AbstractWebSocketHandler {
             }
             // 开始收集调试日志
             session.getAttributes().put(API_DEBUG_ID, req.getApiDebugId());
-            RingBuffer<String> ringBuffer = GraalJsDebugLogbackAppender.apiDebugStart(req.getApiDebugId(), 2048);
+            RingBuffer<String> ringBuffer = GraalJsDebugLogbackAppender.apiDebugStart(req.getApiDebugId(), 256);
             LOG_RING_BUFFER_MAP.put(session, ringBuffer);
         } catch (Exception e) {
             WebSocketErrorRes WebSocketErrorRes = new WebSocketErrorRes();
