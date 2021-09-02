@@ -57,6 +57,10 @@ public class ServerLogsHandler extends AbstractWebSocketHandler {
      */
     @Override
     public void afterConnectionEstablished(WebSocketSession session) {
+        RingBuffer.BufferContent<String> logContent = GraalJsDebugLogbackAppender.SERVER_LOGS_BUFFER.getBuffer();
+        if (!logContent.getContent().isEmpty()) {
+            WebsocketUtils.sendMessage(session, logContent);
+        }
         SESSION_MAP.put(session.getId(), session);
     }
 
