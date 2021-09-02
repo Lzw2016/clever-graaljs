@@ -23,6 +23,10 @@ import java.util.concurrent.TimeUnit;
  */
 public class GraalJsDebugLogbackAppender extends AppenderBase<ILoggingEvent> {
     /**
+     * 所有服务端日志缓冲区
+     */
+    public static final RingBuffer<String> SERVER_LOGS_BUFFER = new RingBuffer<>(256);
+    /**
      * 定时调度器
      */
     private static final ScheduledExecutorService SCHEDULED = Executors.newSingleThreadScheduledExecutor();
@@ -67,6 +71,8 @@ public class GraalJsDebugLogbackAppender extends AppenderBase<ILoggingEvent> {
     protected void append(ILoggingEvent event) {
         // final String logMsg = event.getFormattedMessage();
         final String logMsg = new String(encoder.encode(event));
+        // 所有服务端日志
+        SERVER_LOGS_BUFFER.add(logMsg);
         // API_DEBUG 日志
         String traceLogId = event.getMDCPropertyMap().get(getKey(MDC_API_DEBUG_ID));
         cacheLog(traceLogId, logMsg, API_DEBUG_CACHE);
