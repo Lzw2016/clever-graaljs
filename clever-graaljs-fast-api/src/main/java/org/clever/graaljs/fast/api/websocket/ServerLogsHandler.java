@@ -1,11 +1,13 @@
 package org.clever.graaljs.fast.api.websocket;
 
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.clever.graaljs.core.utils.RingBuffer;
 import org.clever.graaljs.fast.api.utils.WebsocketUtils;
 import org.clever.graaljs.spring.logger.GraalJsDebugLogbackAppender;
 import org.springframework.stereotype.Component;
 import org.springframework.web.socket.CloseStatus;
+import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.AbstractWebSocketHandler;
 
@@ -35,6 +37,9 @@ public class ServerLogsHandler extends AbstractWebSocketHandler {
     static {
         SCHEDULED.scheduleAtFixedRate(() -> {
             try {
+                if (SESSION_MAP.isEmpty()) {
+                    return;
+                }
                 RingBuffer.BufferContent<String> logContent;
                 if (LOG_START_INDEX == null) {
                     logContent = GraalJsDebugLogbackAppender.SERVER_LOGS_BUFFER.getBuffer();
@@ -52,16 +57,28 @@ public class ServerLogsHandler extends AbstractWebSocketHandler {
         }, 0, 1, TimeUnit.MILLISECONDS);
     }
 
-    /**
-     * 建立连接之后
-     */
     @Override
-    public void afterConnectionEstablished(WebSocketSession session) {
-        RingBuffer.BufferContent<String> logContent = GraalJsDebugLogbackAppender.SERVER_LOGS_BUFFER.getBuffer();
-        if (!logContent.getContent().isEmpty()) {
-            WebsocketUtils.sendMessage(session, logContent);
+    protected void handleTextMessage(WebSocketSession session, TextMessage message) {
+        String msg = message.getPayload();
+        if (StringUtils.isBlank(msg)) {
+            WebsocketUtils.close(session);
+            return;
+        }
+        if ("all".equals(msg)) {
+            RingBuffer.BufferContent<String> logContent = GraalJsDebugLogbackAppender.SERVER_LOGS_BUFFER.getBuffer();
+            if (!logContent.getContent().isEmpty()) {
+                WebsocketUtils.sendMessage(session, logContent);
+            }
         }
         SESSION_MAP.put(session.getId(), session);
+    }
+
+    /**
+     * 消息传输错误处理
+     */
+    @Override
+    public void handleTransportError(WebSocketSession session, Throwable exception) {
+        log.warn("[ServerLogsHandler] 数据传输错误 | SessionId={}", session.getId(), exception);
     }
 
     /**
