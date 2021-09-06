@@ -122,6 +122,10 @@ public class RunJsHandler extends AbstractWebSocketHandler {
                 RingBuffer<String> ringBuffer = GraalJsDebugLogbackAppender.runJsStart(sessionId, 128);
                 LOG_RING_BUFFER_MAP.put(session, ringBuffer);
                 scriptObject.executeVoid();
+            } catch (Exception e) {
+                WebSocketErrorRes webSocketErrorRes = new WebSocketErrorRes();
+                webSocketErrorRes.setErrorStackTrace(ExceptionUtils.getErrorCodeLocation(e) + "\n" + ExceptionUtils.getStackTraceAsString(e));
+                WebsocketUtils.sendMessage(session, webSocketErrorRes);
             } finally {
                 GraalJsDebugLogbackAppender.runJsEnd(sessionId);
                 RingBuffer<String> ringBuffer = LOG_RING_BUFFER_MAP.remove(session);
@@ -148,9 +152,9 @@ public class RunJsHandler extends AbstractWebSocketHandler {
         try {
             doRunJs(session, msg);
         } catch (Exception e) {
-            WebSocketErrorRes WebSocketErrorRes = new WebSocketErrorRes();
-            WebSocketErrorRes.setErrorStackTrace(ExceptionUtils.getStackTraceAsString(e));
-            WebsocketUtils.sendMessage(session, WebSocketErrorRes);
+            WebSocketErrorRes webSocketErrorRes = new WebSocketErrorRes();
+            webSocketErrorRes.setErrorStackTrace(ExceptionUtils.getStackTraceAsString(e));
+            WebsocketUtils.sendMessage(session, webSocketErrorRes);
             WebsocketUtils.close(session);
         }
     }

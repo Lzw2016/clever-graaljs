@@ -115,7 +115,7 @@ public class FileResourceManageService {
         List<FileResource> list = new ArrayList<>();
         String[] paths = req.getFullPath().split("/");
         if (paths.length <= 0) {
-            throw new BusinessException("目录全路径格式错误");
+            return new ArrayList<>();
         }
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < paths.length; i++) {
