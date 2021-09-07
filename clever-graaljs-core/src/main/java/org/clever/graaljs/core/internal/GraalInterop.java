@@ -6,6 +6,8 @@ import org.clever.graaljs.core.internal.utils.InteropScriptToJavaUtils;
 import org.graalvm.polyglot.Value;
 import org.graalvm.polyglot.proxy.*;
 
+import java.sql.Time;
+import java.sql.Timestamp;
 import java.time.*;
 import java.util.*;
 
@@ -22,9 +24,30 @@ public class GraalInterop extends Interop<Value> {
         if (arg == null) {
             return null;
         }
+        final boolean isString = arg.isString();
+        final boolean isNumber = arg.isNumber();
+        final boolean isHostObject = arg.isHostObject();
         final boolean isDate = arg.isDate();
         final boolean isTime = arg.isTime();
         final boolean isInstant = arg.isInstant();
+        if (isString) {
+            return asJDate(arg.asString());
+        }
+        if (isNumber) {
+            return asJDate(arg.asLong());
+        }
+        if (isHostObject) {
+            Object obj = arg.asHostObject();
+            if (obj instanceof Timestamp) {
+                return asJDate((Timestamp) obj);
+            }
+            if (obj instanceof Time) {
+                return asJDate((Time) obj);
+            }
+            if (obj instanceof java.sql.Date) {
+                return asJDate((java.sql.Date) obj);
+            }
+        }
         if (isInstant) {
             return Date.from(arg.asInstant());
         }

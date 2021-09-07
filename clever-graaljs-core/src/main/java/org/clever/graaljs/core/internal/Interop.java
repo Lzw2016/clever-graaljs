@@ -157,32 +157,32 @@ public abstract class Interop<T> {
      * "HH:mm:ss" <br />
      */
     @SneakyThrows
-    public Date asJDate(String arg) {
+    protected Date asJDate(String arg) {
         if (StringUtils.isBlank(arg)) {
             return null;
         }
         return DateUtils.parseDate(arg, Date_Patterns);
     }
 
-    public Date asJDate(long arg) {
+    protected Date asJDate(long arg) {
         return new Date(arg);
     }
 
-    public Date asJDate(Timestamp arg) {
+    protected Date asJDate(Timestamp arg) {
         if (arg == null) {
             return null;
         }
         return new Date(arg.getTime());
     }
 
-    public Date asJDate(Time arg) {
+    protected Date asJDate(Time arg) {
         if (arg == null) {
             return null;
         }
         return new Date(arg.getTime());
     }
 
-    public Date asJDate(java.sql.Date arg) {
+    protected Date asJDate(java.sql.Date arg) {
         if (arg == null) {
             return null;
         }
