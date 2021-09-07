@@ -2,7 +2,7 @@ package org.clever.graaljs.spring.mvc.builtin.wrap;
 
 import org.clever.graaljs.core.internal.utils.InteropJavaToScriptUtils;
 import org.clever.graaljs.core.internal.utils.InteropScriptToJavaUtils;
-import org.clever.graaljs.spring.core.builtin.adapter.ValidatorUtils;
+import org.clever.graaljs.spring.core.builtin.wrap.ValidatorUtils;
 import org.springframework.util.MultiValueMap;
 import org.springframework.validation.BindException;
 
