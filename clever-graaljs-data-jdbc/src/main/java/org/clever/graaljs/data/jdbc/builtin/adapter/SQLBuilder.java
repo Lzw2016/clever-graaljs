@@ -258,7 +258,7 @@ public class SQLBuilder {
          * @param value 参数值
          */
         public SelectBuilder addParam(String name, Object value) {
-            return addParam(name, name, true);
+            return addParam(name, value, true);
         }
 
         /**
@@ -915,7 +915,7 @@ public class SQLBuilder {
          * @param value 参数值
          */
         public UpdateBuilder addParam(String name, Object value) {
-            return addParam(name, name, true);
+            return addParam(name, value, true);
         }
 
         /**
@@ -1431,7 +1431,7 @@ public class SQLBuilder {
          * @param value 参数值
          */
         public DeleteBuilder addParam(String name, Object value) {
-            return addParam(name, name, true);
+            return addParam(name, value, true);
         }
 
         /**

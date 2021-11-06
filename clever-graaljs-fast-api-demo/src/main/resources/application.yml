@@ -105,7 +105,7 @@ spring:
   datasource:
     type: com.zaxxer.hikari.HikariDataSource
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://192.168.1.201:12000/fast-api
+    url: jdbc:mysql://mysql.hinny.top:12000/fast-api
     username: fast-api
     password: Aa123456!
     hikari:
@@ -123,7 +123,7 @@ spring:
       max-lifetime: 1800000
       connection-test-query: SELECT 1
   redis:
-    host: 192.168.1.201
+    host: redis.hinny.top
     port: 12001
     password: a123456!@#
     lettuce.pool:
@@ -159,7 +159,7 @@ clever:
         allow-credentials: true
     multiple-jdbc:
       disable: false
-      default-name: default
+      default-name: whmall_crm
       global:
         driver-class-name: com.mysql.cj.jdbc.Driver
         data-source-properties:
@@ -175,12 +175,12 @@ clever:
         max-lifetime: 1800000
         connection-test-query: SELECT 1
       jdbc-map:
-        default:
-          jdbc-url: jdbc:mysql://192.168.1.201:12000/test-data
-          username: test-data
-          password: Aa123456!
+        whmall_crm:
+          jdbc-url: jdbc:mysql://192.168.0.232:3306/whmall_crm
+          username: whmall_crm
+          password: Kw2_2,d782MqN6gX
     multiple-redis:
-      disable: false
+      disable: true
       default-name: default
       global:
         database: 0
